@@ -1,0 +1,40 @@
+html, body {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  background-color: #F0F0F0;
+}
+.protocol-main {
+  width: 94%;
+  height: 100%;
+  font-size: 14px;
+  background-color: #F0F0F0;
+  font-family: "PingFang SC";
+  line-height: 20px;
+  padding: 10px;
+  margin: 0 auto;
+  h1 {
+    text-align: center;
+    padding: 2px 0;
+    font-size: 24px;
+    line-height: 60px;
+  }
+  h2 {
+    text-align: left;
+    padding: 2px 0;
+    font-size: 18px;
+  }
+  p {
+    text-indent: 25px;
+    padding: 1px 0;
+  }
+  .line-item {
+    padding: 0 0 0 30px;
+  }
+  a {
+    display: block;
+    padding: 0.06rem 0;
+    font-size: 0.28rem;
+    color: #0200fd;
+  }
+}
