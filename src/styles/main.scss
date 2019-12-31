@@ -1,0 +1,51 @@
+p{
+  padding: 0;
+  margin: 0;
+}
+
+
+// 折叠面板
+.el-collapse-item__header {
+  color: #ff9000;
+  background: #eee;
+  font-size: 17px;
+  border-bottom: 1px solid #fff;
+  padding: 0 15px;
+}
+
+.el-collapse-item__content {
+  font-size: 17px;
+  padding: 0 15px;
+}
+
+// 单选框
+.el-radio-group {
+  margin-left: 25px;
+}
+
+.el-radio__input.is-checked+.el-radio__label {
+  color: #000;
+}
+
+// 抽屉
+.el-drawer__header {
+  text-align: center;
+  font-size: 17px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  padding-bottom: 15px;
+}
+
+.time,
+.bus-plate,
+.bus-color,
+.bus-type {
+  .el-drawer__header {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    .el-drawer__header {
+      margin-bottom: 0 !important;
+      padding: 0 !important;
+    }
+  }
+}

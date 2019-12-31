@@ -24,7 +24,7 @@
   let ip2 = server1 + "Tool/";
   let ip3 = server1 + "Common/";
 
-  const user_id = "29417541-5141-4ec5-b31f-214f6bc0ac14";
+const user_id = "3e4414e6-f287-4d6b-b194-4cb1624e8627";
 
   /**
    * 分享相关接口
@@ -143,6 +143,9 @@ const color = [{ color: "white", name: "白色" },
 let baseUrl = ''
 
 export default {
+  server1,
+  server2,
+  server3,
   baseUrl,
   user_id,
   getShareQR,

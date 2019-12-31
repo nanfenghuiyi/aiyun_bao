@@ -64,7 +64,6 @@ const routes = [
   /**
    * Authen
    */
-
   {
     path: '/quickAuthen',
     name: 'quickAuthen',
@@ -87,6 +86,38 @@ const routes = [
     component: () => import('../views/Authen/cardAuthen.vue'),
     meta: {
       title: '大巴车随车名片快速注册'
+    }
+  },
+  {
+    path: '/busManagerAuthen',
+    name: 'busManagerAuthen',
+    component: () => import('../views/Authen/busManagerAuthen.vue'),
+    meta: {
+      title: '大巴车承包者认证'
+    }
+  },
+  {
+    path: '/busEmployeesCheckExist',
+    name: 'busEmployeesCheckExist',
+    component: () => import('../views/Authen/busEmployeesCheckExist.vue'),
+    meta: {
+      title: '手机号'
+    }
+  },
+  {
+    path: '/busEmployeesAuthen',
+    name: 'busEmployeesAuthen',
+    component: () => import('../views/Authen/busEmployeesAuthen.vue'),
+    meta: {
+      title: '大巴车司机雇员认证'
+    }
+  },
+  {
+    path: '/busAuthen',
+    name: 'busAuthen',
+    component: () => import('../views/Authen/busAuthen.vue'),
+    meta: {
+      title: '大巴车注册'
     }
   },
 ]

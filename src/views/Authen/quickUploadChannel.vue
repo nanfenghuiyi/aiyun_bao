@@ -13,7 +13,7 @@
           <span>点击进入</span>
         </router-link>
       </li>
-      <li id="card-box">
+      <li id="card-box" v-if="uploaderStatus">
         <p>2.选择上传大巴车随车名片快速录入注册，您需要提交大巴车随车名片一张</p>
         <router-link to="/cardAuthen">
           <span>上传大巴车随车名片快速注册</span>
@@ -21,7 +21,7 @@
         </router-link>
       </li>
     </ul>
-    <ul class="demo-picture">
+    <ul class="demo-picture" v-if="uploaderStatus">
       <li>
         <span>正面图样</span>
         <el-image 
@@ -47,10 +47,13 @@
 </template>
 
 <script>
+import $ from "jquery";
+
 export default {
   data() {
     return {
-      srcList: [require('@/assets/Authen/card_face_demo.jpg'), require('@/assets/Authen/card_back_demo.jpg')]
+      srcList: [require('@/assets/Authen/card_face_demo.jpg'), require('@/assets/Authen/card_back_demo.jpg')],
+      uploaderStatus: false,
     };
   },
   components: {},
@@ -58,14 +61,28 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    // 获取状态
     getUploaderStatus() {
-
+      var url = this.$global_msg.getUploaderStatus;
+      var obj = {user_id: this.user_id}
+      this.axios.post(url, obj).then(res => {
+        console.log("res==", res);
+        if (res) {
+          if (res.status == 1) {
+            this.uploaderStatus = false;
+          } else {
+            this.uploaderStatus = true;
+          }
+        }
+      }).catch(err => {
+        console.log('err===', err)
+      })
     }
   },
   created() {},
   mounted() {
-    // console.log(this.$global_msg.user_id)
-    console.log(this.$global_msg.getShareQR)
+    this.user_id = this.$global_msg.user_id;
+    this.getUploaderStatus();
   }
 };
 </script>

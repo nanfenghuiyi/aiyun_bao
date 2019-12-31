@@ -32,11 +32,6 @@ function canvasDataURL(path, callback) {
 }
 
 /**
- * 防止键盘把当前输入框给挡住
- */
-
-
-/**
  * 与当前时间差格式化
  * @param times 目标时间戳字符串
  * @returns {string}

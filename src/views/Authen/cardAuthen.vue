@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-main">
+  <div class="upload-main" v-loading="loading" :element-loading-text="loadText" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.6)">
     <p class="context">1.您需要取得大巴车随车名片一张</p>
     <p class="context">2.请拍名片正反面照片各一张，要求图片清晰，不倾斜，不反光</p>
     <p class="context">
@@ -30,8 +30,7 @@
     </ul>
     <ul id="upload-picture" class="demo-picture">
       <li>
-        <el-image style="width: 150px; height: 100px" :src="srcList[2]" alt="demo"></el-image>
-        <!-- <img id="img1" src="@/assets/Authen/card_face_add.jpg" alt="" /> -->
+        <img id="img1" src="@/assets/Authen/card_back_add.jpg" alt="" />
         <input
           id="file1"
           class="file"
@@ -41,8 +40,7 @@
         />
       </li>
       <li>
-        <el-image style="width: 150px; height: 100px" :src="srcList[3]" alt="demo"></el-image>
-        <!-- <img id="img2" src="@/assets/Authen/card_back_add.jpg" alt="" /> -->
+        <img id="img2" src="@/assets/Authen/card_face_add.jpg" alt="" />
         <input
           id="file2"
           class="file"
@@ -68,19 +66,16 @@ export default {
   data() {
     return {
       srcList: [
-        require("@/assets/Authen/card_face_demo.jpg"),
-        require("@/assets/Authen/card_back_demo.jpg"),
-        require("@/assets/Authen/card_face_add.jpg"),
-        require("@/assets/Authen/card_back_add.jpg")
+        require('@/assets/Authen/card_face_demo.jpg'),
+        require('@/assets/Authen/card_back_demo.jpg')
       ],
-      img1: "",
-      img2: ""
+      loading: false,
+      loadText: '加载中...',
+      img1: '',
+      img2: '',
+      user_id: ''
     };
   },
-  components: {},
-  props: {},
-  watch: {},
-  computed: {},
   methods: {
     /**
      * 选择上传图片
@@ -116,11 +111,12 @@ export default {
      * @param last_file 上次回传的文件名（服务器上的路径
      */
     uploadPicture(index, base64, type, extra, last_file) {
+      this.loadText = '图片上传中'
+      this.loading = true;
       var that = this;
       canvasDataURL(base64, function callback(data) {
         let params = {
-          user_id: that.$global_msg.user_id,
-          // user_id: param.user_id,
+          user_id: that.user_id,
           base64: data,
           type: type,
           extra: extra,
@@ -132,25 +128,29 @@ export default {
           .post(url, params)
           .then(res => {
             console.log(res);
+            var res = res.data;
             if (res && res.status == 1) {
               let path = res.data;
               switch (index) {
                 case 1:
                   that.img1 = path;
-                  that.srcList[2] = path;
+                  $("#img1").attr("src", data);
                   break;
                 case 2:
                   that.img2 = path;
-                  that.srcList[3] = path;
+                  $("#img2").attr("src", data);
                   break;
                 default:
                   break;
               }
+              that.loading = false;
             } else {
+              that.loading = false;
               vant.Toast(res.data.msg);
             }
           })
           .catch(err => {
+            that.loading = false;
             console.log(err);
           });
       });
@@ -158,9 +158,10 @@ export default {
     // 获取城市
     getCity() {
       var url = this.$global_msg.getUploaderCity;
-      var obj = { user_id: this.$global_msg.user_id };
+      var obj = { user_id: this.user_id };
       this.axios.post(url, obj).then(res => {
         console.log("res", res);
+        var res = res.data;
         if (res) {
           if (res.status == 1) {
             let data = res.data;
@@ -171,7 +172,7 @@ export default {
               }
             }
           } else {
-            vant.Toast(res.data.msg);
+            vant.Toast(res.msg);
           }
         }
       }).catch(err => {
@@ -195,11 +196,12 @@ export default {
         return;
       }
       var code = obj.options[index].value;
-      vant.Toast("正在提交...");
+      this.loadText = '正在提交...';
+      this.loading = true;
       let params = {
         // user_id: param.user_id,
-        user_id: this.$global_msg.user_id,
-        paths: img1 + "," + img2,
+        user_id: this.user_id,
+        paths: this.img1 + "," + this.img2,
         code: code != null ? code : ""
       };
       var url = this.$global_msg.uploadInfo;
@@ -207,26 +209,31 @@ export default {
         .post(url, params)
         .then(res => {
           console.log("res", res);
-          // console.log("res", params);
+          console.log("res", params);
+          var res = res.data;
           if (res) {
             if (res.status == 1) {
-              $("#img1").attr("src", "../img/card_face_add.jpg");
-              $("#img2").attr("src", "../img/card_back_add.jpg");
-              img1 = "";
-              img2 = "";
-              vant.Toast("提交成功");
+              $("#img1").attr("src", require("@/assets/Authen/card_face_add.jpg"));
+              $("#img2").attr("src", require("@/assets/Authen/card_face_add.jpg"));
+              this.img1 = '';
+              this.img2 = '';
+              this.loading = false;
+              vant.Toast(res.msg);
             } else {
-              vant.Toast("提交失败");
+              this.loading = false;
+              vant.Toast(res.msg);
             }
           }
         })
         .catch(err => {
+          this.loading = false;
           console.log("err", err);
         });
     }
   },
-  created() {},
-  mounted() {}
+  mounted() {
+    this.user_id = this.$global_msg.user_id;
+  }
 };
 </script>
 
