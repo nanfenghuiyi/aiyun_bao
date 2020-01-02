@@ -79,12 +79,14 @@
     <!-- 上传照片 -->
     <div>
       <el-drawer
-        :title="drawerTitle"
         :visible.sync="drawer"
         :show-close="false"
         size="56%"
         direction="btt"
       >
+        <div class="title" v-text="drawerTitle">
+          身份证正面照
+        </div>
         <div class="content">
           <div class="legend">
             <img src="@/assets/Authen/id-card-front-demo.jpg" />
@@ -243,22 +245,22 @@ export default {
                 case 0:
                   that.img1 = path;
                   $("#img1").attr("src", data);
-                  $("#img1-status").removeClass("authen-status-ing authen-status-over").addClass("none");
+                  // $("#img1-status").removeClass("authen-status-ing authen-status-over").addClass("none");
                   break;
                 case 1:
                   that.img2 = path;
                   $("#img2").attr("src", data);
-                  $("#img2-status").removeClass("authen-status-ing authen-status-over").addClass("none");
+                  // $("#img2-status").removeClass("authen-status-ing authen-status-over").addClass("none");
                   break;
                 case 2:
                   that.img3 = path;
                   $("#img3").attr("src", data);
-                  $("#img3-status").removeClass("authen-status-ing authen-status-over").addClass("none");
+                  // $("#img3-status").removeClass("authen-status-ing authen-status-over").addClass("none");
                   break;
                 case 3:
                   that.img4 = path;
                   $("#img4").attr("src", data);
-                  $("#img4-status").removeClass("authen-status-ing authen-status-over").addClass("none");
+                  // $("#img4-status").removeClass("authen-status-ing authen-status-over").addClass("none");
                   break;
                 default: break;
               }

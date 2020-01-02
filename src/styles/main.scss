@@ -1,8 +1,61 @@
-p{
+p,ul,li{
   padding: 0;
   margin: 0;
 }
 
+.list-style {
+  width: 100%;
+  height: 660px;
+  overflow-y: scroll;
+  li {
+    width: 85%;
+    // height: 35px;
+    padding: 10px 0 10px 15px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    img {
+      width: 25px;
+      height: 25px;
+      margin-right: 15px;
+    }
+  }
+}
+
+// car/city
+.header {
+  background-color: dodgerblue;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 15px;
+  margin: 10px 20px;
+  border-radius: 5px;
+
+  img {
+    width: 15px;
+    height: 15px;
+    margin-right: 15px;
+    margin-top: -20px;
+  }
+
+  .header-text {
+    display: flex;
+    flex-direction: column;
+
+    .header-name {
+      font-size: 15px;
+      color: #ffffff;
+    }
+
+    .header-msg {
+      font-size: 12px !important;
+      color: #ffffff;
+      margin-top: 5px;
+    }
+  }
+}
 
 // 折叠面板
 .el-collapse-item__header {
@@ -15,7 +68,7 @@ p{
 
 .el-collapse-item__content {
   font-size: 17px;
-  padding: 0 15px;
+  // padding: 0 15px;
 }
 
 // 单选框
@@ -29,23 +82,6 @@ p{
 
 // 抽屉
 .el-drawer__header {
-  text-align: center;
-  font-size: 17px;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 10px;
-  padding-bottom: 15px;
-}
-
-.time,
-.bus-plate,
-.bus-color,
-.bus-type {
-  .el-drawer__header {
-    margin-bottom: 0 !important;
-    padding: 0 !important;
-    .el-drawer__header {
-      margin-bottom: 0 !important;
-      padding: 0 !important;
-    }
-  }
+  margin-bottom: 0 !important;
+  padding: 0 !important;
 }

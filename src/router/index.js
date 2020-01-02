@@ -120,6 +120,31 @@ const routes = [
       title: '大巴车注册'
     }
   },
+  // 快车/出租车
+  {
+    path: '/city',
+    name: 'city',
+    component: () => import('../views/Utils/city.vue'),
+    meta: {
+      title: '城市'
+    }
+  },
+  {
+    path: '/car',
+    name: 'car',
+    component: () => import('../views/Utils/car.vue'),
+    meta: {
+      title: '汽车'
+    }
+  },
+  {
+    path: '/taxiAuthen',
+    name: 'taxiAuthen',
+    component: () => import('../views/Authen/taxiAuthen.vue'),
+    meta: {
+      title: '出租车认证'
+    }
+  },
 ]
 
 const router = new VueRouter({
