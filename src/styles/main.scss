@@ -23,6 +23,59 @@ p,ul,li{
   }
 }
 
+/* 颜色 "白色","红色","黑色","银色","香槟色","灰色","蓝色","黄色","绿色","咖啡色","橙色","其他" */
+.orange-text {
+  color: orange;
+}
+
+.white {
+  background-color: white;
+}
+
+.red {
+  background-color: red;
+}
+
+.black {
+  background-color: black;
+}
+
+.silver {
+  background-color: silver;
+}
+
+.champagne {
+  background-color: sandybrown;
+}
+
+.gray {
+  background-color: gray;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.green {
+  background-color: green;
+}
+
+.coffee {
+  background-color: chocolate;
+}
+
+.orange {
+  background-color: orange;
+}
+
+.other {
+  background-color: #eeeeee;
+}
+
 // car/city
 .header {
   background-color: dodgerblue;
@@ -84,4 +137,17 @@ p,ul,li{
 .el-drawer__header {
   margin-bottom: 0 !important;
   padding: 0 !important;
+}
+
+// IndexBar 索引栏
+.van-index-anchor{
+  background-color: #eee !important;
+}
+
+.van-index-bar__index{
+  line-height: 20px;
+}
+
+.van-cell__value{
+  display: flex;
 }
