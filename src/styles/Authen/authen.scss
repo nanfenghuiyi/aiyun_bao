@@ -17,7 +17,8 @@
     margin: 0;
   }
 
-  .authen-title {
+  .authen-title,
+  .authen-select-title {
     background-color: #eeeeee;
     display: flex;
     flex-direction: row;
@@ -29,6 +30,7 @@
 
     .authen-title-city {
       display: flex;
+      flex: 1;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
@@ -135,18 +137,20 @@
         height: 100px;
       }
 
-        b {
-          color: #ffad18;
-          font-size: 14px;
-          position: absolute;
-          bottom: 0;
-          top: 26%;
-          left: 0;
-          right: 0;
-          z-index: 48;
-          text-align: center;
-        }
+      b {
+        width: 95%;
+        color: #ffad18;
+        font-size: 14px;
+        background: rgba($color: #000000, $alpha: .4);
+        position: absolute;
+        bottom: 0;
+        top: 84%;
+        left: 0;
+        right: 0;
+        z-index: 48;
+        text-align: center;
       }
+    }
   }
 }
 

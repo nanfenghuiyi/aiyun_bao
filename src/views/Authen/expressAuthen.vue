@@ -9,10 +9,6 @@
           <i class="el-icon-arrow-right"></i>
         </div>
       </div>
-      <div class="input authen-item">
-        <span>公司名称</span>
-        <input id="company-name" v-model.trim="company_name" type="text" placeholder="输入公司全称" value="" />
-      </div>
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="实名信息" name="1">
           <div id="realName" class="authen-item">
@@ -61,6 +57,10 @@
         </el-collapse-item>
         <el-collapse-item title="行驶证信息" name="3">
           <div id="driving-license" class="authen-item">
+            <div @click="showCar" id="select-car" class="input">
+              <span>注册车型</span>
+              <input v-model.trim="carValue" id="car" type="text" value="" placeholder="选择车型" readonly />
+            </div>
             <div class="input">
               <span>车牌号码</span>
               <div class="item-right">
@@ -110,25 +110,8 @@
             </ul>
           </div>
         </el-collapse-item>
-        <el-collapse-item title="服务证信息" name="5">
-          <div class="input authen-item">
-            <span>服务证号</span>
-            <input v-model.trim="qualification_no" id="qualification-no" type="text" value="" placeholder="输入证件号码" />
-          </div>
-          <div id="taxi" class="authen-item">
-            <ul>
-              <li @click="showImg(6)">
-                <span ref="title6">服务证照</span>
-                <img id="img7" src="@/assets/Authen/taxi-qualification-add.jpg" alt="" />
-                <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle"></b>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </el-collapse-item>
       </el-collapse>
-      <div @click="submitTaxiDriver" id="submit" class="submit-btn">
+      <div @click="submitExpressDriver" id="submit" class="submit-btn">
         确认提交
       </div>
     </div>
@@ -213,6 +196,15 @@
         <city @cityChildFn="cityParentFn"></city>
       </el-drawer>
     </div>
+    <!-- 车型组件 -->
+    <div>
+      <el-drawer
+        :visible.sync="carDrawer"
+        :show-close="false"
+        size="100%">
+        <car @carChildFn="carParentFn"></car>
+      </el-drawer>
+    </div>
   </div>
 </template>
 
@@ -224,6 +216,7 @@ import Vue from "vue";
 Vue.use(vant);
 
 import city from "../Utils/city";
+import car from "../Utils/car";
 
 export default {
   data() {
@@ -232,19 +225,20 @@ export default {
       loadText: "图片上传中",
       activeNames: ["1", "2", "3", "4", "5"],
       demoImg: [
-        {text: "身份证正面照", img: require("@/assets/Authen/id-card-front-demo.jpg")},
-        {text: "身份证反面照", img: require("@/assets/Authen/id-card-back-demo.jpg")},
-        {text: "驾驶证照", img: require("@/assets/Authen/driver-license-front-demo.jpg")},
-        {text: "行驶证正本照", img: require("@/assets/Authen/driving-license-front-demo.jpg")},
-        {text: "行驶证副本照", img: require("@/assets/Authen/driving-license-back-demo.jpg")},
-        {text: "人车合照", img: require("@/assets/Authen//person-car-demo.jpg")},
-        {text: "服务证照", img: require("@/assets/Authen/taxi-qualification-demo.jpg")}
+          {text: "身份证正面照", img: require("@/assets/Authen/id-card-front-demo.jpg")},
+          {text: "身份证反面照", img: require("@/assets/Authen/id-card-back-demo.jpg")},
+          {text: "驾驶证照", img: require("@/assets/Authen/driver-license-front-demo.jpg")},
+          {text: "行驶证正本照", img: require("@/assets/Authen/driving-license-front-demo.jpg")},
+          {text: "行驶证副本照", img: require("@/assets/Authen/driving-license-back-demo.jpg")},
+          {text: "人车合照", img: require("@/assets/Authen/person-car-demo.jpg")}
       ],
       param: [],
 
-      taxiDriverInfo: [], //司机认证信息
-      taxiCityInfo: [], // 选择城市信息
+      driverInfo: [], //司机认证信息
+      carInfo: [], // 选择车辆信息
+      cityInfo: [], // 选择城市信息
       cityValue: "", // 城市选择的信息
+      carValue: "", // 车型选择的信息
       pro_code: "",
       pro_name: "", // 
       city_code: "", // 
@@ -259,6 +253,9 @@ export default {
       first_issue: "", // 初次领取驾照日期
       first_issue_time: "", // 初次领取驾照日期显示
       image_drivers: "", //	驾驶证照片
+      brand: "", // 车辆品牌
+      model: "", // 车辆型号
+      color: "", // 车辆颜色	 
       plate_no_short: "", // 车牌简称
       plate_no_alpha: "", // 首字母
       short: "", // 页面显示的简称
@@ -269,21 +266,19 @@ export default {
       image_driving_a: "", //	行驶证正本照片	
       image_driving_b: "", // 行驶证副本照片
       image_group: "", //	与车辆的合照
-      qualification_no: "", // 	准驾证号码
-      image_qualification: "", // 准驾证照片
       img1: "",	
       img2: "",	
       img3: "",	
       img4: "",	
       img5: "",	
       img6: "",	
-      img7: "",	
 
       flag: true, //阻止点击事件
       drawerDisabled: false, // 阻止照片显示点击事件
       timeDisabled: false, //  阻止时间显示点击事件
       cityDisabled: false, // 阻止城市显示点击事件
       carShortDisabled: false, // 阻止车牌简称显示点击事件
+      carTypeDisabled: false, // 阻止车辆类型显示点击事件
       drawer: false, // 上传照片显示
       realNameStatusTitle: "审核中...", // 上传图片状态title
       titleShow: false, // 上传图片状态title显示
@@ -308,9 +303,11 @@ export default {
       innerTypeDrawer: false, // 车辆类型
       // 城市组件
       cityDrawer: false,
+      // 车型组件
+      carDrawer: false,
     };
   },
-  components: {city},
+  components: {city, car},
   methods: {
     handleChange(val) {
       console.log(val);
@@ -321,12 +318,25 @@ export default {
         this.cityDrawer = true;
       }
     },
+    // 车型显示
+    showCar() {
+      if (!this.carTypeDisabled) {
+        this.carDrawer = true;
+      }
+    },
     // 城市选择
     cityParentFn(payload) {
       console.log("城市选择===", payload);
       this.taxiCityInfo = payload;
-      this.cityValue = payload.province + "-" + payload.city + "-" + payload.dist;
+      this.cityValue = payload.city;
       this.cityDrawer = payload.msg;
+    },
+    // 车型选择
+    carParentFn(payload) {
+      console.log("车型选择===", payload);
+      this.taxiCityInfo = payload;
+      this.carValue = payload.brand + " " + payload.model + " " + payload.color;
+      this.carDrawer = payload.msg;
     },
     // 时间选择
     checkTime(index) {
@@ -385,8 +395,6 @@ export default {
           this.drawerTitle = this.$refs.title5.innerText;
         }else if (index == 6) {
           this.drawerTitle = this.$refs.title6.innerText;
-        }else if (index == 7) {
-          this.drawerTitle = this.$refs.title7.innerText;
         }
         // console.log("showImg===", index);
         this.drawer = true;
@@ -412,6 +420,297 @@ export default {
       this.plate_no_alpha = item;
       this.short = this.plate_no_short + this.plate_no_alpha;
     },
+
+    //获取司机实名认证信息
+    getExpressDriverInfo() {
+      let params = {};
+      var param = this.param;
+      params.user_id = param.user_id;
+      // params.user_id = $.user_id;
+      if (param.id != null) {
+        params.id = param.id;
+      }
+      this.loadText = "获取中...";
+      this.loading = true;
+      let url = this.$global_msg.getExpressDriverInfo;
+      this.axios.post(url, params).then(res => {
+        console.log(res);
+        this.loading = false;
+        var res = res.data;
+        if (res && res.status == 1) {
+          this.driverInfo = res.data;
+          if (this.driverInfo) {
+            this.showExpressDriverInfo();
+          }
+        } else {
+          vant.Toast(res.msg);
+        }
+      }).catch(err => {
+        console.log("err===", err)
+        this.loading = false;
+      })
+    },
+
+    //提交司机实名认证信息
+    submitExpressDriver() {
+      var cityInfo = this.cityInfo;
+      var carInfo = this.carInfo;
+      let params = {
+        user_id: this.param.user_id,
+        city_code: cityInfo.city_code,
+        city_name: cityInfo.city,
+        name: this.name,
+        ID: this.ID,
+        image_id_a: this.img1,
+        image_id_b: this.img2,
+        image_drivers: this.img3,
+        first_issue: this.first_issue,
+        brand: carInfo.brand,
+        model: carInfo.model,
+        color: carInfo.color,
+        plate_no_short: this.plate_no_short,
+        plate_no_alpha: this.plate_no_alpha,
+        plate_no: this.plate_no,
+        vehicle_owner: this.vehicle_owner,
+        register_date: this.register_date,
+        image_driving_a: this.img4,
+        image_driving_b: this.img5,
+        image_group: this.img6
+      };
+      console.log(params);
+      let text = detectionParam(params);
+      if (text != "") {
+        vant.Toast(text);
+        return;
+      }
+      this.loadText = "提交中...";
+      this.loading = true;
+      this.axios.post(url, params).post(res => {
+        console.log(res);
+        this.loading =false;
+        var res = res.data;
+        if (res && res.status == 1) {
+          this.flag = false;this.drawerDisabled = true, // 阻止照片显示点击事件
+          this.timeDisabled = true, // 阻止时间显示点击事件
+          this.cityDisabled = true, // 阻止城市显示点击事件
+          this.carTypeDisabled = true, // 阻止车型显示点击事件
+          this.carShortDisabled = true, // 阻止车牌简称显示点击事件
+          this.drawer = true, // 上传照片显示
+          $("#submit").removeClass("submit-btn").addClass("none");
+          $("input").attr("readonly", true);
+          $("input").attr("disabled", true);
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核中";
+          vant.Toast(res.msg);
+        } else {
+          vant.Toast(res.msg);
+        }
+      }).catch(err => {
+        console.log("err===", err)
+        this.loading =false;
+      })
+    },
+
+    /**
+     * 显示司机认证信息
+     */
+    showExpressDriverInfo() {
+      var driverInfo = this.driverInfo;
+      if (driverInfo) {
+        console.log(driverInfo)
+        let status = driverInfo.status;
+        let realNameStatus = driverInfo.real_name_status;
+        let driversLicenseStatus = driverInfo.drivers_license_status;
+        let drivingLicenseStatus = driverInfo.driving_license_status;
+        let photoGroupStatus = driverInfo.photo_group_status;
+        if (driverInfo.city != null) {
+          this.cityInfo = {   //选择城市信息
+            city: driverInfo.city,
+            city_code: driverInfo.city_code
+          };
+          var cityInfo = this.cityInfo
+          this.cityValue = (cityInfo.city != null ? cityInfo.city : "");
+        }
+        if (driverInfo.brand != null || driverInfo.model != null || driverInfo.color != null) {
+          this.carInfo = {   //选择车辆信息
+            brand: driverInfo.brand,
+            model: driverInfo.model,
+            color: driverInfo.color
+          };
+          var carInfo = this.carInfo;
+          this.carValue = ((carInfo.brand != null ? carInfo.brand : "") + " " + (carInfo.model != null ? carInfo.model : "") + " " + (carInfo.color != null ? carInfo.color : ""))
+        }
+        if (status != 2 && realNameStatus > 0 && driversLicenseStatus > 0 && drivingLicenseStatus > 0 && photoGroupStatus > 0) {
+          this.flag = false;
+          this.drawerDisabled = true, // 阻止照片显示点击事件
+          this.timeDisabled = true, // 阻止时间显示点击事件
+          this.cityDisabled = true, // 阻止城市显示点击事件
+          this.carDisabled = true, // 阻止城市显示点击事件
+          this.carShortDisabled = true, // 阻止车牌简称显示点击事件
+          $("#submit").removeClass("submit-btn").addClass("none");
+        } else {
+          this.flag = true;
+          this.drawerDisabled = false, // 阻止照片显示点击事件
+          this.timeDisabled = false, // 阻止时间显示点击事件
+          this.cityDisabled = false, // 阻止城市显示点击事件
+          this.carDisabled = false, // 阻止城市显示点击事件
+          this.carShortDisabled = false, // 阻止车牌简称显示点击事件
+          $("#submit").removeClass("none").addClass("submit-btn");
+        }
+        //实名信息
+        var server3 = this.$global_msg.server3;
+        this.name = (driverInfo.name != null ? driverInfo.name : "");
+        this.ID = (driverInfo.ID != null ? driverInfo.ID : "");
+        if (realNameStatus == 1) { //审核中
+          $("#realName input").attr("readonly", true);
+          $("#realName #img1").attr("src", driverInfo.image_id_a != null ? (server3 + driverInfo.image_id_a) : "");
+          $("#realName #img2").attr("src", driverInfo.image_id_b != null ? (server3 + driverInfo.image_id_b) : "");
+          this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
+          this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核中";
+        } else if (realNameStatus == 2) { //待完善
+          $("#realName input").attr("readonly", false);
+          $("#realName #img1").attr("src", driverInfo.image_id_a != null ? (server3 + driverInfo.image_id_a) : "");
+          $("#realName #img2").attr("src", driverInfo.image_id_b != null ? (server3 + driverInfo.image_id_b) : "");
+          this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
+          this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "请完善资料";
+        } else if (realNameStatus == 3) { //成功
+          $("#realName input").attr("readonly", true);
+          $("#realName #img1").attr("src", driverInfo.image_id_a != null ? (server3 + driverInfo.image_id_a) : "");
+          $("#realName #img2").attr("src", driverInfo.image_id_b != null ? (server3 + driverInfo.image_id_b) : "");
+          this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
+          this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核通过";
+        } else if (realNameStatus == 0 || realNameStatus == -1) { //未提交认证 数据无效
+          $("#realName input").attr("readonly", false);
+          this.titleShow = false;
+          this.realNameStatusTitle = "";
+        } else if (realNameStatus == -2) { //失败
+          $("#realName input").attr("readonly", false);
+          $("#realName #img1").attr("src", driverInfo.image_id_a != null ? (server3 + driverInfo.image_id_a) : "");
+          $("#realName #img2").attr("src", driverInfo.image_id_b != null ? (server3 + driverInfo.image_id_b) : "");
+          this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
+          this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核失败,点击重新上传";
+        }
+        //驾驶证信息
+        this.first_issue_time = (driverInfo.first_issue != null ? driverInfo.first_issue : "");
+        if (driversLicenseStatus == 1) { //审核中
+          $("#driver-license input").attr("disabled", true);
+          
+          $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
+          this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核中";
+        } else if (driversLicenseStatus == 2) { //待完善
+          $("#driver-license input").attr("disabled", false);
+          $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
+          this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "请完善资料";
+        } else if (driversLicenseStatus == 3) { //成功
+          $("#driver-license input").attr("disabled", true);
+          $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
+          this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核通过";
+        } else if (driversLicenseStatus == 0 || driversLicenseStatus == -1) { //未提交认证 数据无效
+          $("#driver-license input").attr("disabled", false);
+          $("#driver-license ul li div").addClass("none");
+          $("#driver-license ul li div b").html("");
+        } else if (driversLicenseStatus == -2) { //失败
+          $("#driver-license input").attr("disabled", false);
+          $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
+          this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核失败,点击重新上传";
+        }
+        //行驶证信息
+        this.carValue = ((driverInfo.brand != null ? driverInfo.brand : "") + " " + (driverInfo.model != null ? driverInfo.model : "") + " " + (driverInfo.color != null ? driverInfo.color : ""));
+          this.short =((driverInfo.plate_no_short != null ? driverInfo.plate_no_short : "") + (driverInfo.plate_no_alpha != null ? driverInfo.plate_no_alpha : ""));
+          this.plate_no = (driverInfo.plate_no != null ? driverInfo.plate_no : "");
+          this.vehicle_owner = (driverInfo.vehicle_owner != null ? driverInfo.vehicle_owner : "");
+          this.register_date_time = (driverInfo.register_date != null ? driverInfo.register_date : "");
+        if (drivingLicenseStatus == 1) { //审核中
+          $("#driving-license input").attr("disabled", true);
+          $("#driving-license #plate-no").attr("readonly", true);
+          $("#driving-license #vehicle-owner").attr("readonly", true);
+          $("#driving-license #img4").attr("src", driverInfo.image_driving_a != null ? (server3 + driverInfo.image_driving_a) : "");
+          $("#driving-license #img5").attr("src", driverInfo.image_driving_b != null ? (server3 + driverInfo.image_driving_b) : "");
+          this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
+          this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核中";
+        } else if (drivingLicenseStatus == 2) { //待完善
+          $("#driving-license input").attr("disabled", false);
+          $("#driving-license #plate-no").attr("readonly", false);
+          $("#driving-license #vehicle-owner").attr("readonly", false);
+          $("#driving-license #img4").attr("src", driverInfo.image_driving_a != null ? (server3 + driverInfo.image_driving_a) : "");
+          $("#driving-license #img5").attr("src", driverInfo.image_driving_b != null ? (server3 + driverInfo.image_driving_b) : "");
+          this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
+          this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "请完善资料";
+        } else if (drivingLicenseStatus == 3) { //成功
+          $("#driving-license input").attr("disabled", true);
+          $("#driving-license #plate-no").attr("readonly", true);
+          $("#driving-license #vehicle-owner").attr("readonly", true);
+          $("#driving-license #img4").attr("src", driverInfo.image_driving_a != null ? (server3 + driverInfo.image_driving_a) : "");
+          $("#driving-license #img5").attr("src", driverInfo.image_driving_b != null ? (server3 + driverInfo.image_driving_b) : "");
+          this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
+          this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核通过";
+        } else if (drivingLicenseStatus == 0 || drivingLicenseStatus == -1) { //未提交认证 数据无效
+          $("#driving-license input").attr("disabled", false);
+          $("#driving-license #plate-no").attr("readonly", false);
+          $("#driving-license #vehicle-owner").attr("readonly", false);
+          this.titleShow = false;
+          this.realNameStatusTitle = "";
+        } else if (drivingLicenseStatus == -2) { //失败
+          $("#driving-license input").attr("disabled", false);
+          $("#driving-license #plate-no").attr("readonly", false);
+          $("#driving-license #vehicle-owner").attr("readonly", false);
+          $("#driving-license #img4").attr("src", driverInfo.image_driving_a != null ? (server3 + driverInfo.image_driving_a) : "");
+          $("#driving-license #img5").attr("src", driverInfo.image_driving_b != null ? (server3 + driverInfo.image_driving_b) : "");
+          this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
+          this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核失败,点击重新上传";
+        }
+        //人车信息
+        if (photoGroupStatus == 1) { //审核中
+          $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
+          this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核中";
+        } else if (photoGroupStatus == 2) { //待完善
+          $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
+          this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "请完善资料";
+        } else if (photoGroupStatus == 3) { //成功
+          $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
+          this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核通过";
+        } else if (photoGroupStatus == 0 || photoGroupStatus == -1) { //未提交认证 数据无效
+          this.titleShow = false;
+          this.realNameStatusTitle = "";
+        } else if (photoGroupStatus == -2) { //失败
+          $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
+          this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
+          this.titleShow = true;
+          this.realNameStatusTitle = "审核失败,点击重新上传";
+        }
+      }
+    },
+
     /**
      * 选择上传图片
      * @param index 选取上传下标
@@ -419,35 +718,30 @@ export default {
     checkImg(index) {
       this.drawer = false;
       var that = this;
-      var taxiDriverInfo = this.taxiDriverInfo;
-      if (taxiDriverInfo) {
+      var driverInfo = that.driverInfo;
+      if (driverInfo) {
         if (index < 2) {
-          if (taxiDriverInfo.real_name_status > 0 && taxiDriverInfo.real_name_status != 2) {
+          if (driverInfo.real_name_status > 0 && driverInfo.real_name_status != 2) {
             return;
           }
         }
         if (index == 2) {
-          if (taxiDriverInfo.drivers_license_status > 0 && taxiDriverInfo.drivers_license_status != 2) {
+          if (driverInfo.drivers_license_status > 0 && driverInfo.drivers_license_status != 2) {
             return;
           }
         }
         if (index == 3 || index == 4) {
-          if (taxiDriverInfo.driving_license_status > 0 && taxiDriverInfo.driving_license_status != 2) {
+          if (driverInfo.driving_license_status > 0 && driverInfo.driving_license_status != 2) {
             return;
           }
         }
-        if (index == 5) {
-          if (taxiDriverInfo.photo_group_status > 0 && taxiDriverInfo.photo_group_status != 2) {
-            return;
-          }
-        }
-        if (index > 5) {
-          if (taxiDriverInfo.taxi_qualification_status > 0 && taxiDriverInfo.taxi_qualification_status != 2) {
+        if (index > 4) {
+          if (driverInfo.photo_group_status > 0 && driverInfo.photo_group_status != 2) {
             return;
           }
         }
       }
-      if (!this.flag) {
+      if (!that.flag) {
         return;
       }
       var file = $(".file").get(0).files[0];
@@ -457,24 +751,22 @@ export default {
         // console.log(e);
         //console.log(e.target.result);
         if (index == 0) {
-          that.uploadPicture(0, e.target.result, 1, "A", that.img1);    //身份证正面
+          that.uploadPicture(0, e.target.result, 1, "A", that.img1);  //身份证正面
         } else if (index == 1) {
-          that.uploadPicture(1, e.target.result, 1, "B", that.img2);    //身份证反面
+          that.uploadPicture(1, e.target.result, 1, "B", that.img2); //身份证反面
         } else if (index == 2) {
-          that.uploadPicture(2, e.target.result, 2, "A", that.img3);    //驾驶证
+          that.uploadPicture(2, e.target.result, 2, "A", that.img3); //驾驶证
         } else if (index == 3) {
-          that.uploadPicture(3, e.target.result, 3, "A", that.img4);    //行驶证正面
+          that.uploadPicture(3, e.target.result, 2, "A", that.img4); //行驶证正面
         } else if (index == 4) {
-          that.uploadPicture(4, e.target.result, 3, "B", that.img5);    //行驶证反面
-        } else if (index == 5) {
-          that.uploadPicture(5, e.target.result, 4, "A", that.img6);    // 人车照
+          that.uploadPicture(4, e.target.result, 3, "B", that.img5); //行驶证反面
         } else {
-          that.uploadPicture(6, e.target.result, 5, "A", that.img7);    // 服务证照
+          that.uploadPicture(5, e.target.result, 3, "A", that.img6); // 人车照
         }
         file = null;
         $("#file").val("");
         $("#file").off("change");
-      };
+      }
     },
     /**
      * 图片上传
@@ -490,7 +782,6 @@ export default {
       var that = this;
       canvasDataURL(base64, function callback(data) {
         let params = {
-          // user_id: $.user_id,
           user_id: that.param.user_id,
           base64: data,
           type: type,
@@ -501,9 +792,9 @@ export default {
         let url = that.$global_msg.uploadPicture;
         that.axios.post(url, params).then(res => {
           console.log(res);
-          that.loading = false;
           var res = res.data;
-          if (res && res.status == 1) {
+          that.loading = false;
+          if (res.status == 1) {
             let path = res.data;
             switch (index) {
               case 0:
@@ -530,10 +821,6 @@ export default {
                 that.img6 = path;
                 $("#img6").attr("src", data);
                 break;
-              case 6:
-                that.img7 = path;
-                $("#img7").attr("src", data);
-                break;
               default: break;
             }
           } else {
@@ -545,359 +832,11 @@ export default {
         })
       });
     },
-    /**
-     * 获取司机实名认证信息
-     */
-    getTaxiDriverInfo() {
-      let params = {};
-      var param = this.param;
-      params.user_id = param.user_id;
-      if (param.id != null) {
-        params.id = param.id;
-      }
-      this.loadText = "获取中...";
-      this.loading = true;
-      let url = this.$global_msg.getTaxiDriverInfo;
-      this.axios.post(url, params).then(res => {
-        console.log(res);
-        var res = res.data
-        this.loading = false;
-        if (res && res.status == 1) {
-          this.taxiDriverInfo = res.data;
-          if (this.taxiDriverInfo) {
-            this.showTaxiDriverInfo();
-          }
-        } else {
-          $(".authen-main").removeClass("none");
-          vant.Toast(res.msg);
-        }
-      }).catch(err => {
-        console.log("err===", err)
-        this.loading = false;
-      })
-    },
-    /**
-     * 提交司机实名认证信息
-     */
-    submitTaxiDriver() {
-      let params = {
-        // user_id: $.user_id,
-        user_id: this.param.user_id,
-        pro_code: this.taxiCityInfo.pro_code,
-        pro_name: this.taxiCityInfo.province,
-        city_code: this.taxiCityInfo.city_code,
-        city_name: this.taxiCityInfo.city,
-        ad_code: this.taxiCityInfo.ad_code,
-        ad_name: this.taxiCityInfo.dist,
-        company_name: this.company_name,
-        name: this.name,
-        ID: this.ID,
-        image_id_a: this.img1,
-        image_id_b: this.img2,
-        image_drivers: this.img3,
-        first_issue: this.first_issue,
-        plate_no_short: this.plate_no_short,
-        plate_no_alpha: this.plate_no_alpha,
-        plate_no: this.plate_no,
-        vehicle_owner: this.vehicle_owner,
-        register_date: this.register_date,
-        image_driving_a: this.img4,
-        image_driving_b: this.img5,
-        image_group: this.img6,
-        qualification_no: this.qualification_no,
-        image_qualification: this.img7
-      };
-      let text = detectionParam(params);
-      if (text != "") {
-        vant.Toast(text);
-        return;
-      }
-      this.loadText = "提交中...";
-      this.loading = true;
-      console.log("params", params);
-      let url = this.$global_msg.submitTaxiDriver;
-      this.axios.post(url, params).then(res => {
-        console.log(res);
-        this.loading = false;
-        var res = res.data;
-        if (res && res.status == 1) {
-          this.flag = false;
-          this.drawerDisabled = true, // 阻止照片显示点击事件
-          this.timeDisabled = true, // 阻止时间显示点击事件
-          this.cityDisabled = true, // 阻止城市显示点击事件
-          this.carShortDisabled = true, // 阻止车牌简称显示点击事件
-          this.drawer = true, // 上传照片显示
-          $("#submit").removeClass("submit-btn").addClass("none");
-          $("input").attr("readonly", true);
-          $("input").attr("disabled", true);
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
-          vant.Toast(res.msg);
-        } else {
-          vant.Toast(res.msg);
-        }
-      }).catch(err => {
-        console.log("err===", err)
-        this.loading = false;
-      })
-    },
-
-    /**
-     * 显示司机认证信息
-     */
-    showTaxiDriverInfo() {
-      var taxiDriverInfo = this.taxiDriverInfo;
-      if (taxiDriverInfo) {
-        let status = taxiDriverInfo.status;
-        let taxiCompanyStatus = taxiDriverInfo.taxi_company_status;
-        let realNameStatus = taxiDriverInfo.real_name_status;
-        let driversLicenseStatus = taxiDriverInfo.drivers_license_status;
-        let drivingLicenseStatus = taxiDriverInfo.driving_license_status;
-        let photoGroupStatus = taxiDriverInfo.photo_group_status;
-        let taxiQualificationStatus = taxiDriverInfo.taxi_qualification_status;
-        if (taxiDriverInfo.province != null || taxiDriverInfo.city != null || taxiDriverInfo.dist) {
-          this.taxiCityInfo = {   // 选择城市信息
-            province: taxiDriverInfo.province,
-            pro_code: taxiDriverInfo.pro_code,
-            city: taxiDriverInfo.city,
-            city_code: taxiDriverInfo.city_code,
-            dist: taxiDriverInfo.dist,
-            ad_code: taxiDriverInfo.ad_code
-          };
-          var taxiCityInfo = this.taxiCityInfo
-          this.cityValue = ((taxiCityInfo.province != null ? taxiCityInfo.province : "") + "  " + (taxiCityInfo.city != null ? taxiCityInfo.city : "") + "  " + (taxiCityInfo.dist != null ? taxiCityInfo.dist : ""));
-        }
-        if (status != 2 && taxiCompanyStatus > 0 && realNameStatus > 0 && driversLicenseStatus > 0 && drivingLicenseStatus > 0 && photoGroupStatus > 0 && taxiQualificationStatus > 0) {
-          this.flag = false;
-          this.drawerDisabled = true, // 阻止照片显示点击事件
-          this.timeDisabled = true, // 阻止时间显示点击事件
-          this.cityDisabled = true, // 阻止城市显示点击事件
-          this.carShortDisabled = true, // 阻止车牌简称显示点击事件
-          $("#submit").removeClass("submit-btn").addClass("none");
-        } else {
-          this.flag = true;
-          this.drawerDisabled = false, // 阻止照片显示点击事件
-          this.timeDisabled = false, // 阻止时间显示点击事件
-          this.cityDisabled = false, // 阻止城市显示点击事件
-          this.carShortDisabled = false, // 阻止车牌简称显示点击事件
-          $("#submit").removeClass("none").addClass("submit-btn");
-        }
-        //公司信息
-        if (taxiCompanyStatus == 1) { //审核中
-          this.company_name = (taxiDriverInfo.company_name != null ? taxiDriverInfo.company_name : "");
-          $("#company-name").attr("readonly", true);
-        } else if (taxiCompanyStatus == 2) { //需完善
-          this.company_name = (taxiDriverInfo.company_name != null ? taxiDriverInfo.company_name : "");
-          $("#company-name").attr("readonly", false);
-        } else if (taxiCompanyStatus == 3) { //已认证
-          this.company_name = (taxiDriverInfo.company_name != null ? taxiDriverInfo.company_name : "");
-          $("#company-name").attr("readonly", true);
-        } else if (taxiCompanyStatus == 0 || taxiCompanyStatus == -1) { //未认证
-          $("#company-name").attr("readonly", false);
-        } else if (taxiCompanyStatus == -2) { //审核失败
-          this.company_name = (taxiDriverInfo.company_name != null ? taxiDriverInfo.company_name : "");
-          $("#company-name").attr("readonly", false);
-        }
-        //实名信息
-        var server3 = this.$global_msg.server3;
-        if (realNameStatus == 1) { //审核中
-          this.name = (taxiDriverInfo.name != null ? taxiDriverInfo.name : "");
-          this.ID = (taxiDriverInfo.ID != null ? taxiDriverInfo.ID : "");
-          $("#realName input").attr("readonly", true);
-          $("#realName #img1").attr("src", taxiDriverInfo.image_id_a != null ? (server3 + taxiDriverInfo.image_id_a) : "");
-          $("#realName #img2").attr("src", taxiDriverInfo.image_id_b != null ? (server3 + taxiDriverInfo.image_id_b) : "");
-          this.img1 = taxiDriverInfo.image_id_a != null ? taxiDriverInfo.image_id_a : "";
-          this.img2 = taxiDriverInfo.image_id_b != null ? taxiDriverInfo.image_id_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
-        } else if (realNameStatus == 2) { //需完善
-          this.name = (taxiDriverInfo.name != null ? taxiDriverInfo.name : "");
-          this.ID = (taxiDriverInfo.ID != null ? taxiDriverInfo.ID : "");
-          $("#realName input").attr("readonly", false);
-          $("#realName #img1").attr("src", taxiDriverInfo.image_id_a != null ? (server3 + taxiDriverInfo.image_id_a) : "");
-          $("#realName #img2").attr("src", taxiDriverInfo.image_id_b != null ? (server3 + taxiDriverInfo.image_id_b) : "");
-          this.img1 = taxiDriverInfo.image_id_a != null ? taxiDriverInfo.image_id_a : "";
-          this.img2 = taxiDriverInfo.image_id_b != null ? taxiDriverInfo.image_id_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
-        } else if (realNameStatus == 3) { //成功
-          this.name = (taxiDriverInfo.name != null ? taxiDriverInfo.name : "");
-          this.ID = (taxiDriverInfo.ID != null ? taxiDriverInfo.ID : "");
-          $("#realName input").attr("readonly", true);
-          $("#realName #img1").attr("src", taxiDriverInfo.image_id_a != null ? (server3 + taxiDriverInfo.image_id_a) : "");
-          $("#realName #img2").attr("src", taxiDriverInfo.image_id_b != null ? (server3 + taxiDriverInfo.image_id_b) : "");
-          this.img1 = taxiDriverInfo.image_id_a != null ? taxiDriverInfo.image_id_a : "";
-          this.img2 = taxiDriverInfo.image_id_b != null ? taxiDriverInfo.image_id_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
-          $("#realName ul li div b").html("审核通过");
-        } else if (realNameStatus == 0 || realNameStatus == -1) { //未提交认证 数据无效
-          $("#realName input").attr("readonly", false);
-          this.titleShow = true;
-          this.realNameStatusTitle = "";
-        } else if (realNameStatus == -2) { //失败
-          this.name = (taxiDriverInfo.name != null ? taxiDriverInfo.name : "");
-          this.ID = (taxiDriverInfo.ID != null ? taxiDriverInfo.ID : "");
-          $("#realName input").attr("readonly", false);
-          $("#realName #img1").attr("src", taxiDriverInfo.image_id_a != null ? (server3 + taxiDriverInfo.image_id_a) : "");
-          $("#realName #img2").attr("src", taxiDriverInfo.image_id_b != null ? (server3 + taxiDriverInfo.image_id_b) : "");
-          this.img1 = taxiDriverInfo.image_id_a != null ? taxiDriverInfo.image_id_a : "";
-          this.img2 = taxiDriverInfo.image_id_b != null ? taxiDriverInfo.image_id_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
-        }
-        //驾驶证信息
-        if (driversLicenseStatus == 1) { //审核中
-          this.first_issue_time = (taxiDriverInfo.first_issue != null ? taxiDriverInfo.first_issue : "");
-          $("#driver-license #first-issue").val(taxiDriverInfo.first_issue != null ? taxiDriverInfo.first_issue : "");
-          $("#driver-license input").attr("disabled", true);
-          $("#driver-license #img3").attr("src", taxiDriverInfo.image_drivers != null ? (server3 + taxiDriverInfo.image_drivers) : "");
-          this.img3 = taxiDriverInfo.image_drivers != null ? taxiDriverInfo.image_drivers : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
-        } else if (driversLicenseStatus == 2) { //需完善
-          this.first_issue_time = (taxiDriverInfo.first_issue != null ? taxiDriverInfo.first_issue : "");
-          $("#driver-license input").attr("disabled", false);
-          $("#driver-license #img3").attr("src", taxiDriverInfo.image_drivers != null ? (server3 + taxiDriverInfo.image_drivers) : "");
-          this.img3 = taxiDriverInfo.image_drivers != null ? taxiDriverInfo.image_drivers : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
-        } else if (driversLicenseStatus == 3) { //成功
-          this.first_issue_time = (taxiDriverInfo.first_issue != null ? taxiDriverInfo.first_issue : "");
-          $("#driver-license input").attr("disabled", true);
-          $("#driver-license #img3").attr("src", taxiDriverInfo.image_drivers != null ? (server3 + taxiDriverInfo.image_drivers) : "");
-          this.img3 = taxiDriverInfo.image_drivers != null ? taxiDriverInfo.image_drivers : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
-        } else if (driversLicenseStatus == 0 || driversLicenseStatus == -1) { //未提交认证 数据无效
-          $("#driver-license input").attr("disabled", false);
-          $("#driver-license ul li div").addClass("none");
-          $("#driver-license ul li div b").html("");
-        } else if (driversLicenseStatus == -2) { //失败
-        this.first_issue_time = (taxiDriverInfo.first_issue != null ? taxiDriverInfo.first_issue : "");
-          $("#driver-license input").attr("disabled", false);
-          $("#driver-license #first-issue").val(taxiDriverInfo.first_issue != null ? taxiDriverInfo.first_issue : "");this.first_issue_time = (taxiDriverInfo.first_issue != null ? taxiDriverInfo.first_issue : "");
-          $("#driver-license #img3").attr("src", taxiDriverInfo.image_drivers != null ? (server3 + taxiDriverInfo.image_drivers) : "");
-          this.img3 = taxiDriverInfo.image_drivers != null ? taxiDriverInfo.image_drivers : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
-        }
-        //行驶证信息
-        this.short = ((taxiDriverInfo.plate_no_short != null ? taxiDriverInfo.plate_no_short : "") + (taxiDriverInfo.plate_no_alpha != null ? taxiDriverInfo.plate_no_alpha : ""));
-        this.plate_no = (taxiDriverInfo.plate_no != null ? taxiDriverInfo.plate_no : "");
-        this.vehicle_owner = (taxiDriverInfo.vehicle_owner != null ? taxiDriverInfo.vehicle_owner : "");
-        this.register_date_time = (taxiDriverInfo.register_date != null ? taxiDriverInfo.register_date : "");
-        if (drivingLicenseStatus == 1) { //审核中
-          $("#driving-license input").attr("disabled", true);
-          $("#driving-license #plate-no").attr("readonly", true);
-          $("#driving-license #vehicle-owner").attr("readonly", true);
-          $("#driving-license #img4").attr("src", taxiDriverInfo.image_driving_a != null ? (server3 + taxiDriverInfo.image_driving_a) : "");
-          $("#driving-license #img5").attr("src", taxiDriverInfo.image_driving_b != null ? (server3 + taxiDriverInfo.image_driving_b) : "");
-          this.img4 = taxiDriverInfo.image_driving_a != null ? taxiDriverInfo.image_driving_a : "";
-          this.img5 = taxiDriverInfo.image_driving_b != null ? taxiDriverInfo.image_driving_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
-        } else if (drivingLicenseStatus == 2) { //需完善
-          $("#driving-license input").attr("disabled", false);
-          $("#driving-license #plate-no").attr("readonly", false);
-          $("#driving-license #vehicle-owner").attr("readonly", false);
-          $("#driving-license #img4").attr("src", taxiDriverInfo.image_driving_a != null ? (server3 + taxiDriverInfo.image_driving_a) : "");
-          $("#driving-license #img5").attr("src", taxiDriverInfo.image_driving_b != null ? (server3 + taxiDriverInfo.image_driving_b) : "");
-          this.img4 = taxiDriverInfo.image_driving_a != null ? taxiDriverInfo.image_driving_a : "";
-          this.img5 = taxiDriverInfo.image_driving_b != null ? taxiDriverInfo.image_driving_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
-        } else if (drivingLicenseStatus == 3) { //成功
-          $("#driving-license input").attr("disabled", true);
-          $("#driving-license #plate-no").attr("readonly", true);
-          $("#driving-license #vehicle-owner").attr("readonly", true);
-          $("#driving-license #img4").attr("src", taxiDriverInfo.image_driving_a != null ? (server3 + taxiDriverInfo.image_driving_a) : "");
-          $("#driving-license #img5").attr("src", taxiDriverInfo.image_driving_b != null ? (server3 + taxiDriverInfo.image_driving_b) : "");
-          this.img4 = taxiDriverInfo.image_driving_a != null ? taxiDriverInfo.image_driving_a : "";
-          this.img5 = taxiDriverInfo.image_driving_b != null ? taxiDriverInfo.image_driving_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
-        } else if (drivingLicenseStatus == 0 || drivingLicenseStatus == -1) { //未提交认证 数据无效
-          $("#driving-license input").attr("disabled", false);
-          $("#driving-license #plate-no").attr("readonly", false);
-          $("#driving-license #vehicle-owner").attr("readonly", false);
-          this.titleShow = false;
-          this.realNameStatusTitle = "";
-        } else if (drivingLicenseStatus == -2) { //失败
-          $("#driving-license input").attr("disabled", false);
-          $("#driving-license #plate-no").attr("readonly", false);
-          $("#driving-license #vehicle-owner").attr("readonly", false);
-          $("#driving-license #img4").attr("src", taxiDriverInfo.image_driving_a != null ? (server3 + taxiDriverInfo.image_driving_a) : "");
-          $("#driving-license #img5").attr("src", taxiDriverInfo.image_driving_b != null ? (server3 + taxiDriverInfo.image_driving_b) : "");
-          this.img4 = taxiDriverInfo.image_driving_a != null ? taxiDriverInfo.image_driving_a : "";
-          this.img5 = taxiDriverInfo.image_driving_b != null ? taxiDriverInfo.image_driving_b : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
-        }
-        //人车信息
-        if (photoGroupStatus == 1) { //审核中
-          $("#img6").attr("src", taxiDriverInfo.image_group != null ? (server3 + taxiDriverInfo.image_group) : "");
-          this.img6 = taxiDriverInfo.image_group != null ? taxiDriverInfo.image_group : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
-        } else if (photoGroupStatus == 2) { //需完善
-          $("#img6").attr("src", taxiDriverInfo.image_group != null ? (server3 + taxiDriverInfo.image_group) : "");
-          this.img6 = taxiDriverInfo.image_group != null ? taxiDriverInfo.image_group : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
-        } else if (photoGroupStatus == 3) { //成功
-          $("#img6").attr("src", taxiDriverInfo.image_group != null ? (server3 + taxiDriverInfo.image_group) : "");
-          this.img6 = taxiDriverInfo.image_group != null ? taxiDriverInfo.image_group : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
-        } else if (photoGroupStatus == 0 || photoGroupStatus == -1) { //未提交认证 数据无效
-          $("ul li div").addClass("none");
-          $("ul li div b").html("");
-        } else if (photoGroupStatus == -2) { //失败
-          $("#img6").attr("src", taxiDriverInfo.image_group != null ? (server3 + taxiDriverInfo.image_group) : "");
-          this.img6 = taxiDriverInfo.image_group != null ? taxiDriverInfo.image_group : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
-        }
-        //服务证认证
-        this.qualification_no = (taxiDriverInfo.taxi_qualification_no != null ? taxiDriverInfo.taxi_qualification_no : "");
-
-        if (taxiQualificationStatus == 1) { // 审核中
-          $("input").attr("readonly", true);
-          $("#img7").attr("src", taxiDriverInfo.image_taxi_qualification != null ? (server3 + taxiDriverInfo.image_taxi_qualification) : "");
-          this.img7 = taxiDriverInfo.image_taxi_qualification != null ? taxiDriverInfo.image_taxi_qualification : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
-        } else if (taxiQualificationStatus == 2) { //需完善
-          $("input").attr("readonly", false);
-          $("#img7").attr("src", taxiDriverInfo.image_taxi_qualification != null ? (server3 + taxiDriverInfo.image_taxi_qualification) : "");
-          this.img7 = taxiDriverInfo.image_taxi_qualification != null ? taxiDriverInfo.image_taxi_qualification : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
-        } else if (taxiQualificationStatus == 3) { //成功
-          $("input").attr("readonly", true);
-          $("#img7").attr("src", taxiDriverInfo.image_taxi_qualification != null ? (server3 + taxiDriverInfo.image_taxi_qualification) : "");
-          this.img7 = taxiDriverInfo.image_taxi_qualification != null ? taxiDriverInfo.image_taxi_qualification : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
-        } else if (taxiQualificationStatus == 0 || taxiQualificationStatus == -1) { //未提交认证 数据无效
-          $("input").attr("readonly", false);
-          this.titleShow = false;
-          this.realNameStatusTitle = "";
-        } else if (taxiQualificationStatus == -2) { //失败
-          $("input").attr("readonly", false);
-          $("#img7").attr("src", taxiDriverInfo.image_taxi_qualification != null ? (server3 + taxiDriverInfo.image_taxi_qualification) : "");
-          img7 = taxiDriverInfo.image_taxi_qualification != null ? taxiDriverInfo.image_taxi_qualification : "";
-          this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
-        }
-      }
-    },
   },
   created() {},
   mounted() {
     this.param = {bus_no : 308, user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"};
-    this.getTaxiDriverInfo();
+    // this.getExpressDriverInfo();
   }
 };
 </script>

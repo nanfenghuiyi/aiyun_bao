@@ -120,7 +120,24 @@ const routes = [
       title: '大巴车注册'
     }
   },
+  // 实名认证
+  {
+    path: '/realNameAuthen',
+    name: 'realNameAuthen',
+    component: () => import('../views/Authen/realNameAuthen.vue'),
+    meta: {
+      title: '实名认证'
+    }
+  },
   // 快车/出租车
+  {
+    path: '/index',
+    name: 'index',
+    component: () => import('../views/Authen/index.vue'),
+    meta: {
+      title: '车主认证身份'
+    }
+  },
   {
     path: '/city',
     name: 'city',
@@ -143,6 +160,23 @@ const routes = [
     component: () => import('../views/Authen/taxiAuthen.vue'),
     meta: {
       title: '出租车认证'
+    }
+  },
+  {
+    path: '/expressAuthen',
+    name: 'expressAuthen',
+    component: () => import('../views/Authen/expressAuthen.vue'),
+    meta: {
+      title: '快车/顺风车认证'
+    }
+  },
+  // 钱包
+  {
+    path: '/wealthDetail',
+    name: 'wealthDetail',
+    component: () => import('../views/Wealth/wealthDetail.vue'),
+    meta: {
+      title: '详情'
     }
   },
 ]

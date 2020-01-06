@@ -25,17 +25,7 @@
           </li>
         </ul>
       </div>
-      <!-- <van-index-bar :index-list="letter" :sticky="false" highlight-color="#00f" @select="onSelect">
-        <van-index-anchor :index="letter" v-for="(item, index) of allModels" :key="index">
-          {{item.letter}} 
-          <van-cell v-for="(item, index) of item.module" :key="index" @click="getCarModel(item)">
-            <img class="mr" :src="item.src" alt="">
-            <span>{{item.name}}</span>
-          </van-cell>
-        </van-index-anchor>
-      </van-index-bar> -->
-
-      <van-index-bar highlight-color="#00f">
+      <van-index-bar highlight-color="#07c160">
         <div v-for="(item, index) of allModels" :key="index">
           <van-index-anchor :index="item.letter" />
             <van-cell v-for="(item, index) of item.module" :key="index" @click="getCarModel(item)">
@@ -74,8 +64,9 @@
 
 <script>
 import Vue from "vue";
+import { IndexBar, IndexAnchor, Cell } from 'vant';
 
-Vue.use(vant);
+Vue.use(IndexBar).use(IndexAnchor).use(Cell);
 
 export default {
   data() {
@@ -216,7 +207,7 @@ export default {
      */
     getCarColor(item) {
       console.log(item)
-      this.mModel = item.model;
+      this.mModel = item.model.replace(this.mBrand, "").trim();;
       this.innerDrawer = true;
       this.colorSeries = this.$global_msg.color;
     },
@@ -224,14 +215,16 @@ export default {
      * 选择车辆颜色
      */
     setCarColor(itemSeries) {
+      console.log(itemSeries)
       this.carDrawer = false,
       this.innerDrawer = false,
       this.carInfo = {
         brand: this.mBrand,
         model: this.mModel,
-        color: itemSeries.color,
+        color: itemSeries.name,
         msg: false
       };
+      this.$emit("carChildFn", this.carInfo)
       console.log(this.carInfo)
     }
   },

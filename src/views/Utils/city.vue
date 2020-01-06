@@ -120,8 +120,10 @@ export default {
               province: this.province,
               pro_code: this.pro_code,
               city: this.province,
-              city_code: this.pro_code
+              city_code: this.pro_code,
+              msg: false
             };
+            this.$emit('cityChildFn', this.cityInfo);
             console.log(this.cityInfo)
             vant.Toast(res.msg);
           }
@@ -142,12 +144,14 @@ export default {
       this.city = item.city;
       this.city_code = item.code;
       if(this.type == "express"){ // 快车
-        let cityInfo = {   //选择城市信息
+        this.cityInfo = {   //选择城市信息
           province: this.province,
           pro_code: this.pro_code,
           city: this.city,
-          city_code: this.city_code
+          city_code: this.city_code,
+          msg: false
         };
+        this.$emit('cityChildFn', this.cityInfo);
       } else {
         let url = this.$global_msg.getAds;
         let params = {
@@ -163,12 +167,14 @@ export default {
                 this.AdsList = res.data;
               }
           } else {
-            let cityInfo = {   //选择城市信息
+            this.cityInfo = {   //选择城市信息
               province: this.province,
               pro_code: this.pro_code,
               city: this.city,
-              city_code: this.city_code
+              city_code: this.city_code,
+              msg: false
             };
+            this.$emit('cityChildFn', this.cityInfo);
             vant.Toast(res.msg);
           }
         }).catch(err => {
@@ -185,7 +191,7 @@ export default {
     selectAds(item) {
       this.cityDrawer = false;
       this.AdsDrawer = false;
-      let cityInfo = {   //选择城市信息
+      this.cityInfo = {   //选择城市信息
         province: this.province,
         pro_code: this.pro_code,
         city: this.city,
@@ -194,6 +200,8 @@ export default {
         ad_code: item.district_code,
         msg: false
       };
+      console.log(this.cityInfo)
+      this.$emit('cityChildFn', this.cityInfo);
     }
   },
   mounted() {
@@ -205,6 +213,9 @@ export default {
 
 <style lang="scss">
 @import "../../styles/main.scss";
+.v-modal {
+  z-index: 2000 !important;
+}
 
 </style>
 

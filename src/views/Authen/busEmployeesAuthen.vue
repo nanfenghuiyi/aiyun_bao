@@ -74,7 +74,8 @@
         </div>
         <div class="content">
           <div class="legend">
-            <img src="@/assets/Authen/id-card-front-demo.jpg" />
+            <!-- <img src="@/assets/Authen/id-card-front-demo.jpg" /> -->
+            <img :src="demoImg[imgIndex].img" />
             <p>请按照示例图提交身份证正面照</p>
             <p>确保照片真实有效、文字清晰、无反光、无遮挡</p>
           </div>
@@ -126,6 +127,11 @@ export default {
       loading: false,
       loadText: "图片上传中",
       activeNames: ["1", "2"],
+      demoImg: [
+        { text: "身份证正面照", img: require("@/assets/Authen/id-card-front-demo.jpg") },
+        { text: "身份证反面照", img: require("@/assets/Authen/id-card-back-demo.jpg") },
+        { text: "驾驶证正本照", img: require("@/assets/Authen/driver-license-front-demo.jpg") }
+      ],
       demoShow: true,
       radio: 1,
       disabled: false, // 单选禁止
@@ -189,7 +195,8 @@ export default {
     timeConfirm(){
       if (this.first_issue_time != "") {
         this.timeDrawer = false;
-        this.first_issue = new Date((this.first_issue_time + " 00:00:00").replace(/-/g, "/")).getTime();
+        // this.first_issue = new Date((this.first_issue_time + " 00:00:00").replace(/-/g, "/")).getTime();
+        this.first_issue = this.first_issue_time;
       }else {
         vant.Toast("请滚动选择时间")
       }

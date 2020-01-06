@@ -325,7 +325,7 @@ export default {
         // console.log(e);
         // console.log(e.target.result);
         if (index == 0) {
-          that.uploadPicture(0, e.target.result, 7, "A", img1);  //大巴车资质照
+          that.uploadPicture(0, e.target.result, 7, "A", that.img1);  //大巴车资质照
         }
         file = null;
         $("#file").val("");

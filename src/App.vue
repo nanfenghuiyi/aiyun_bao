@@ -52,7 +52,7 @@ export default {
   text-align: left;
   color: #2c3e50;
   a {
-    font-weight: bold;
+    // font-weight: bold;
     text-decoration: none;
     &.router-link-exact-active {
       color: #42b983;

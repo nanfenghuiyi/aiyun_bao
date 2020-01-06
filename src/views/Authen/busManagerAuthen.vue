@@ -89,7 +89,8 @@
         </div>
         <div class="content">
           <div class="legend">
-            <img src="@/assets/Authen/id-card-front-demo.jpg" />
+            <!-- <img src="@/assets/Authen/id-card-front-demo.jpg" /> -->
+            <img :src="demoImg[imgIndex].img" />
             <p>请按照示例图提交身份证正面照</p>
             <p>确保照片真实有效、文字清晰、无反光、无遮挡</p>
           </div>
@@ -119,6 +120,12 @@ export default {
       loading: false,
       loadText: "图片上传中",
       activeNames: ["1", "2"],
+      demoImg: [
+        { text: "身份证正面照", img: require("@/assets/Authen/id-card-front-demo.jpg") },
+        { text: "身份证反面照", img: require("@/assets/Authen/id-card-back-demo.jpg") },
+        { text: "手持身份证正面照", img: require("@/assets/Authen/id-card-hand-demo.jpg") },
+        { text: "企业营业执照照", img: require("@/assets/Authen/enterprise-license-demo.jpg") }
+      ],
       demoShow: true,
       radio: 2,
       disabled: false,
