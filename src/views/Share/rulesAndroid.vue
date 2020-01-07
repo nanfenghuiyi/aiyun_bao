@@ -1,0 +1,46 @@
+<template>
+  <div class="container">
+    <div class="rules">
+      <h1>共享收益规则</h1>
+      <h2>活动理念：</h2>
+      <p>推动共享出行，全民共享收益。</p>
+      <h2>活动简介：</h2>
+      <p>即日起，分享邀请链接给您的朋友，无论他们注册成为乘客还是司机，您都将成为他们的上级推荐人。同时，若您的朋友邀请新的用户，您也将成为他们的上上级推荐人。以此类推，您最多可拥有四级的推荐用户。</p>
+      <p>被推荐用户每次发生交易，无论是作为乘客支付费用，或是作为司机收取费用，平台都会将一定比例的服务费共享给推荐人，最多可达行程费用的5%。</p>
+      <h2>活动说明：</h2>
+      <ul>
+        <li>
+          <p>推荐人永久享有共享收益的权利；</p>
+        </li>
+        <li>
+          <p>收益可在钱包中提现；</p>
+        </li>
+        <li>
+          <p>共享收益的比例受地区、市场等因素影响，以实际发放为准。</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  components: {},
+  props: {},
+  watch: {},
+  computed: {},
+  methods: {},
+  created() {},
+  mounted() {}
+};
+</script>
+
+<style lang="scss" scoped>
+@import "@/styles/main.scss";
+@import "@/styles/Share/rules.scss";
+
+
+</style>

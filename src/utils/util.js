@@ -209,6 +209,70 @@ function getNewsStatus(status) {
   return str;
 };
 
+//获取提现类型格式解析
+function getWealthChannel(channel) {
+  let str = "";
+  switch (channel) {
+    case "1":
+      str = "微信";
+      break;
+    case "2":
+      str = "支付宝";
+      break;
+    case "1001":
+      str = "招商银行";
+      break;
+    case "1002":
+      str = "工商银行";
+      break;
+    case "1003":
+      str = "建设银行";
+      break;
+    case "1004":
+      str = "浦发银行";
+      break;
+    case "1005":
+      str = "农业银行";
+      break;
+    case "1006":
+      str = "民生银行";
+      break;
+    case "1009":
+      str = "兴业银行";
+      break;
+    case "1010":
+      str = "平安银行";
+      break;
+    case "1020":
+      str = "交通银行";
+      break;
+    case "1021":
+      str = "中信银行";
+      break;
+    case "1022":
+      str = "光大银行";
+      break;
+    case "1025":
+      str = "华夏银行";
+      break;
+    case "1026":
+      str = "中国银行";
+      break;
+    case "1027":
+      str = "广发银行";
+      break;
+    case "1032":
+      str = "北京银行";
+      break;
+    case "1056":
+      str = "宁波银行";
+      break;
+    case "1066":
+      str = "邮储银行";
+      break;
+  }
+  return str;
+};
 
   //判断提交的参数是否完整
 function detectionParam(json) {
@@ -358,5 +422,6 @@ export { //很关键
   getNewsStatus,
   detectionParam,
   authenInfoDetection,
-  repeatType
+  repeatType,
+  getWealthChannel
 }

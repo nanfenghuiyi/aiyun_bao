@@ -1,0 +1,41 @@
+<template>
+  <div class="container">
+    <div class="rules">
+        <h1>共享业务收入规则</h1>
+        <h2>活动理念：</h2>
+        <p>推动共享出行，共享业务收入。</p>
+        <h2>活动简介：</h2>
+        <p>在“爱运宝”APP中，分享邀请链接给您的亲友，无论他们注册成为乘客还是司机，您都将成为他们的上级推荐人。同时，若您的亲友邀请新的用户，您也将成为他们的上上级推荐人，以此类推，您最多可拥有四级的推荐用户。</p>
+        <p>被推荐用户每次完成出行业务，无论是作为乘客支付乘车业务费用，或是作为司机收取载客业务费用，平台都会将一定比例的业务费用共享给推荐人，最多可达行程费用的5%。</p>
+        <h2>活动说明：</h2>
+        <ul>
+            <li><p>推荐人在“爱运宝”上永久享有共享业务收入的权利</p></li>
+            <li><p>共享业务收入可在“爱运宝”的“我”里面的“钱包”中提现</p></li>
+            <li><p>共享业务收入的比例受地区、市场等因素影响，以实际发放为准</p></li>
+            <li><p>活动最终解释权归成都爱运科技有限公司所有</p></li>
+        </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+    }
+  },
+  components: {},
+  props: {},
+  watch: {},
+  computed: {},
+  methods: {},
+  created () {},
+  mounted () {}
+}
+</script>
+
+<style lang="scss" scoped>
+@import "@/styles/main.scss";
+@import "@/styles/Share/rules.scss";
+
+</style>

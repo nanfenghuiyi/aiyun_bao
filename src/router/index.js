@@ -179,6 +179,81 @@ const routes = [
       title: '详情'
     }
   },
+  // 支付
+  {
+    path: '/pay',
+    name: 'pay',
+    component: () => import('../views/Pay/pay.vue'),
+    meta: {
+      title: '支付'
+    }
+  },
+  {
+    path: '/payResult',
+    name: 'payResult',
+    component: () => import('../views/Pay/payResult.vue'),
+    meta: {
+      title: '支付结果'
+    }
+  },
+  {
+    path: '/priceDetail', // 未测试
+    name: 'priceDetail',
+    component: () => import('../views/Pay/priceDetail.vue'),
+    meta: {
+      title: '拼车预估价格明细'
+    }
+  },
+  {
+    path: '/pricingRules', // 未测试
+    name: 'pricingRules',
+    component: () => import('../views/Pay/pricingRules.vue'),
+    meta: {
+      title: '计价规则'
+    }
+  },
+  // 消息
+  {
+    path: '/busRepeatDetail', // 未完成
+    name: 'busRepeatDetail',
+    component: () => import('../views/News/busRepeatDetail.vue'),
+    meta: {
+      title: '详情'
+    }
+  },
+  // 推荐与分享
+  {
+    path: '/cardGuide', // 
+    name: 'cardGuide',
+    component: () => import('../views/Share/cardGuide.vue'),
+    meta: {
+      title: '专属名片'
+    }
+  },
+  {
+    path: '/rulesAndroid', // 
+    name: 'rulesAndroid',
+    component: () => import('../views/Share/rulesAndroid.vue'),
+    meta: {
+      title: '共享收益规则'
+    }
+  },
+  {
+    path: '/rulesIos', // 
+    name: 'rulesIos',
+    component: () => import('../views/Share/rulesIos.vue'),
+    meta: {
+      title: '共享业务收入规则'
+    }
+  },
+  {
+    path: '/share', // 
+    name: 'share',
+    component: () => import('../views/Share/share.vue'),
+    meta: {
+      title: '推荐与分享'
+    }
+  },
 ]
 
 const router = new VueRouter({

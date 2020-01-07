@@ -1,0 +1,28 @@
+.rules {
+  width: 92%;
+  height: 95vh;
+  overflow: scroll;
+  font-size: 8px;
+  line-height: 15px;
+  padding: 15px;
+
+  h1 {
+    text-align: center;
+    line-height: 50px;
+  }
+
+  h2 {
+    line-height: 30px;
+  }
+
+  p {
+    margin: 10px 0;
+    opacity: .8;
+    font-size: 12px;
+  }
+
+  ul li {
+    list-style: disc !important;
+    margin-left: 10px;
+  }
+}

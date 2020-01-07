@@ -11,7 +11,12 @@
         <span class="type"></span>
         <span class="value"></span>
       </div>
-      <ul id="wealth-detail"></ul>
+      <ul id="wealth-detail">
+        <li v-for="(item, index) of wealthDetail" :key="index">
+          <span>{{item.text}}</span>
+          <span>{{item.content}}</span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -19,6 +24,8 @@
 <script>
 import $ from "jquery";
 import Vue from "vue";
+import { formatTwoDecimal, getNewsType, getNewsStatus, getWealthChannel, format } from "../../utils/util";
+
 Vue.use(vant);
 
 export default {
@@ -27,6 +34,8 @@ export default {
       loading: false,
       loadText: "图片上传中",
       param: [],
+
+      wealthDetail: [], // 钱包详情
     };
   },
   components: {},
@@ -50,70 +59,68 @@ export default {
         var res = res.data;
         this.loading =false;
         if (res && res.status == 1) {
-          $(".wealth-detail-main").removeClass("none");
           let data = res.data;
           // $(".type").text($.getNewsType(data.type));
           $(".type").text(data.remarks);
-          $(".value").text($.formatTwoDecimal(data.value));
-          let wealthDetail = [];
+          $(".value").text(formatTwoDecimal(data.value));
           if (data.type != null) {
             let type = {
               text: "类型",
-              content: $.getNewsType(data.type)
+              content: getNewsType(data.type)
             };
-            wealthDetail.push(type);
+            this.wealthDetail.push(type);
           }
           if (data.status != null) {
             let status = {
               text: "状态",
-              content: $.getNewsStatus(data.status)
+              content: getNewsStatus(data.status)
             };
-            wealthDetail.push(status);
+            this.wealthDetail.push(status);
           }
           if (data.extra != null) {
             let extra = data.extra;
             if (extra.channel != null) {
               let channel = {
                 text: "账户类型",
-                content: $.getWealthChannel(extra.channel + "")
+                content: getWealthChannel(extra.channel + "")
               };
-              wealthDetail.push(channel);
+              this.wealthDetail.push(channel);
             }
             if (extra.name != null) {
               let name = {
                 text: "账户姓名",
                 content: extra.name
               };
-              wealthDetail.push(name);
+              this.wealthDetail.push(name);
             }
             if (extra.account != null) {
               let account = {
                 text: "账户账号",
                 content: extra.account
               };
-              wealthDetail.push(account);
+              this.wealthDetail.push(account);
             }
           }
           if (data.add_time != null) {
             let add_time = {
               text: "时间",
-              content: $.format(data.add_time, "yyyy-MM-dd hh:mm:ss")
+              content: format(data.add_time, "yyyy-MM-dd hh:mm:ss")
             };
-            wealthDetail.push(add_time);
+            this.wealthDetail.push(add_time);
           }
           if (data.id != null) {
             let id = {
               text: "编号",
               content: data.id
             };
-            wealthDetail.push(id);
+            this.wealthDetail.push(id);
           }
           if (data.balance != null) {
             let balance = {
               text: "剩余金额",
-              content: $.formatTwoDecimal(data.balance)
+              content: formatTwoDecimal(data.balance)
             };
-            wealthDetail.push(balance);
+            this.wealthDetail.push(balance);
           }
           // if (data.remarks != null || (data.extra != null && data.extra.err_msg != null)) {
           if (data.extra != null && data.extra.err_msg != null) {
@@ -122,13 +129,10 @@ export default {
               // content: (data.remarks != null ? data.remarks : "") + (data.remarks != null && data.remarks != "" && data.extra.err_msg != null && data.extra.err_msg != "" ? "，" : "") + (data.extra.err_msg != null ? data.extra.err_msg : "")
               content: data.extra.err_msg
             };
-            wealthDetail.push(remarks);
+            this.wealthDetail.push(remarks);
           }
-          let template = document.getElementById('template-wealth-detail-list').innerHTML;
-          document.getElementById('wealth-detail').innerHTML = doT.template(template)(wealthDetail);
         } else {
-          $(".wealth-detail-main").removeClass("none");
-          toastAlertShow(res.msg);
+          vant.Toast(res.msg);
         }
       }).catch(err => {
         console.log("err===", err);
@@ -139,9 +143,9 @@ export default {
   created() {},
   mounted() {
     this.param = {
-      id: 0,
+      // id: "",
       user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627",
-      log_id: 15764947343577704317
+      log_id: "15764947343577704317"
     };
     this.getParams();
   }
@@ -149,40 +153,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wealth-detail-main {
+
+.wealth-detail-main, .container {
   background-color: #f3f3f3;
-  font-size: 0.28rem;
+  font-size: 16px;
   width: 100%;
   height: 100%;
   ul li {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0.25rem 0.4rem;
+    padding: 10px 10px;
+    font-size: 14px;
     span:first-child {
-      font-size: 0.3rem;
       color: #6e6e6e;
-      min-width: 1.2rem;
+      min-width: 20px;
     }
     span:last-child {
-      font-size: 0.3rem;
       color: #333333;
-      margin-left: 0.2rem;
+      margin-left: 5px;
     }
   }
   .title {
-    border-bottom: 0.02rem solid #cccccc;
-    padding: 0.8rem 0.2rem;
+    border-bottom: 1px solid #cccccc;
+    padding: 30px 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     span:first-child {
-      font-size: 0.35rem;
+      font-size: 18px;
       color: #333333;
-      padding: 0.2rem;
+      padding: 5px;
     }
     span:last-child {
-      font-size: 0.5rem;
+      font-size: 18px;
       color: #333333;
     }
   }

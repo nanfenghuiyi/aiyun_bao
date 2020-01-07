@@ -51,6 +51,27 @@ const getShareLinkRegister = ip3 + "register";
 const downloadUrl = ip1 + "WebShare/downloadUrl";
 
   /**
+   * 钱包相关接口
+   */
+//获取钱包消息详情
+const getPropertyDetail = ip1 + "Common/getPropertyDetail";
+//获取支付结果详情
+const getPayResult = ip1 + "Pay/orderQuery";
+
+/**
+   * 支付相关接口
+   */
+//获取账单信息
+const getPayInfo = ip1 + "Pay/getPayInfo";
+//下单
+const unifiedOrder = ip1 + "Pay/unifiedOrder";
+//获取预估价格详情
+const getDetailEstimateInfo = ip1 + "PriceDescription/getDetailEstimateInfo";
+//获取价格配置详情
+const getPriceConfig = ip1 + "PriceDescription/getPriceConfig";
+
+
+  /**
    * 认证相关接口
    */
   //上传认证图片
@@ -113,6 +134,14 @@ const getUploaderCity = ip1 + "BusUploader/uploaderCity";
 const uploadInfo = ip1 + "BusUploader/uploadInfo";
   //快速上传联系信息
 const leaveWords = ip1 + "BusUploader/leaveWords";
+
+/**
+     * 消息相关接口
+     */
+//获取大巴车上传记录详情
+const getAllUploadedBus = ip1 + "BusUploader/getAllUploadedBus";
+//获取重复大巴车上传者信息
+const getBusUploaderInfo = ip1 + "BusUploader/getBusUploaderInfo";
 
   /**
    * 车辆类型
@@ -186,5 +215,13 @@ export default {
   carLogo,
   plateShortList,
   plateletterList,
-  color
+  color,
+  getPropertyDetail,
+  getPayResult,
+  getPayInfo,
+  unifiedOrder,
+  getDetailEstimateInfo,
+  getPriceConfig,
+  getAllUploadedBus,
+  getBusUploaderInfo
 }
