@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{ height: scrollerHeight }">
     <router-view id="apply" />
   </div>
 </template>
@@ -10,6 +10,13 @@ import Vue from 'vue'
 export default {
   data() {
     return {};
+  },
+  computed: {
+    // 滚动区高度
+    // (业务需求：手机屏幕高度减去头部标题和底部tabbar的高度，当然这2个高度也是可以动态获取的)
+    scrollerHeight: function() {
+      return (window.innerHeight) + 'px';
+    },
   },
   methods: {},
   created() {
@@ -35,7 +42,11 @@ export default {
   },
   mounted() {
     console.log("这是APP中的事件");
-    // Vue.prototype.$global_msg.id = 123;
+    Vue.prototype.param = {
+      city_code: "028",
+      identity: 1,
+      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
+    };
   }
 };
 </script>
@@ -47,7 +58,7 @@ export default {
 }
 #app {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

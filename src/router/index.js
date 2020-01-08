@@ -247,11 +247,35 @@ const routes = [
     }
   },
   {
-    path: '/share', // 
+    path: '/share',
     name: 'share',
     component: () => import('../views/Share/share.vue'),
     meta: {
       title: '推荐与分享'
+    }
+  },
+  {
+    path: '/recommendedNum',
+    name: 'recommendedNum',
+    component: () => import('../views/Share/recommendedNum.vue'),
+    meta: {
+      title: '推荐用户详情'
+    }
+  },
+  {
+    path: '/recommendedList',
+    name: 'recommendedList',
+    component: () => import('../views/Share/recommendedList.vue'),
+    meta: {
+      title: '我已推荐的用户'
+    }
+  },
+  {
+    path: '/card',
+    name: 'card',
+    component: () => import('../views/Share/card.vue'),
+    meta: {
+      title: '专属名片'
     }
   },
 ]
