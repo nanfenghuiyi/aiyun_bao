@@ -74,8 +74,8 @@
           </div>
         </el-collapse-item>
       </el-collapse>
+      <div @click="submitBusManager" id="submit" class="submit-btn">确认提交</div>
     </div>
-    <div @click="submitBusManager" id="submit" class="submit-btn">确认提交</div>
     <!-- 上传照片 -->
     <div>
       <el-drawer
@@ -129,7 +129,6 @@ export default {
       demoShow: true,
       radio: 2,
       disabled: false,
-      param: [],
 
       busManagerInfo: [], // 获取的认证信息
       name: "",
@@ -539,7 +538,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.param.user_id = this.$global_msg.user_id;
     this.getBusManagerInfo();
   }
 };

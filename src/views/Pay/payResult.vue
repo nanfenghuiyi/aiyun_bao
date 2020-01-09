@@ -25,7 +25,6 @@ export default {
     return {
       loading: false,
       loadText: "获取中",
-      param: []
     };
   },
   computed: {},
@@ -57,17 +56,15 @@ export default {
     }
   },
   mounted() {
-    this.param = {
-      order_no: "FPBV32MT",
-      order_type: 4,
-      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
-    };
     this.getPayResultInfo();
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.container{
+  height: 100%;
+}
 .pay-result-main {
   width: 100%;
   height: 100%;

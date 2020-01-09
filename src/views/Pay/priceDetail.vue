@@ -38,7 +38,6 @@ export default {
     return {
       loading: false,
       loadText: "获取中",
-      param: [],
 
       type: 0, // 1 快车 2 出租车
       priceData: [], // 价格详情
@@ -143,8 +142,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.param = {},
-    this.type = this.param.type;
     this.getPriceDetail()
   }
 };

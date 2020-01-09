@@ -33,17 +33,12 @@ export default {
     return {
       loading: false,
       loadText: "图片上传中",
-      param: [],
 
       wealthDetail: [], // 钱包详情
     };
   },
-  components: {},
-  props: {},
-  watch: {},
-  computed: {},
   methods: {
-    getParams() {
+    getWealth() {
       var param = this.param;
       let params = {
         user_id: param.user_id,
@@ -140,14 +135,8 @@ export default {
       })
     }
   },
-  created() {},
   mounted() {
-    this.param = {
-      // id: "",
-      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627",
-      log_id: "15764947343577704317"
-    };
-    this.getParams();
+    this.getWealth();
   }
 };
 </script>

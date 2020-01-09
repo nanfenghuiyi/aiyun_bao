@@ -43,7 +43,6 @@ export default {
     return {
       loading: false,
       loadText: "获取中",
-      param: [],
 
       priceInfoList: [], // 账单信息
       payBtn: "确认支付0.00元", // 确定支付
@@ -187,17 +186,13 @@ export default {
   },
   created() {},
   mounted() {
-    this.param = {
-      order_no: "FPBV32MT",
-      order_type: 4,
-      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
-    };
     this.getPayInfo();
   }
 };
 </script>
 
 <style lang="scss" scoped>
+
 .mp-main {
   width: 100%;
   background-color: #ffffff;

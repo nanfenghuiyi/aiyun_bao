@@ -64,7 +64,7 @@ export default {
     // 获取状态
     getUploaderStatus() {
       var url = this.$global_msg.getUploaderStatus;
-      var obj = {user_id: this.user_id}
+      var obj = {user_id: this.param.user_id}
       this.axios.post(url, obj).then(res => {
         console.log("res==", res);
         if (res) {
@@ -81,7 +81,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.user_id = this.$global_msg.user_id;
     this.getUploaderStatus();
   }
 };

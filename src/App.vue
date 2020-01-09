@@ -45,13 +45,23 @@ export default {
     Vue.prototype.param = {
       city_code: "028",
       identity: 1,
-      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
+      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627",
+      bus_no : 308,
+      employee_id: 569,
+      employee_type: "1",
+      order_no: "FPBV32MT",
+      order_type: 4,
+      log_id: "15764947343577704317",
     };
   }
 };
 </script>
 
 <style lang="scss">
+.container{
+  width: 100%;
+  height: 100%;
+}
 .focusState {
   position: absolute;
   bottom: 0;

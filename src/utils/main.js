@@ -50,6 +50,18 @@ const getShareLinkRegister = ip3 + "register";
   //分享链接下载地址
 const downloadUrl = ip1 + "WebShare/downloadUrl";
 
+/**
+  * 评价相关接口
+  */
+//获取评价信息
+const getRatingInfo = ip1 + "Judge/getRatingInfo";
+//提交评价信息
+const submitRating = ip1 + "Judge/submitRating";
+//获取取消理由
+const getCancelReason = ip2 + "getCancelReason";
+//提交取消理由
+const submitReason = ip2 + "submitReason";
+
   /**
    * 钱包相关接口
    */
@@ -223,5 +235,9 @@ export default {
   getDetailEstimateInfo,
   getPriceConfig,
   getAllUploadedBus,
-  getBusUploaderInfo
+  getBusUploaderInfo,
+  getRatingInfo,
+  submitRating,
+  getCancelReason,
+  submitReason
 }

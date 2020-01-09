@@ -59,7 +59,6 @@ export default {
     return {
       loading: false,
       loadText: "获取中",
-      param: [],
 
       priceData: [], // 价格详情
       nightPrice: "", // 夜间费
@@ -155,7 +154,6 @@ export default {
     }
   },
   mounted() {
-    this.param = {};
     this.getPriceRules();
   }
 };

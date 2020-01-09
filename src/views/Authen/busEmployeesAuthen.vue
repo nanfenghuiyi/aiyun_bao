@@ -59,8 +59,8 @@
           </div>
         </el-collapse-item>
       </el-collapse>
+      <div @click="submitBusEmployeesInfo" id="submit" class="submit-btn">确认提交</div>
     </div>
-    <div @click="submitBusEmployeesInfo" id="submit" class="submit-btn">确认提交</div>
     <!-- 上传照片 -->
     <div>
       <el-drawer
@@ -135,7 +135,7 @@ export default {
       demoShow: true,
       radio: 1,
       disabled: false, // 单选禁止
-      param: [],
+      existToken: "", // url传递的参数
 
       busEmployeesInfo: [], // 获取的认证信息
       name: "",
@@ -340,7 +340,7 @@ export default {
         if (res && res.status == 1) {
           this.busEmployeesInfo = res.data;
           if (this.busEmployeesInfo) {
-            sessionStorage.setItem("busEmployeesInfo", JSON.stringify(this.busEmployeesInfo));
+            // sessionStorage.setItem("busEmployeesInfo", JSON.stringify(this.busEmployeesInfo));
             this.showBusEmployeesInfo();
           }
         } else {
@@ -357,6 +357,7 @@ export default {
      */
     submitBusEmployeesInfo() {
       let params = {};
+      var param = this.param;
       params.user_id = param.user_id;
       let url = this.$global_msg.submitBusEmployees;
       if (param.employee_id != null) {
@@ -575,14 +576,14 @@ export default {
       }
     },
   },
-  created() {},
   mounted() {
-    // this.token = this.$route.query.token;
-    this.param = {employee_id: 569,employee_type: "1",user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"}
-
-    this.param.user_id = this.$global_msg.user_id;
-    console.log(this.param)
-    this.getBusEmployeesInfo();
+    this.existToken = this.$route.query.token;
+    if(this.$route.query != "" && this.$route.query != null && this.existToken != "" && this.existToken != null){
+      this.param.user_id = this.existToken;
+    }else {
+      this.getBusEmployeesInfo();
+    }
+    
   }
 };
 </script>

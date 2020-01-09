@@ -56,7 +56,7 @@ export default {
       }
       this.loading = true;
       var url = this.$global_msg.leaveWords;
-      var obj = {user_id: this.user_id, user_name: this.user_name, phone: this.phone}
+      var obj = {user_id: this.param.user_id, user_name: this.user_name, phone: this.phone}
       this.axios.post(url, obj).then(res => {
         console.log("res", res);
         var res = res.data;
@@ -76,9 +76,6 @@ export default {
       })
     }
   },
-  mounted() {
-    this.user_id = this.$global_msg.user_id;
-  }
 };
 </script>
 

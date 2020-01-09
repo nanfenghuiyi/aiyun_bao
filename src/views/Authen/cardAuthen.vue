@@ -116,7 +116,7 @@ export default {
       var that = this;
       canvasDataURL(base64, function callback(data) {
         let params = {
-          user_id: that.user_id,
+          user_id: that.param.user_id,
           base64: data,
           type: type,
           extra: extra,
@@ -232,7 +232,6 @@ export default {
     }
   },
   mounted() {
-    this.user_id = this.$global_msg.user_id;
   }
 };
 </script>

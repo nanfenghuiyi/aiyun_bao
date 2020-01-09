@@ -109,7 +109,7 @@ export default {
     /**
      * 获取车辆
      */
-    getParams() {
+    getCar() {
       let params = {
         brand: ""
       };
@@ -230,11 +230,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.param = {
-      bus_no: 308,
-      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
-    };
-    this.getParams();
+    this.getCar();
   }
 };
 </script>

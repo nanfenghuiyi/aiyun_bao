@@ -77,7 +77,7 @@ export default {
     /**
      * 获取app传递过来的参数
      */
-    getParams() {
+    getRecommendDetail() {
       this.loadText = "正在获取...";
       this.loading = true;
       let params = {
@@ -110,12 +110,12 @@ export default {
       setTimeout(() => {
         vant.Toast('刷新成功');
         this.isLoading = false;
-        this.getParams();
+        this.getRecommendDetail();
       }, 500);
     }
   },
   mounted() {
-    this.getParams()
+    this.getRecommendDetail()
   }
 };
 </script>

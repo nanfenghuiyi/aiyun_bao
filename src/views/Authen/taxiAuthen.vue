@@ -240,7 +240,7 @@ export default {
         {text: "人车合照", img: require("@/assets/Authen//person-car-demo.jpg")},
         {text: "服务证照", img: require("@/assets/Authen/taxi-qualification-demo.jpg")}
       ],
-      param: [],
+      // param: [],
 
       taxiDriverInfo: [], //司机认证信息
       taxiCityInfo: [], // 选择城市信息
@@ -896,7 +896,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.param = {bus_no : 308, user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"};
     this.getTaxiDriverInfo();
   }
 };

@@ -22,37 +22,37 @@
         <i></i>
       </div>
       <ul>
-        <li @click="getParams(0)">
+        <li @click="getShare(0)">
           <i class="share-wechat">
             <img src="@/assets/Share/ico_share_wechat.png" alt />
           </i>
           <span>微信</span>
         </li>
-        <li @click="getParams(1)">
+        <li @click="getShare(1)">
           <i class="share-friend">
             <img src="@/assets/Share/ico_share_friends.png" alt />
           </i>
           <span>朋友圈</span>
         </li>
-        <li @click="getParams(2)">
+        <li @click="getShare(2)">
           <i class="share-qq">
             <img src="@/assets/Share/ico_share_qq.png" alt />
           </i>
           <span>QQ好友</span>
         </li>
-        <li @click="getParams(3)">
+        <li @click="getShare(3)">
           <i class="share-zone">
             <img src="@/assets/Share/ico_share_qzone.png" alt />
           </i>
           <span>QQ空间</span>
         </li>
-        <li @click="getParams(4)">
+        <li @click="getShare(4)">
           <i class="share-qr">
             <img src="@/assets/Share/ico_share_erweima.png" alt />
           </i>
           <span>二维码</span>
         </li>
-        <li @click="getParams(5)">
+        <li @click="getShare(5)">
           <i class="share-card">
             <img src="@/assets/Share/ico_share_mingpian.png" alt />
           </i>
@@ -89,7 +89,12 @@
             <span class="text-red">"专属名片"</span>
             了解
           </span>
-          <img @click="closeMyShare" class="close" src="@/assets/Share/icon-close-gray.png" alt="qr" />
+          <img
+            @click="closeMyShare"
+            class="close"
+            src="@/assets/Share/icon-close-gray.png"
+            alt="qr"
+          />
         </div>
       </van-popup>
     </div>
@@ -103,7 +108,7 @@
 </template>
 
 <script>
-import QRCode from "qrcodejs2"
+import QRCode from "qrcodejs2";
 import $ from "jquery";
 import Vue from "vue";
 Vue.use(vant);
@@ -135,7 +140,7 @@ export default {
       qqShareData: "", // 分享qq信息
       zoneShareData: "", // 分享空间信息
       shareIndex: "", // 分享实例的index
-      shareData: "", // 分享实例的data
+      shareData: "" // 分享实例的data
     };
   },
   components: { QRCode },
@@ -154,7 +159,7 @@ export default {
       }
     },
     // 点击事件
-    getParams(index) {
+    getShare(index) {
       switch (index) {
         case 0:
           if (this.wxShareData) {
@@ -190,16 +195,17 @@ export default {
           } else {
             this.myShare = true;
             if (this.qrcode == "") {
-              this.$nextTick(function () {
+              this.$nextTick(function() {
                 this.showShareQR();
-              })
+              });
             }
           }
           break;
         case 5:
-          this.$router.push({ path: 'card' })
+          this.$router.push({ path: "card" });
           break;
-        default: break;
+        default:
+          break;
       }
     },
     /**
@@ -213,43 +219,46 @@ export default {
         identity: param.identity
       };
       let url = this.$global_msg.getShareContent;
-      console.log(params)
+      console.log(params);
       this.loadText = "获取中...";
       this.loading = true;
-      this.axios.post(url, params).then(res => {
-        console.log(res);
-        var res = res.data;
-        if (res.status == 1) {
-          let data = res.data;
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].type == "1") {
-              this.wxShareData = data[i];
-            } else if (data[i].type == "2") {
-              this.pyqShareData = data[i];
-            } else if (data[i].type == "3") {
-              this.qqShareData = data[i];
-            } else if (data[i].type == "4") {
-              this.zoneShareData = data[i];
-            } else if (data[i].type == "7") {
-              this.qrsrc = data[i].url;
+      this.axios
+        .post(url, params)
+        .then(res => {
+          console.log(res);
+          var res = res.data;
+          if (res.status == 1) {
+            let data = res.data;
+            for (let i = 0; i < data.length; i++) {
+              if (data[i].type == "1") {
+                this.wxShareData = data[i];
+              } else if (data[i].type == "2") {
+                this.pyqShareData = data[i];
+              } else if (data[i].type == "3") {
+                this.qqShareData = data[i];
+              } else if (data[i].type == "4") {
+                this.zoneShareData = data[i];
+              } else if (data[i].type == "7") {
+                this.qrsrc = data[i].url;
+              }
             }
+            this.loading = false;
+          } else {
+            vant.Toast(res.msg);
           }
+        })
+        .catch(err => {
+          console.log("err===", err);
           this.loading = false;
-        } else {
-          vant.Toast(res.msg);
-        }
-      }).catch(err => {
-        console.log("err===", err)
-        this.loading = false;
-      })
+        });
     },
 
     /**
      * 显示我的分享二维码
      */
     showShareQR() {
-      this.$nextTick(()=>{ 
-        console.log("显示我的分享二维码")
+      this.$nextTick(() => {
+        console.log("显示我的分享二维码");
         //生成二维码工具
         this.qrcode = new QRCode("qrcode", {
           width: 128,
@@ -261,7 +270,7 @@ export default {
         //设置要生成二维码的链接
         this.qrcode.clear(); // 清除代码
         this.qrcode.makeCode(this.qrsrc);
-        console.log(this.qrcode)
+        console.log(this.qrcode);
       });
     },
 
@@ -276,7 +285,7 @@ export default {
     showShareDemo(index, data) {
       this.shareIndex = index;
       this.shareData = data;
-      console.log(index,data)
+      console.log(index, data);
       if (data == null) {
         vant.Toast("未获取到分享信息，请返回重试");
         return;
@@ -292,17 +301,12 @@ export default {
       this.myImgShare = false;
       let index = this.shareIndex;
       let data = this.shareData;
-      console.log(index, data)
-      shareTo.postMessage(JSON.stringify({ index,data}));
-    },
+      console.log(index, data);
+      shareTo.postMessage(JSON.stringify({ index, data }));
+    }
   },
   mounted() {
     this.getNavigator();
-    // this.param = {
-    //   city_code: "028",
-    //   identity: 1,
-    //   user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
-    // };
     this.getShareContent();
   }
 };
@@ -379,7 +383,7 @@ body {
       }
     }
   }
-  .share-footer{
+  .share-footer {
     width: 92%;
     position: absolute;
     bottom: 0;
@@ -393,7 +397,6 @@ body {
       justify-content: space-between;
       align-items: center;
       font-size: 20px;
-      
     }
     span {
       flex: 1;
@@ -445,8 +448,8 @@ body {
   }
 }
 
-.share-img{
-  img{
+.share-img {
+  img {
     width: 100%;
   }
 }

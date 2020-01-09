@@ -148,7 +148,6 @@ export default {
     return {
       loading: false,
       loadText: "图片上传中",
-      param: [],
 
       busInfo: [], // 获取的认证信息
       name: "",
@@ -584,7 +583,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.param = {bus_no : 308, user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"};
     this.getBusInfo();
   }
 };

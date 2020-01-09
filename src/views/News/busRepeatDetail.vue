@@ -47,7 +47,6 @@ export default {
     return {
       loading: false,
       loadText: "图片上传中",
-      param: [],
 
       title_plate: "", // 重复车牌号详情
       info_he_tel: "" , // 已上传的该车牌号的手机号为：

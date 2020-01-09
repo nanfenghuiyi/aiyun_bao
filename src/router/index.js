@@ -5,17 +5,6 @@ Vue.use(VueRouter)
 
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: () => import('../views/Home.vue')
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/About.vue')
-  },
-
   /**
    * Protocol
    */
@@ -129,15 +118,7 @@ const routes = [
       title: '实名认证'
     }
   },
-  // 快车/出租车
-  {
-    path: '/index',
-    name: 'index',
-    component: () => import('../views/Authen/index.vue'),
-    meta: {
-      title: '车主认证身份'
-    }
-  },
+  // 工具 utils
   {
     path: '/city',
     name: 'city',
@@ -152,6 +133,31 @@ const routes = [
     component: () => import('../views/Utils/car.vue'),
     meta: {
       title: '汽车'
+    }
+  },
+  {
+    path: '/error',
+    name: 'error',
+    component: () => import('../views/Utils/error.vue'),
+    meta: {
+      title: '页面报错'
+    }
+  },
+  {
+    path: '/payRequest',
+    name: 'payRequest',
+    component: () => import('../views/Utils/payRequest.vue'),
+    meta: {
+      title: '支付结果'
+    }
+  },
+  // 快车/出租车
+  {
+    path: '/index',
+    name: 'index',
+    component: () => import('../views/Authen/index.vue'),
+    meta: {
+      title: '车主认证身份'
     }
   },
   {
@@ -276,6 +282,31 @@ const routes = [
     component: () => import('../views/Share/card.vue'),
     meta: {
       title: '专属名片'
+    }
+  },
+  // 评价
+  {
+    path: '/judgePassenger', // 未完成
+    name: 'judgePassenger',
+    component: () => import('../views/Judge/judgePassenger.vue'),
+    meta: {
+      title: '评价乘客'
+    }
+  },
+  {
+    path: '/judgeDriver', // 未完成
+    name: 'judgeDriver',
+    component: () => import('../views/Judge/judgeDriver.vue'),
+    meta: {
+      title: '评价司机'
+    }
+  },
+  {
+    path: '/cancelReason', // 未完成
+    name: 'cancelReason',
+    component: () => import('../views/Judge/cancelReason.vue'),
+    meta: {
+      title: '取消理由'
     }
   },
 ]

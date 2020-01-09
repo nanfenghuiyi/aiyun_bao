@@ -232,7 +232,6 @@ export default {
           {text: "行驶证副本照", img: require("@/assets/Authen/driving-license-back-demo.jpg")},
           {text: "人车合照", img: require("@/assets/Authen/person-car-demo.jpg")}
       ],
-      param: [],
 
       driverInfo: [], //司机认证信息
       carInfo: [], // 选择车辆信息
@@ -835,8 +834,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.param = {bus_no : 308, user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"};
-    // this.getExpressDriverInfo();
+    this.getExpressDriverInfo();
   }
 };
 </script>

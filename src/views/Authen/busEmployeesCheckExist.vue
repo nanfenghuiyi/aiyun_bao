@@ -25,15 +25,10 @@ export default {
     return {
       loading: false,
       loadText: "正在保存...",
-      param: [],
       phone: "",
       user_id: ""
     };
   },
-  components: {},
-  props: {},
-  watch: {},
-  computed: {},
   methods: {
     getParams() {
       if (this.phone.length == 11) {
@@ -52,7 +47,6 @@ export default {
               vant.Toast(res.msg);
               console.log(res.data);
               this.$router.push({path:'/busEmployeesAuthen',query: {token:res.data}})
-              // window.location.href = "./newBusEmployeesAuthen.html?token=" + res.data;
             } else {
               vant.Toast(res.msg);
               this.phone = "";
@@ -66,10 +60,6 @@ export default {
       }
     }
   },
-  created() {},
-  mounted() {
-    this.param.user_id = this.$global_msg.user_id;
-  }
 };
 </script>
 

@@ -164,3 +164,13 @@ p,ul,li,h1,h2,h3,h4,h5,h6{
   border-radius: 5px;
   margin: 10px auto 0;
 }
+
+// 评论星星
+.el-rate{
+  height: 60px;
+  line-height: 5;
+  text-align: center;
+}
+.el-rate__icon{
+  font-size: 36px;
+}
