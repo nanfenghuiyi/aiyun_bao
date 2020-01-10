@@ -139,10 +139,14 @@ p,ul,li,h1,h2,h3,h4,h5,h6{
   margin-bottom: 0 !important;
   padding: 0 !important;
 }
+.el-drawer__body{
+  background-color: #f1f3f5;
+  overflow: scroll;
+}
 
 // IndexBar 索引栏
 .van-index-anchor{
-  background-color: #eee !important;
+  background-color: #f1f3f5 !important;
 }
 
 .van-index-bar__index{

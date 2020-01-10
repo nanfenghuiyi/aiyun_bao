@@ -25,17 +25,17 @@
               <li @click="showImg(0)">
                 <span ref="title0">身份证正面照</span>
                 <img id="img1" src="@/assets/Authen/id-card-front-add.jpg" alt />
-                <b v-text="realNameStatusTitle" v-if="titleShow"></b>
+                <b v-text="realNameStatusTitle1" v-if="titleShow"></b>
               </li>
               <li @click="showImg(1)">
                 <span ref="title1">身份证反面照</span>
                 <img id="img2" src="@/assets/Authen/id-card-back-add.jpg" alt />
-                <b v-text="realNameStatusTitle" v-if="titleShow"></b>
+                <b v-text="realNameStatusTitle1" v-if="titleShow"></b>
               </li>
               <li @click="showImg(2)">
                 <span ref="title2">手持身份证正面照</span>
                 <img id="img3" src="@/assets/Authen/id-card-hand-add.jpg" alt />
-                <b v-text="realNameStatusTitle" v-if="titleShow"></b>
+                <b v-text="realNameStatusTitle1" v-if="titleShow"></b>
               </li>
             </ul>
           </div>
@@ -67,7 +67,7 @@
                 <span ref="title3">企业营业执照照</span>
                 <img id="img4" src="@/assets/Authen/enterprise-license-add.jpg" alt />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle">审核中...</b>
+                  <b v-text="realNameStatusTitle2">审核中...</b>
                 </div>
               </li>
             </ul>
@@ -148,16 +148,17 @@ export default {
       flag: true, //阻止点击事件
       drawerDisabled: false, // 阻止照片显示点击事件
       drawer: false, // 上传照片显示
-      realNameStatusTitle: "审核中", // 上传图片状态title
+      realNameStatusTitle1: "审核中", // 上传图片状态title
+      realNameStatusTitle2: "审核中", // 上传图片状态title
       titleShow: false, // 上传图片状态title显示
       imgIndex: 0, // 选择的图片
       drawerTitle: "", // 抽屉的标题
+      // 认证的条件
+      status: "", // 全部状态
+      realNameStatus: "", // 身份信息
+      companyStatus: "", // 企业信息
     };
   },
-  components: {},
-  props: {},
-  watch: {},
-  computed: {},
   methods: {
     handleChange(val) {
       console.log(val);
@@ -177,20 +178,28 @@ export default {
     },
     // 图片选择
     showImg(index){
-      if (!drawerDisabled) {
-        if (index ==0) {
-          this.drawerTitle = this.$refs.title0.innerText;
-        }else if (index ==1) {
-          this.drawerTitle = this.$refs.title1.innerText;
-        }else if (index ==2) {
-          this.drawerTitle = this.$refs.title2.innerText;
-        }else if (index ==3) {
-          this.drawerTitle = this.$refs.title3.innerText;
-        }
-        // console.log("showImg===", index);
-        this.drawer = true;
-        this.imgIndex = index;
+      this.imgIndex = index;
+      if (index ==0) {
+        this.drawerTitle = this.$refs.title0.innerText;
+      }else if (index ==1) {
+        this.drawerTitle = this.$refs.title1.innerText;
+      }else if (index ==2) {
+        this.drawerTitle = this.$refs.title2.innerText;
+      }else if (index ==3) {
+        this.drawerTitle = this.$refs.title3.innerText;
       }
+      // console.log("showImg===", index);
+      if (index == 0 || index == 1 || index == 2) {
+        if (!(this.realNameStatus > 0) || this.realNameStatus == 2 || this.realNameStatus == "") {
+          this.drawer = true;
+        }
+      }
+      if (index == 3) {
+        if (!(this.companyStatus > 0) || this.companyStatus == 2 || this.companyStatus == "") {
+          this.drawer = true;
+        }
+      }
+        
     },
     /**
      * 选择上传图片
@@ -316,43 +325,49 @@ export default {
       console.log(busManagerInfo)
       var flag = this.flag;
       if (busManagerInfo) {
-        let status = busManagerInfo.status;
-        let realNameStatus = busManagerInfo.real_name_status;
-        let companyStatus = busManagerInfo.enterprise_license_status;
-        let type = busManagerInfo.type;
+        this.status = busManagerInfo.status;
+        this.realNameStatus = busManagerInfo.real_name_status;
+        this.companyStatus = busManagerInfo.enterprise_license_status;
+        var status = this.status;
+        var realNameStatus = this.realNameStatus;
+        var companyStatus = this.companyStatus;
+        this.type = busManagerInfo.type;
+        var type = this.type;
         this.radio = Number(type);
         if (type == 2) {
           this.demoShow = true;
+          this.disabled = true;
           if (realNameStatus > 0 && companyStatus > 0 && status != 2) {
             flag = false;
-            this.disabled = true;
+            // this.disabled = true;
             this.drawerDisabled = true;
             $("#submit").removeClass("submit-btn").addClass("none");
           } else {
             flag = true;
-            this.disabled = false;
+            // this.disabled = false;
             this.drawerDisabled = false;
             $("#submit").removeClass("none").addClass("submit-btn");
           }
         } else {
           this.demoShow = false;
+          this.disabled = true;
           if (realNameStatus > 0 && status != 2) {
             flag = false;
-            this.disabled = true;
+            // this.disabled = true;
             this.drawerDisabled = true;
             $("#submit").removeClass("submit-btn").addClass("none");
           } else {
             flag = true;
-            this.disabled = false;
+            // this.disabled = false;
             this.drawerDisabled = false;
             $("#submit").removeClass("none").addClass("submit-btn");
           }
         }
         //实名信息
         var server3 = this.$global_msg.server3;
+        this.name = (busManagerInfo.name != null ? busManagerInfo.name : "");
+        this.ID = (busManagerInfo.ID != null ? busManagerInfo.ID : "");
         if (realNameStatus == 1) { //审核中
-          this.name = busManagerInfo.name;
-          this.ID = busManagerInfo.ID
           $("#realName input").attr("readonly", true);
           $("#realName #img1").attr("src", server3 + busManagerInfo.image_id_a);
           $("#realName #img2").attr("src", server3 + busManagerInfo.image_id_b);
@@ -361,11 +376,9 @@ export default {
           this.img2 = busManagerInfo.image_id_b;
           this.img3 = busManagerInfo.image_group;
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.realNameStatusTitle1 = "审核中";
 
         } else if (realNameStatus == 2) { //待完善
-          this.name = (busManagerInfo.name != null ? busManagerInfo.name : "");
-          this,ID = (busManagerInfo.ID != null ? busManagerInfo.ID : "");
           $("#realName input").attr("readonly", false);
           $("#realName #img1").attr("src", busManagerInfo.image_id_a != null && busManagerInfo.image_id_a != "" ? server3 + busManagerInfo.image_id_a : img_id_card_front);
           $("#realName #img2").attr("src", busManagerInfo.image_id_b != null && busManagerInfo.image_id_b != "" ? server3 + busManagerInfo.image_id_b : img_id_card_back);
@@ -380,12 +393,9 @@ export default {
             this.img3 = busManagerInfo.image_group;
           }
           this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
+          this.realNameStatusTitle1 = "请完善资料";
 
         } else if (realNameStatus == 3) { //成功
-          this.name = busManagerInfo.name;
-          console.log(this.name)
-          this.ID = busManagerInfo.ID
           $("#realName input").attr("readonly", true);
           $("#realName #img1").attr("src", server3 + busManagerInfo.image_id_a);
           $("#realName #img2").attr("src", server3 + busManagerInfo.image_id_b);
@@ -394,15 +404,13 @@ export default {
           this.img2 = busManagerInfo.image_id_b;
           this.img3 = busManagerInfo.image_group;
           this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
+          this.realNameStatusTitle1 = "审核通过";
 
         } else if (realNameStatus == 0 || realNameStatus == -1) { //未提交认证 数据无效
           $("#realName input").attr("readonly", false);
           this.titleShow = false;
-          this.realNameStatusTitle = "";
+          this.realNameStatusTitle1 = "";
         } else if (realNameStatus == -2) { //失败
-          this.name = busManagerInfo.name;
-          this.ID = busManagerInfo.ID;
           $("#realName input").attr("readonly", false);
           $("#realName #img1").attr("src", server3 + busManagerInfo.image_id_a);
           $("#realName #img2").attr("src", server3 + busManagerInfo.image_id_b);
@@ -411,51 +419,45 @@ export default {
           this.img2 = busManagerInfo.image_id_b;
           this.img3 = busManagerInfo.image_group;
           this.titleShow = true;
-          this.realNameStatusTitle = "审核失败，点击重新上传";
+          this.realNameStatusTitle1 = "审核失败，点击重新上传";
         }
         //企业信息
+        this.company_name = (busManagerInfo.company_name != null ? busManagerInfo.company_name : "");
+        this.unified_social_credit_code = (busManagerInfo.code != null ? busManagerInfo.code : "");
         if (type == 2) {
           if (companyStatus == 1) { //审核中
             $("#company input").attr("disabled", true);
-            this.company_name = busManagerInfo.company_name;
-            this.unified_social_credit_code = busManagerInfo.code;
             $("#company #img4").attr("src", server3 + busManagerInfo.image_enterprise_license);
             this.img4 = busManagerInfo.image_enterprise_license;
             this.titleShow = true;
-            this.realNameStatusTitle = "审核中";
+            this.realNameStatusTitle2 = "审核中";
 
           } else if (companyStatus == 2) { //待完善
             $("#company input").attr("disabled", false);
-            this.company_name = (busManagerInfo.company_name != null ? busManagerInfo.company_name : "");
-            this.unified_social_credit_code = (busManagerInfo.code != null ? busManagerInfo.code : "");
             $("#company #img4").attr("src", busManagerInfo.image_enterprise_license != null && busManagerInfo.image_enterprise_license != "" ? server3 + busManagerInfo.image_enterprise_license : img_enterprise_license);
             if (busManagerInfo.image_enterprise_license != null && busManagerInfo.image_enterprise_license != "") {
               this.img4 = busManagerInfo.image_enterprise_license;
             }
             this.titleShow = true;
-            this.realNameStatusTitle = "请完善资料";
+            this.realNameStatusTitle2 = "请完善资料";
 
           } else if (companyStatus == 3) { //成功
             $("#company input").attr("disabled", true);
-            this.company_name = busManagerInfo.company_name;
-            this.unified_social_credit_code = busManagerInfo.code;
             $("#company #img4").attr("src", server3 + busManagerInfo.image_enterprise_license);
             this.img4 = busManagerInfo.image_enterprise_license;
             this.titleShow = true;
-            this.realNameStatusTitle = "审核通过";
+            this.realNameStatusTitle2 = "审核通过";
 
           } else if (companyStatus == 0 || companyStatus == -1) { //未提交认证 数据无效
             $("#company input").attr("disabled", false);
             this.titleShow = false;
-            this.realNameStatusTitle = "";
+            this.realNameStatusTitle2 = "";
           } else if (companyStatus == -2) { //失败
             $("#company input").attr("disabled", false);
-            this.company_name = busManagerInfo.company_name;
-            this.unified_social_credit_code = busManagerInfo.code;
             $("#company #img4").attr("src", server3 + busManagerInfo.image_enterprise_license);
             this.img4 = busManagerInfo.image_enterprise_license;
             this.titleShow = true;
-            this.realNameStatusTitle = "审核失败，点击重新上传";
+            this.realNameStatusTitle2 = "审核失败，点击重新上传";
           }
         }
       }
@@ -511,7 +513,7 @@ export default {
           return;
         }
       }
-      console.log(params);
+      console.log("提交===", params);
       this.loading = true;
       this.loadText = "信息提交中"
       var url = this.$global_msg.submitBusManager;
@@ -519,12 +521,18 @@ export default {
         console.log(res);
         var res = res.data;
         if (res && res.status == 1) {
-          flag = false;
+          this.flag = false;
           $("#submit").removeClass("submit-btn").addClass("none");
           $("input").attr("readonly", true);
           $("input").attr("disabled", true);
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.flag = false;
+          this.drawerDisabled = true, // 阻止照片显示点击事件
+          this.realNameStatusTitle1 = "审核中";
+          this.realNameStatusTitle2 = "审核中";
+          this.status = 1; // 全部状态
+          this.realNameStatus = 1; // 身份信息
+          this.companyStatus = 1; // 企业信息
           vant.Toast(res.msg);
         } else {
           vant.Toast(res.msg);
@@ -536,7 +544,6 @@ export default {
       })
     }
   },
-  created() {},
   mounted() {
     this.getBusManagerInfo();
   }

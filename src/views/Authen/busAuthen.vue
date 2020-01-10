@@ -153,7 +153,7 @@ export default {
       name: "",
       image: "", // 大巴车图片
       plate_no_short: "", // 车牌简称
-      plate_no_alpha: 1, // 首字母
+      plate_no_alpha: "", // 首字母
       short: "", // 页面显示的简称
       plate_no: "", // 车牌号码
       color: "", // 大巴车颜色
@@ -182,6 +182,9 @@ export default {
       carTypeList1: [], // 类型列表
       carTypeList2: [], // 类型列表
       innerTypeDrawer: false, // 车辆类型
+
+      // 认证的条件
+      status: "",
     };
   },
   components: {},
@@ -191,7 +194,7 @@ export default {
   methods: {
     // 图片选择
     showImg(index) {
-      if (!this.drawerDisabled) {
+      if (!(this.status > 0) || this.status == 2 || this.status == "") {
         this.drawerTitle = this.$refs.title.innerText;
         // console.log("showImg===", index);
         this.drawer = true;
@@ -200,21 +203,21 @@ export default {
     },
     // 车牌简称显示
     checkPlate() {
-      if (!this.carShortDisabled) {
+      if (!(this.status > 0) || this.status == 2 || this.status == "") {
         this.plateDrawer = true;
         this.plateShortList = this.$global_msg.plateShortList;
       }
     },
     // 车辆颜色显示
     checkColor() {
-      if (!this.carColorDisabled) {
+      if (!(this.status > 0) || this.status == 2 || this.status == "") {
         this.colorDrawer = true;
         this.carColorList = this.$global_msg.color;
       }
     },
     // 车辆类型显示
     checkType () {
-      if (!this.carTypeDisabled) {
+      if (!(this.status > 0) || this.status == 2 || this.status == "") {
         this.typeDrawer = true;
         this.getBusType1();
       }
@@ -388,7 +391,6 @@ export default {
         return;
       }
       let params = {};
-      // params.user_id = $.user_id;
       params.user_id = param.user_id;
       params.bus_no = param.bus_no;
       if (param.id != null) {
@@ -476,6 +478,7 @@ export default {
           $("input").attr("readonly", true);
           $("input").attr("disabled", true);
           this.titleShow = true;
+          this.status = 1
           this.realNameStatusTitle = "审核中";
           vant.Toast(res.msg, 2500);
         } else {
@@ -495,7 +498,8 @@ export default {
       var busInfo = this.busInfo;
       var server3 = this.$global_msg.server3;
       if (busInfo) {
-        let status = busInfo.status;
+        this.status = busInfo.status;
+        var status = this.status;
         if (status > 0 && busInfo.status != 2) {
           this.flag = false;
           this.drawerDisabled = true;
@@ -512,13 +516,15 @@ export default {
           $("#submit").removeClass("none").addClass("submit-btn");
         }
         //实名信息
+        this.name = (busInfo.name != null ? busInfo.name : "");
+        this.plate_no_short = (busInfo.plate_for_short != null ? busInfo.plate_for_short : "");
+        this.plate_no_alpha = (busInfo.plate_for_alpha != null ? busInfo.plate_for_alpha : "");
+        this.short = this.plate_no_short + this.plate_no_alpha;
+        this.plate_no = (busInfo.plate_no != null ? busInfo.plate_no : "");
+        this.color = (busInfo.bus_color != null ? busInfo.bus_color : "");
+        this.type = (busInfo.bus_type_name != null ? busInfo.bus_type_name : "");
+        this.seats = (busInfo.bus_seat != null ? busInfo.bus_seat : "");
         if (status == 1) { //审核中
-          this.name = busInfo.name;
-          this.short = (busInfo.plate_for_short + busInfo.plate_for_alpha);
-          this.plate_no = busInfo.plate_no;
-          this.color = busInfo.bus_color;
-          this.type = busInfo.bus_type_name;
-          this.seats = busInfo.bus_seat;
           $("#realName input").attr("readonly", true);
           $("#realName #img1").attr("src", server3 + busInfo.image);
           this.img1 = busInfo.image;
@@ -526,12 +532,6 @@ export default {
           this.realNameStatusTitle = "审核中";
 
         } else if (status == 2) { //待完善
-          this.name = (busInfo.name != null ? busInfo.name : "");
-          this.short = (busInfo.plate_for_short != null && busInfo.plate_for_alpha != null ? busInfo.plate_for_short + busInfo.plate_for_alpha : "");
-          this.plate_no = (busInfo.plate_no != null ? busInfo.plate_no : "");
-          this.color = (busInfo.bus_color != null ? busInfo.bus_color : "");
-          this.type = (busInfo.bus_type_name != null ? busInfo.bus_type_name : "");
-          this.seats = (busInfo.bus_seat != null ? busInfo.bus_seat : "");
           $("#realName input").attr("readonly", false);
           this.carShortDisabled = false, 
           this.carColorDisabled = false, 
@@ -544,12 +544,6 @@ export default {
           this.realNameStatusTitle = "请完善资料";
 
         } else if (status == 3) { //成功
-          this.name = busInfo.name;
-          this.short = (busInfo.plate_for_short + busInfo.plate_for_alpha);
-          this.plate_no = busInfo.plate_no;
-          this.color = busInfo.bus_color;
-          this.type = busInfo.bus_type_name;
-          this.seats = busInfo.bus_seat;
           $("#realName input").attr("readonly", true);
           $("#realName #img1").attr("src", server3 + busInfo.image);
           this.img1 = busInfo.image;
@@ -560,15 +554,10 @@ export default {
           this.carShortDisabled = false, 
           this.carColorDisabled = false, 
           this.carTypeDisabled = false,
+          $("#realName #img1").attr("src", server3 + busInfo.image);
           this.titleShow = true;
           this.realNameStatusTitle = "";
         } else if (status == -2) { //失败
-          this.name = busInfo.name;
-          this.short = (busInfo.plate_for_short + busInfo.plate_for_alpha);
-          this.plate_no = busInfo.plate_no;
-          this.color = busInfo.bus_color;
-          this.type = busInfo.bus_type_name;
-          this.seats = busInfo.bus_seat;
           $("#realName input").attr("readonly", false);
           this.carShortDisabled = false, 
           this.carColorDisabled = false, 
@@ -581,9 +570,9 @@ export default {
       }
     },
   },
-  created() {},
   mounted() {
     this.getBusInfo();
+    console.log(this.param)
   }
 };
 </script>

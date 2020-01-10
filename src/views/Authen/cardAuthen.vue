@@ -50,7 +50,7 @@
         />
       </li>
     </ul>
-    <div class="city" @click="getCity">
+    <div class="city">
       <span>选择城市</span>
       <select id="select"></select>
     </div>
@@ -158,7 +158,7 @@ export default {
     // 获取城市
     getCity() {
       var url = this.$global_msg.getUploaderCity;
-      var obj = { user_id: this.user_id };
+      var obj = { user_id: this.param.user_id };
       this.axios.post(url, obj).then(res => {
         console.log("res", res);
         var res = res.data;
@@ -232,6 +232,7 @@ export default {
     }
   },
   mounted() {
+    this.getCity();
   }
 };
 </script>

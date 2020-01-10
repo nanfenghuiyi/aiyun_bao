@@ -25,7 +25,7 @@
           </li>
         </ul>
       </div>
-      <van-index-bar highlight-color="#07c160">
+      <van-index-bar :index-list="letter" @select="onSelect" highlight-color="#07c160">
         <div v-for="(item, index) of allModels" :key="index">
           <van-index-anchor :index="item.letter" />
             <van-cell v-for="(item, index) of item.module" :key="index" @click="getCarModel(item)">
@@ -91,12 +91,10 @@ export default {
 
     };
   },
-  components: {},
-  props: {},
-  watch: {},
-  computed: {},
   methods: {
     onSelect(event) {
+      console.log(event)
+      this.$emit("elect", event)
     },
     // 选取热门车型
     isHotModel(data) {
@@ -257,6 +255,7 @@ img{
 }
 
 .layer-left {
+  height: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -266,7 +265,7 @@ img{
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 15px;
+    padding: 25px 15px;
     margin: 10px 20px;
     border-radius: 5px;
     img {

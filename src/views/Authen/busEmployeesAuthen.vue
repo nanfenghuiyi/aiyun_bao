@@ -25,12 +25,16 @@
               <li @click="showImg(0)">
                 <span ref="title0">身份证正面照</span>
                 <img id="img1" src="@/assets/Authen/id-card-front-add.jpg" alt />
-                <b v-text="realNameStatusTitle" v-if="titleShow"></b>
+                <div v-if="titleShow">
+                  <b v-text="realNameStatusTitle1"></b>
+                </div>
               </li>
               <li @click="showImg(1)">
                 <span ref="title1">身份证反面照</span>
                 <img id="img2" src="@/assets/Authen/id-card-back-add.jpg" alt />
-                <b v-text="realNameStatusTitle" v-if="titleShow"></b>
+                <div v-if="titleShow">
+                  <b v-text="realNameStatusTitle1"></b>
+                </div>
               </li>
             </ul>
           </div>
@@ -41,7 +45,7 @@
               <span>初次领证日期</span>
               <input
                 id="first-issue"
-                v-model.trim="first_issue_time"
+                v-model.trim="first_issue"
                 placeholder="选择日期"
                 type="text"
                 readonly
@@ -52,7 +56,7 @@
                 <span ref="title2">驾驶证照</span>
                 <img id="img3" src="@/assets/Authen/driver-license-front-add.jpg" alt />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle">审核中...</b>
+                  <b v-text="realNameStatusTitle2">审核中...</b>
                 </div>
               </li>
             </ul>
@@ -149,12 +153,12 @@ export default {
       img1: "",
       img2: "",
       img3: "",
-      first_issue_time: "", // 显示的时间
 
       flag: true, //阻止点击事件
       drawerDisabled: false, // 阻止照片显示点击事件
       drawer: false, // 上传照片显示
-      realNameStatusTitle: "审核中", // 上传图片状态title
+      realNameStatusTitle1: "审核中", // 上传图片身份信息状态title
+      realNameStatusTitle2: "审核中", // 上传图片驾驶证信息状态title
       titleShow: false, // 上传图片状态title显示
       imgIndex: 0, // 选择的图片
       drawerTitle: "", // 抽屉的标题
@@ -163,12 +167,12 @@ export default {
       minDate: new Date(1999, 0, 1),
       maxDate: new Date(2019, 12, 31),
       timeDrawer: false, // 时间选择显示
+      // 时间认证的条件
+      status: "", // 全部状态
+      realNameStatus: "", // 实名信息
+      driverStatus: "", // 驾驶证信息
     };
   },
-  components: {},
-  props: {},
-  watch: {},
-  computed: {},
   methods: {
     handleChange(val) {
       console.log(val);
@@ -183,27 +187,24 @@ export default {
       this.type = val;
       this.img3 = "";
       this.first_issue = "";
-      this.first_issue_time = "";
     },
-    // 时间选择
+    // 时间显示
     checkTime() {
-      if (!this.drawerDisabled) {
+      if (!(this.driverStatus > 0) || this.driverStatus == 2 || this.driverStatus == "") {
         this.timeDrawer = true;
       }
     },
     // 时间确认
     timeConfirm(){
-      if (this.first_issue_time != "") {
+      if (this.first_issue != "") {
         this.timeDrawer = false;
-        // this.first_issue = new Date((this.first_issue_time + " 00:00:00").replace(/-/g, "/")).getTime();
-        this.first_issue = this.first_issue_time;
       }else {
         vant.Toast("请滚动选择时间")
       }
     },
     getValues(e) {
       let times = e.getValues();
-      this.first_issue_time = `${times[0]}-${times[1]}-${times[2]}`;
+      this.first_issue = `${times[0]}-${times[1]}-${times[2]}`;
     },
     // 时间取消
     timeCancel(){
@@ -211,6 +212,7 @@ export default {
     },
     // 图片选择
     showImg(index){
+      this.imgIndex = index;
       if (!this.drawerDisabled) {
         if (index ==0) {
         this.drawerTitle = this.$refs.title0.innerText;
@@ -220,8 +222,16 @@ export default {
           this.drawerTitle = this.$refs.title2.innerText;
         }
         // console.log("showImg===", index);
-        this.drawer = true;
-        this.imgIndex = index;
+        if (index == 0 || index == 1) {
+          if (!(this.realNameStatus > 0) || this.realNameStatus == 2 || this.realNameStatus == "") {
+            this.drawer = true;
+          }
+        }
+        if (index == 2) {
+          if (!(this.driverStatus > 0) || this.driverStatus == 2 || this.driverStatus == "") {
+            this.drawer = true;
+          }
+        }
       }
     },
     /**
@@ -403,7 +413,7 @@ export default {
         }
       }
       this.loadText = "上传中...";
-      this,loading = true;
+      this.loading = true;
       this.axios.post(url, params).then(res => {
         console.log(res);
         var res = res.data
@@ -413,7 +423,13 @@ export default {
           $("input").attr("readonly", true);
           $("input").attr("disabled", true);
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.flag = false;
+          this.drawerDisabled = true, // 阻止照片显示点击事件
+          this.status = 1;
+          this.realNameStatus = 1;
+          this.driverStatus = 1;
+          this.realNameStatusTitle1 = "审核中";
+          this.realNameStatusTitle2 = "审核中";
           vant.Toast(res.msg);
         } else {
           vant.Toast(res.msg);
@@ -430,58 +446,59 @@ export default {
     showBusEmployeesInfo() {
       var busEmployeesInfo = this.busEmployeesInfo;
       if (busEmployeesInfo) {
-        let status = busEmployeesInfo.status;
-        let realNameStatus = busEmployeesInfo.real_name_status;
-        let driverStatus = busEmployeesInfo.drivers_license_status;
-        let type = busEmployeesInfo.employee_type;
+        this.status = busEmployeesInfo.status;
+        this.realNameStatus = busEmployeesInfo.real_name_status;
+        this.driverStatus = busEmployeesInfo.drivers_license_status;
+        var status = this.status;
+        var realNameStatus = this.realNameStatus;
+        var driverStatus = this.driverStatus;
+        this.type = busEmployeesInfo.employee_type;
+        var type = this.type;
         this.radio = Number(type);
         if (type == "1") {
           this.demoShow = true;
+          this.disabled = true;
           if (realNameStatus > 0 && driverStatus > 0 && status != 2) {
             this.flag = false;
-            this.disabled = true;
+            // this.disabled = true;
             this.drawerDisabled = true;
             $("#submit").removeClass("submit-btn").addClass("none");
           } else {
             this.flag = true;
-            this.disabled = false;
+            // this.disabled = false;
             this.drawerDisabled = false;
             $("#submit").removeClass("none").addClass("submit-btn");
           }
         } else {
           this.demoShow = false;
+          this.disabled = true;
           if (realNameStatus > 0 && status != 2) {
             this.flag = false;
-            this.disabled = true;
+            // this.disabled = true;
             this.drawerDisabled = true;
             $("#submit").removeClass("submit-btn").addClass("none");
           } else {
             this.flag = true;
-            this.disabled = false;
+            // this.disabled = false;
             this.drawerDisabled = false;
             $("#submit").removeClass("none").addClass("submit-btn");
           }
         }
-        //实名信息
+        // 实名信息
+        this.name = (busEmployeesInfo.name != null ? busEmployeesInfo.name : "");
+        this.ID = (busEmployeesInfo.ID != null ? busEmployeesInfo.ID : "");
         var server3 = this.$global_msg.server3;
         if (realNameStatus == 1) { //审核中
-          this.name = busEmployeesInfo.name;
-          this.ID = busEmployeesInfo.name;
-          this.phone = busEmployeesInfo.phone;
           $("#realName input").attr("readonly", true);
           $("#realName #img1").attr("src", server3 + busEmployeesInfo.image_id_a);
           $("#realName #img2").attr("src", server3 + busEmployeesInfo.image_id_b);
           this.img1 = busEmployeesInfo.image_id_a;
           this.img2 = busEmployeesInfo.image_id_b;
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.realNameStatusTitle1 = "审核中";
 
         } else if (realNameStatus == 2) { //待完善
-          this.name = (busEmployeesInfo.name != null ? busEmployeesInfo.name : "");
-          this.ID = (busEmployeesInfo.ID != null ? busEmployeesInfo.ID : "");
-          this.phone = busEmployeesInfo.phone;
           $("#realName input").attr("readonly", false);
-          $("#realName #phone").attr("readonly", true);
           $("#realName #img1").attr("src", busEmployeesInfo.image_id_a != null && busEmployeesInfo.image_id_a != "" ? server3 + busEmployeesInfo.image_id_a : img_id_card_front);
           $("#realName #img2").attr("src", busEmployeesInfo.image_id_b != null && busEmployeesInfo.image_id_b != "" ? server3 + busEmployeesInfo.image_id_b : img_id_card_back);
           if (busEmployeesInfo.image_id_a != null && busEmployeesInfo.image_id_a != "") {
@@ -491,29 +508,23 @@ export default {
             this.img2 = busEmployeesInfo.image_id_b;
           }
           this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
+          this.realNameStatusTitle1 = "请完善资料";
 
         } else if (realNameStatus == 3) { //成功
-          this.name = busEmployeesInfo.name;
-          this.ID = busEmployeesInfo.name;
-          this.phone = busEmployeesInfo.phone;
           $("#realName input").attr("readonly", true);
           $("#realName #img1").attr("src", server3 + busEmployeesInfo.image_id_a);
           $("#realName #img2").attr("src", server3 + busEmployeesInfo.image_id_b);
           this.img1 = busEmployeesInfo.image_id_a;
           this.img2 = busEmployeesInfo.image_id_b;
           this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
+          this.realNameStatusTitle1 = "审核通过";
 
         } else if (realNameStatus == 0 || realNameStatus == -1) { //未提交认证 数据无效
           $("#realName input").attr("readonly", false);
           this.titleShow = false;
-          this.realNameStatusTitle = "";
+          this.realNameStatusTitle1 = "";
 
         } else if (realNameStatus == -2) { //失败
-          this.name = busEmployeesInfo.name;
-          this.ID = busEmployeesInfo.name;
-          this.phone = busEmployeesInfo.phone;
           $("#realName input").attr("readonly", false);
           $("#realName #phone").attr("readonly", true);
           $("#realName #img1").attr("src", server3 + busEmployeesInfo.image_id_a);
@@ -521,22 +532,19 @@ export default {
           this.img1 = busEmployeesInfo.image_id_a;
           this.img2 = busEmployeesInfo.image_id_b;
           this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
+          this.realNameStatusTitle1 = "审核失败,点击重新上传";
         }
         //驾驶证信息
+        this.first_issue = busEmployeesInfo.first_issue;
         if (type == "1") {
           if (driverStatus == 1) { //审核中
-            this.first_issue = busEmployeesInfo.first_issue;
-            this.first_issue_time = busEmployeesInfo.first_issue;
             $("#driver input").attr("readonly", true);
             $("#driver input").attr("disabled", true);
             $("#driver #img3").attr("src", server3 + busEmployeesInfo.image_drivers);
             this.img3 = busEmployeesInfo.image_drivers;
             this.titleShow = true;
-            this.realNameStatusTitle = "审核中";
+            this.realNameStatusTitle2 = "审核中";
           } else if (driverStatus == 2) { //待完善
-            this.first_issue = (busEmployeesInfo.first_issue != null ? busEmployeesInfo.first_issue : "");
-            this.first_issue_time = (busEmployeesInfo.first_issue != null ? busEmployeesInfo.first_issue : "");
             $("#driver input").attr("disabled", false);
             $("#driver input").attr("readonly", false);
             $("#driver #img3").attr("src", busEmployeesInfo.image_drivers != null && busEmployeesInfo.image_drivers != "" ? server3 + busEmployeesInfo.image_drivers : img_driver_license);
@@ -544,18 +552,16 @@ export default {
               this.img3 = busEmployeesInfo.image_drivers;
             }
             this.titleShow = true;
-            this.realNameStatusTitle = "请完善资料";
+            this.realNameStatusTitle2 = "请完善资料";
 
           } else if (driverStatus == 3) { //成功
-            this.first_issue = busEmployeesInfo.first_issue;
-            this.first_issue_time = busEmployeesInfo.first_issue;
             $("#driver input").attr("disabled", true);
             $("#driver input").attr("readonly", true);
             $("#driver #img3").attr("src", server3 + busEmployeesInfo.image_drivers);
             this.img3 = busEmployeesInfo.image_drivers;
             console.log(this.img3)
             this.titleShow = true;
-            this.realNameStatusTitle = "审核通过";
+            this.realNameStatusTitle2 = "审核通过";
 
           } else if (driverStatus == 0 || driverStatus == -1) { //未提交认证 数据无效
             $("#driver input").attr("disabled", false);
@@ -563,14 +569,12 @@ export default {
             this.titleShow = false;
             this.realNameStatusTitle = "";
           } else if (driverStatus == -2) { //失败
-            this.first_issue = busEmployeesInfo.first_issue;
-            this.first_issue_time = busEmployeesInfo.first_issue;
             $("#driver input").attr("readonly", false);
             $("#driver input").attr("disabled", false);
             $("#driver #img3").attr("src", server3 + busEmployeesInfo.image_drivers);
             this.img3 = busEmployeesInfo.image_drivers;
             this.titleShow = true;
-            this.realNameStatusTitle = "审核失败,点击重新上传";
+            this.realNameStatusTitle2 = "审核失败,点击重新上传";
           }
         }
       }

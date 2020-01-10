@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
 export default {
   data() {
@@ -15,8 +15,8 @@ export default {
     // 滚动区高度
     // (业务需求：手机屏幕高度减去头部标题和底部tabbar的高度，当然这2个高度也是可以动态获取的)
     scrollerHeight: function() {
-      return (window.innerHeight) + 'px';
-    },
+      return window.innerHeight + "px";
+    }
   },
   methods: {},
   created() {
@@ -46,19 +46,31 @@ export default {
       city_code: "028",
       identity: 1,
       user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627",
-      bus_no : 308,
+      bus_no: 308,
       employee_id: 569,
       employee_type: "1",
       order_no: "FPBV32MT",
       order_type: 4,
-      log_id: "15764947343577704317",
+      log_id: "15764947343577704317"
     };
+    // var sad = {
+    //   ID: "523124198502244243",
+    //   company_name: "不告诉的",
+    //   image_enterprise_license: "Upload/enterprise/170-daf64ec93848-A.jpeg",
+    //   image_group: "Upload/photoGroup/170-24a078588528-A.jpeg",
+    //   image_id_a: "Upload/realName/170-0de4f9d968bb-A.jpeg",
+    //   image_id_b: "Upload/realName/170-1ba0e2ca2473-B.jpeg",
+    //   name: "残夜",
+    //   type: 1,
+    //   unified_social_credit_code: "12341",
+    //   user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
+    // };
   }
 };
 </script>
 
 <style lang="scss">
-.container{
+.container {
   width: 100%;
   height: 100%;
 }

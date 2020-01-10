@@ -202,8 +202,14 @@
         :visible.sync="carDrawer"
         :show-close="false"
         size="100%">
-        <car @carChildFn="carParentFn"></car>
+        <car @carChildFn="carParentFn" @onSelect="onSelect"></car>
       </el-drawer>
+      <!-- <van-popup
+        v-model="carDrawer"
+        position="right"
+        :style="{ height: '100%' }">
+        <car @carChildFn="carParentFn" @onSelect="onSelect"></car>
+      </van-popup> -->
     </div>
   </div>
 </template>
@@ -213,6 +219,9 @@ import $ from "jquery";
 import { canvasDataURL } from "../../utils/util";
 import { detectionParam } from "../../utils/util";
 import Vue from "vue";
+// import { IndexBar, IndexAnchor, Cell } from 'vant';
+
+// Vue.use(IndexBar).use(IndexAnchor).use(Cell);
 Vue.use(vant);
 
 import city from "../Utils/city";
@@ -305,22 +314,41 @@ export default {
       cityDrawer: false,
       // 车型组件
       carDrawer: false,
+      // 认证的条件
+      status: "", // 全部状态
+      realNameStatus: "", // 实名信息
+      driversLicenseStatus: "", // 驾驶证信息
+      drivingLicenseStatus: "", // 行驶证信息
+      photoGroupStatus: "", // 人车信息
     };
   },
   components: {city, car},
   methods: {
+    onSelect() {
+      console.log(1111)
+    },
     handleChange(val) {
       console.log(val);
     },
     // 城市显示
     showCity() {
-      if (!this.cityDisabled) {
-        this.cityDrawer = true;
+      var driverInfo = this.driverInfo;
+      if (driverInfo) {
+        if (driverInfo.city != null && driverInfo.city != "") {
+          return;
+        }
       }
+      if (!this.flag) {
+        return;
+      }
+      this.cityDrawer = true;
+      // if (status != 2) {
+      //   this.cityDrawer = true;
+      // }
     },
     // 车型显示
     showCar() {
-      if (!this.carTypeDisabled) {
+      if (!(this.drivingLicenseStatus > 0) || this.drivingLicenseStatus == 2 || this.drivingLicenseStatus == "") {
         this.carDrawer = true;
       }
     },
@@ -342,8 +370,17 @@ export default {
     checkTime(index) {
       console.log("时间显示")
       this.timeIndex = index;
-      if (!this.timeDisabled) {
-        this.timeDrawer = true;
+      if (index == 1) {
+        console.log(this.driversLicenseStatus)
+        if (!(this.driversLicenseStatus > 0) || this.driversLicenseStatus == 2 || this.driversLicenseStatus == "") {
+          this.timeDrawer = true;
+        }
+      }
+      if (index == 2) {
+        console.log(this.drivingLicenseStatus)
+        if (!(this.drivingLicenseStatus > 0) || this.drivingLicenseStatus == 2 || this.drivingLicenseStatus == "") {
+          this.timeDrawer = true;
+        }
       }
     },
     // 时间确认
@@ -381,30 +418,48 @@ export default {
     },
     // 图片选择
     showImg(index) {
-      if (!this.drawerDisabled) {
-        if (index == 0) {
-        this.drawerTitle = this.$refs.title0.innerText;
-        }else if (index == 1) {
-          this.drawerTitle = this.$refs.title1.innerText;
-        }else if (index == 2) {
-          this.drawerTitle = this.$refs.title2.innerText;
-        }else if (index == 3) {
-          this.drawerTitle = this.$refs.title3.innerText;
-        }else if (index == 4) {
-          this.drawerTitle = this.$refs.title4.innerText;
-        }else if (index == 5) {
-          this.drawerTitle = this.$refs.title5.innerText;
-        }else if (index == 6) {
-          this.drawerTitle = this.$refs.title6.innerText;
+      console.log(index)
+      this.imgIndex = index;
+      if (index == 0) {
+      this.drawerTitle = this.$refs.title0.innerText;
+      }else if (index == 1) {
+        this.drawerTitle = this.$refs.title1.innerText;
+      }else if (index == 2) {
+        this.drawerTitle = this.$refs.title2.innerText;
+      }else if (index == 3) {
+        this.drawerTitle = this.$refs.title3.innerText;
+      }else if (index == 4) {
+        this.drawerTitle = this.$refs.title4.innerText;
+      }else if (index == 5) {
+        this.drawerTitle = this.$refs.title5.innerText;
+      }else if (index == 6) {
+        this.drawerTitle = this.$refs.title6.innerText;
+      }
+      // console.log("showImg===", index);
+      if (index == 0 || index == 1) {
+        if (!(this.realNameStatus > 0) || this.realNameStatus == 2 || this.realNameStatus == "") {
+          this.drawer = true;
         }
-        // console.log("showImg===", index);
-        this.drawer = true;
-        this.imgIndex = index;
+      }
+      if (index == 2) {
+        if (!(this.driversLicenseStatus > 0) || this.driversLicenseStatus == 2 || this.driversLicenseStatus == "") {
+          this.drawer = true;
+        }
+      }
+      if (index == 3 || index == 4) {
+        if (!(this.drivingLicenseStatus > 0) || this.drivingLicenseStatus == 2 || this.drivingLicenseStatus == "") {
+          this.drawer = true;
+        }
+      }
+      if (index == 5) {
+        if (!(this.photoGroupStatus > 0) || this.photoGroupStatus == 2 || this.photoGroupStatus == "") {
+          this.drawer = true;
+        }
       }
     },
     // 车牌简称显示
     checkPlate() {
-      if (!this.carShortDisabled) {
+      if (!(this.drivingLicenseStatus > 0) || this.drivingLicenseStatus == 2 || this.drivingLicenseStatus == "") {
         this.plateDrawer = true;
         this.plateShortList = this.$global_msg.plateShortList;
       }
@@ -492,17 +547,25 @@ export default {
         this.loading =false;
         var res = res.data;
         if (res && res.status == 1) {
-          this.flag = false;this.drawerDisabled = true, // 阻止照片显示点击事件
+          this.flag = false;
+          this.drawerDisabled = true, // 阻止照片显示点击事件
           this.timeDisabled = true, // 阻止时间显示点击事件
           this.cityDisabled = true, // 阻止城市显示点击事件
           this.carTypeDisabled = true, // 阻止车型显示点击事件
           this.carShortDisabled = true, // 阻止车牌简称显示点击事件
-          this.drawer = true, // 上传照片显示
+          this.status = 1, // 全部状态
+          this.realNameStatus = 1, // 实名信息
+          this.driversLicenseStatus = 1, // 驾驶证信息
+          this.drivingLicenseStatus = 1, // 行驶证信息
+          this.photoGroupStatus = 1, // 人车信息
           $("#submit").removeClass("submit-btn").addClass("none");
           $("input").attr("readonly", true);
           $("input").attr("disabled", true);
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.realNameStatusTitle1 = "审核中";
+          this.realNameStatusTitle2 = "审核中";
+          this.realNameStatusTitle3 = "审核中";
+          this.realNameStatusTitle4 = "审核中";
           vant.Toast(res.msg);
         } else {
           vant.Toast(res.msg);
@@ -520,11 +583,16 @@ export default {
       var driverInfo = this.driverInfo;
       if (driverInfo) {
         console.log(driverInfo)
-        let status = driverInfo.status;
-        let realNameStatus = driverInfo.real_name_status;
-        let driversLicenseStatus = driverInfo.drivers_license_status;
-        let drivingLicenseStatus = driverInfo.driving_license_status;
-        let photoGroupStatus = driverInfo.photo_group_status;
+        this.status = driverInfo.status;
+        this.realNameStatus = driverInfo.real_name_status;
+        this.driversLicenseStatus = driverInfo.drivers_license_status;
+        this.drivingLicenseStatus = driverInfo.driving_license_status;
+        this.photoGroupStatus = driverInfo.photo_group_status;
+        var status = this.status; 
+        var realNameStatus = this.realNameStatus; 
+        var driversLicenseStatus = this.driversLicenseStatus; 
+        var drivingLicenseStatus = this.drivingLicenseStatus; 
+        var photoGroupStatus = this.photoGroupStatus; 
         if (driverInfo.city != null) {
           this.cityInfo = {   //选择城市信息
             city: driverInfo.city,
