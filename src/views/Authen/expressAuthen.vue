@@ -25,14 +25,14 @@
                 <span ref="title0">身份证正面照</span>
                 <img id="img1" src="@/assets/Authen/id-card-front-add.jpg" alt="" />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle"></b>
+                  <b v-text="realNameStatusTitle1"></b>
                 </div>
               </li>
               <li @click="showImg(1)">
                 <span ref="title1">身份证反面照</span>
                 <img id="img2" src="@/assets/Authen/id-card-back-add.jpg" alt="" />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle"></b>
+                  <b v-text="realNameStatusTitle1"></b>
                 </div>
               </li>
             </ul>
@@ -42,14 +42,14 @@
           <div id="driver-license" class="authen-item">
             <div id="first-date" class="input" @click="checkTime(1)">
               <span>初次领证日期</span>
-              <input v-model.trim="first_issue_time" id="first-issue" type="text" class="ui-date-scroll" placeholder="选择日期" value="" readonly />
+              <input v-model.trim="first_issue" id="first-issue" type="text" class="ui-date-scroll" placeholder="选择日期" value="" readonly />
             </div>
             <ul>
               <li @click="showImg(2)">
                 <span ref="title2">驾驶证照</span>
                 <img id="img3" src="@/assets/Authen/driver-license-front-add.jpg" alt="" />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle"></b>
+                  <b v-text="realNameStatusTitle2"></b>
                 </div>
               </li>
             </ul>
@@ -77,21 +77,21 @@
             </div>
             <div class="input" @click="checkTime(2)">
               <span>行驶证注册日期</span>
-              <input v-model.trim="register_date_time" id="register-date" class="ui-date-scroll" type="text" placeholder="选择日期" value="" readonly />
+              <input v-model.trim="register_date" id="register-date" class="ui-date-scroll" type="text" placeholder="选择日期" value="" readonly />
             </div>
             <ul>
               <li @click="showImg(3)">
                 <span ref="title3">行驶证正本照</span>
                 <img id="img4" src="@/assets/Authen/driving-license-front-add.jpg" alt="" />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle"></b>
+                  <b v-text="realNameStatusTitle3"></b>
                 </div>
               </li>
               <li @click="showImg(4)">
                 <span ref="title4">行驶证副本照</span>
                 <img id="img5" src="@/assets/Authen/driving-license-back-add.jpg" alt="" />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle"></b>
+                  <b v-text="realNameStatusTitle3"></b>
                 </div>
               </li>
             </ul>
@@ -104,7 +104,7 @@
                 <span ref="title5">人车合照</span>
                 <img id="img6" src="@/assets/Authen/person-car-add.jpg" alt="" />
                 <div v-if="titleShow">
-                  <b v-text="realNameStatusTitle"></b>
+                  <b v-text="realNameStatusTitle4"></b>
                 </div>
               </li>
             </ul>
@@ -250,7 +250,6 @@ export default {
       image_id_a: "", // 身份证人像面照片
       image_id_b: "", // 身份证国徽面照片	
       first_issue: "", // 初次领取驾照日期
-      first_issue_time: "", // 初次领取驾照日期显示
       image_drivers: "", //	驾驶证照片
       brand: "", // 车辆品牌
       model: "", // 车辆型号
@@ -261,7 +260,6 @@ export default {
       plate_no: "", // 车牌号码
       vehicle_owner: "", // 车辆所有人姓名	
       register_date: "", // 行驶证注册日期	
-      register_date_time: "", // 行驶证注册日期显示	
       image_driving_a: "", //	行驶证正本照片	
       image_driving_b: "", // 行驶证副本照片
       image_group: "", //	与车辆的合照
@@ -279,7 +277,10 @@ export default {
       carShortDisabled: false, // 阻止车牌简称显示点击事件
       carTypeDisabled: false, // 阻止车辆类型显示点击事件
       drawer: false, // 上传照片显示
-      realNameStatusTitle: "审核中...", // 上传图片状态title
+      realNameStatusTitle1: "审核中...", // 上传图片状态实名信息title
+      realNameStatusTitle2: "审核中...", // 上传图片状态驾驶证信息title
+      realNameStatusTitle3: "审核中...", // 上传图片状态行驶证信息title
+      realNameStatusTitle4: "审核中...", // 上传图片状态人车合照title
       titleShow: false, // 上传图片状态title显示
       imgIndex: 0, // 选择的图片
       /* 时间插件 */
@@ -337,8 +338,9 @@ export default {
       this.carValue = payload.brand + " " + payload.model + " " + payload.color;
       this.carDrawer = payload.msg;
     },
-    // 时间选择
+    // 时间显示
     checkTime(index) {
+      console.log("时间显示")
       this.timeIndex = index;
       if (!this.timeDisabled) {
         this.timeDrawer = true;
@@ -347,18 +349,18 @@ export default {
     // 时间确认
     timeConfirm(){
       if (this.timeIndex == 1) {
-        if (this.first_issue_time != "") {
+        if (this.first_issue != "") {
           this.timeDrawer = false;
           // this.first_issue = new Date((this.first_issue_time + " 00:00:00").replace(/-/g, "/")).getTime();
-          this.first_issue = this.first_issue_time;
+          // this.first_issue = this.first_issue_time;
         }else {
           vant.Toast("请滚动选择时间")
         }
       }else if (this.timeIndex ==2 ) {
-        if (this.register_date_time != "") {
+        if (this.register_date != "") {
           this.timeDrawer = false;
           // this.register_date = new Date((this.register_date_time + " 00:00:00").replace(/-/g, "/")).getTime();
-          this.register_date = this.register_date_time;
+          // this.register_date = this.register_date_time;
           console.log(this.register_date)
         }else {
           vant.Toast("请滚动选择时间")
@@ -368,9 +370,9 @@ export default {
     getValues(e) {
       let times = e.getValues();
       if (this.timeIndex == 1) {
-        this.first_issue_time = `${times[0]}-${times[1]}-${times[2]}`;
+        this.first_issue = `${times[0]}-${times[1]}-${times[2]}`;
       }else if (this.timeIndex == 2) {
-        this.register_date_time = `${times[0]}-${times[1]}-${times[2]}`;
+        this.register_date = `${times[0]}-${times[1]}-${times[2]}`;
       }
     },
     // 时间取消
@@ -484,7 +486,8 @@ export default {
       }
       this.loadText = "提交中...";
       this.loading = true;
-      this.axios.post(url, params).post(res => {
+      let url = this.$global_msg.submitExpressDriver;
+      this.axios.post(url, params).then(res => {
         console.log(res);
         this.loading =false;
         var res = res.data;
@@ -540,6 +543,7 @@ export default {
           this.carValue = ((carInfo.brand != null ? carInfo.brand : "") + " " + (carInfo.model != null ? carInfo.model : "") + " " + (carInfo.color != null ? carInfo.color : ""))
         }
         if (status != 2 && realNameStatus > 0 && driversLicenseStatus > 0 && drivingLicenseStatus > 0 && photoGroupStatus > 0) {
+          console.log(111)
           this.flag = false;
           this.drawerDisabled = true, // 阻止照片显示点击事件
           this.timeDisabled = true, // 阻止时间显示点击事件
@@ -548,6 +552,7 @@ export default {
           this.carShortDisabled = true, // 阻止车牌简称显示点击事件
           $("#submit").removeClass("submit-btn").addClass("none");
         } else {
+          console.log(222)
           this.flag = true;
           this.drawerDisabled = false, // 阻止照片显示点击事件
           this.timeDisabled = false, // 阻止时间显示点击事件
@@ -567,7 +572,7 @@ export default {
           this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
           this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.realNameStatusTitle1 = "审核中";
         } else if (realNameStatus == 2) { //待完善
           $("#realName input").attr("readonly", false);
           $("#realName #img1").attr("src", driverInfo.image_id_a != null ? (server3 + driverInfo.image_id_a) : "");
@@ -575,7 +580,7 @@ export default {
           this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
           this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
+          this.realNameStatusTitle1 = "请完善资料";
         } else if (realNameStatus == 3) { //成功
           $("#realName input").attr("readonly", true);
           $("#realName #img1").attr("src", driverInfo.image_id_a != null ? (server3 + driverInfo.image_id_a) : "");
@@ -583,11 +588,11 @@ export default {
           this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
           this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
+          this.realNameStatusTitle1 = "审核通过";
         } else if (realNameStatus == 0 || realNameStatus == -1) { //未提交认证 数据无效
           $("#realName input").attr("readonly", false);
           this.titleShow = false;
-          this.realNameStatusTitle = "";
+          this.realNameStatusTitle1 = "";
         } else if (realNameStatus == -2) { //失败
           $("#realName input").attr("readonly", false);
           $("#realName #img1").attr("src", driverInfo.image_id_a != null ? (server3 + driverInfo.image_id_a) : "");
@@ -595,29 +600,30 @@ export default {
           this.img1 = driverInfo.image_id_a != null ? driverInfo.image_id_a : "";
           this.img2 = driverInfo.image_id_b != null ? driverInfo.image_id_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
+          this.realNameStatusTitle1 = "审核失败,点击重新上传";
         }
         //驾驶证信息
-        this.first_issue_time = (driverInfo.first_issue != null ? driverInfo.first_issue : "");
+        this.first_issue = (driverInfo.first_issue != null ? driverInfo.first_issue : "");
         if (driversLicenseStatus == 1) { //审核中
           $("#driver-license input").attr("disabled", true);
-          
+          console.log("驾驶证信息")
           $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
           this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
+          // this.
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.realNameStatusTitle2 = "审核中";
         } else if (driversLicenseStatus == 2) { //待完善
           $("#driver-license input").attr("disabled", false);
           $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
           this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
+          this.realNameStatusTitle2 = "请完善资料";
         } else if (driversLicenseStatus == 3) { //成功
           $("#driver-license input").attr("disabled", true);
           $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
           this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
+          this.realNameStatusTitle2 = "审核通过";
         } else if (driversLicenseStatus == 0 || driversLicenseStatus == -1) { //未提交认证 数据无效
           $("#driver-license input").attr("disabled", false);
           $("#driver-license ul li div").addClass("none");
@@ -627,14 +633,16 @@ export default {
           $("#driver-license #img3").attr("src", driverInfo.image_drivers != null ? (server3 + driverInfo.image_drivers) : "");
           this.img3 = driverInfo.image_drivers != null ? driverInfo.image_drivers : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
+          this.realNameStatusTitle2 = "审核失败,点击重新上传";
         }
         //行驶证信息
         this.carValue = ((driverInfo.brand != null ? driverInfo.brand : "") + " " + (driverInfo.model != null ? driverInfo.model : "") + " " + (driverInfo.color != null ? driverInfo.color : ""));
-          this.short =((driverInfo.plate_no_short != null ? driverInfo.plate_no_short : "") + (driverInfo.plate_no_alpha != null ? driverInfo.plate_no_alpha : ""));
-          this.plate_no = (driverInfo.plate_no != null ? driverInfo.plate_no : "");
-          this.vehicle_owner = (driverInfo.vehicle_owner != null ? driverInfo.vehicle_owner : "");
-          this.register_date_time = (driverInfo.register_date != null ? driverInfo.register_date : "");
+        this.plate_no_alpha = (driverInfo.plate_no_short != null ? driverInfo.plate_no_short : "")
+        this.plate_no_short = (driverInfo.plate_no_alpha != null ? driverInfo.plate_no_alpha : "")
+        this.short =(this.plate_no_alpha + this.plate_no_short);
+        this.plate_no = (driverInfo.plate_no != null ? driverInfo.plate_no : "");
+        this.vehicle_owner = (driverInfo.vehicle_owner != null ? driverInfo.vehicle_owner : "");
+        this.register_date= (driverInfo.register_date != null ? driverInfo.register_date : "");
         if (drivingLicenseStatus == 1) { //审核中
           $("#driving-license input").attr("disabled", true);
           $("#driving-license #plate-no").attr("readonly", true);
@@ -644,7 +652,7 @@ export default {
           this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
           this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.realNameStatusTitle3 = "审核中";
         } else if (drivingLicenseStatus == 2) { //待完善
           $("#driving-license input").attr("disabled", false);
           $("#driving-license #plate-no").attr("readonly", false);
@@ -654,7 +662,7 @@ export default {
           this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
           this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
+          this.realNameStatusTitle3 = "请完善资料";
         } else if (drivingLicenseStatus == 3) { //成功
           $("#driving-license input").attr("disabled", true);
           $("#driving-license #plate-no").attr("readonly", true);
@@ -664,13 +672,13 @@ export default {
           this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
           this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
+          this.realNameStatusTitle3 = "审核通过";
         } else if (drivingLicenseStatus == 0 || drivingLicenseStatus == -1) { //未提交认证 数据无效
           $("#driving-license input").attr("disabled", false);
           $("#driving-license #plate-no").attr("readonly", false);
           $("#driving-license #vehicle-owner").attr("readonly", false);
           this.titleShow = false;
-          this.realNameStatusTitle = "";
+          this.realNameStatusTitle3 = "";
         } else if (drivingLicenseStatus == -2) { //失败
           $("#driving-license input").attr("disabled", false);
           $("#driving-license #plate-no").attr("readonly", false);
@@ -680,32 +688,32 @@ export default {
           this.img4 = driverInfo.image_driving_a != null ? driverInfo.image_driving_a : "";
           this.img5 = driverInfo.image_driving_b != null ? driverInfo.image_driving_b : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
+          this.realNameStatusTitle3 = "审核失败,点击重新上传";
         }
         //人车信息
         if (photoGroupStatus == 1) { //审核中
           $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
           this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核中";
+          this.realNameStatusTitle4 = "审核中";
         } else if (photoGroupStatus == 2) { //待完善
           $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
           this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "请完善资料";
+          this.realNameStatusTitle4 = "请完善资料";
         } else if (photoGroupStatus == 3) { //成功
           $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
           this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核通过";
+          this.realNameStatusTitle4 = "审核通过";
         } else if (photoGroupStatus == 0 || photoGroupStatus == -1) { //未提交认证 数据无效
           this.titleShow = false;
-          this.realNameStatusTitle = "";
+          this.realNameStatusTitle4 = "";
         } else if (photoGroupStatus == -2) { //失败
           $("#img6").attr("src", driverInfo.image_group != null ? (server3 + driverInfo.image_group) : "");
           this.img6 = driverInfo.image_group != null ? driverInfo.image_group : "";
           this.titleShow = true;
-          this.realNameStatusTitle = "审核失败,点击重新上传";
+          this.realNameStatusTitle4 = "审核失败,点击重新上传";
         }
       }
     },
