@@ -36,7 +36,7 @@
       </van-index-bar>
     </div>
     <!-- 获取指定车型数据 -->
-    <div>
+    <div v-swipeleft="swipeLeft">
       <el-drawer
         :visible.sync="carDrawer"
         :show-close="false"
@@ -64,6 +64,7 @@
 
 <script>
 import Vue from "vue";
+import vueTouch from "@/utils/touch.js";
 import { IndexBar, IndexAnchor, Cell } from 'vant';
 
 Vue.use(IndexBar).use(IndexAnchor).use(Cell);
@@ -92,6 +93,10 @@ export default {
     };
   },
   methods: {
+    // 城市右滑关闭
+    swipeLeft() {
+      this.carDrawer = false;
+    },
     onSelect(event) {
       console.log(event)
       this.$emit("elect", event)

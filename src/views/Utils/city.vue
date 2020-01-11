@@ -14,7 +14,7 @@
       </li>
     </ul>
     <!-- 城市列表 -->
-    <div>
+    <div v-swipeleft="swipeLeft">
       <el-drawer
         :visible.sync="cityDrawer"
         :show-close="false"
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import vueTouch from "@/utils/touch.js";
+
 export default {
   data() {
     return {
@@ -63,6 +65,10 @@ export default {
     };
   },
   methods: {
+    // 城市右滑关闭
+    swipeLeft() {
+      this.cityDrawer = false;
+    },
     /**
      * 获取省
      */

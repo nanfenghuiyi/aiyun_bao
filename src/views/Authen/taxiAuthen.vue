@@ -205,8 +205,8 @@
       </el-drawer>
     </div>
     <!-- 城市组件 -->
-    <div>
-      <el-drawer
+    <div v-swipeleft="swipeLeft">
+      <el-drawer 
         :visible.sync="cityDrawer"
         :show-close="false"
         size="100%">
@@ -220,6 +220,7 @@
 import $ from "jquery";
 import { canvasDataURL } from "../../utils/util";
 import { detectionParam } from "../../utils/util";
+import vueTouch from "@/utils/touch.js";
 import Vue from "vue";
 Vue.use(vant);
 
@@ -322,6 +323,11 @@ export default {
   },
   components: {city},
   methods: {
+    // 城市右滑关闭
+    swipeLeft() {
+      vant.Toast("未选择")
+      this.cityDrawer = false;
+    },
     handleChange(val) {
       console.log(val);
     },
@@ -344,7 +350,12 @@ export default {
     cityParentFn(payload) {
       console.log("城市选择===", payload);
       this.taxiCityInfo = payload;
-      this.cityValue = payload.province + "-" + payload.city + "-" + payload.dist;
+      if (payload.dist != null && payload.dist != "") {
+        this.cityValue = payload.province + "-" + payload.city + "-" + payload.dist;
+      }else {
+        this.cityValue = payload.province + "-" + payload.city
+      }
+      
       this.cityDrawer = payload.msg;
     },
     // 时间选择

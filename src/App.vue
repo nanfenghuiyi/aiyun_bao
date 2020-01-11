@@ -41,11 +41,12 @@ export default {
     };
   },
   mounted() {
-    console.log("这是APP中的事件");
+    console.log("这是APP中的事件")
+    // Vue.prototype.param = getParams();
     Vue.prototype.param = {
       city_code: "028",
       identity: 1,
-      user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627",
+      user_id: "a8b697c9-e803-4a88-91bf-dab09dcde250",
       bus_no: 308,
       employee_id: 569,
       employee_type: "1",
@@ -53,18 +54,6 @@ export default {
       order_type: 4,
       log_id: "15764947343577704317"
     };
-    // var sad = {
-    //   ID: "523124198502244243",
-    //   company_name: "不告诉的",
-    //   image_enterprise_license: "Upload/enterprise/170-daf64ec93848-A.jpeg",
-    //   image_group: "Upload/photoGroup/170-24a078588528-A.jpeg",
-    //   image_id_a: "Upload/realName/170-0de4f9d968bb-A.jpeg",
-    //   image_id_b: "Upload/realName/170-1ba0e2ca2473-B.jpeg",
-    //   name: "残夜",
-    //   type: 1,
-    //   unified_social_credit_code: "12341",
-    //   user_id: "3e4414e6-f287-4d6b-b194-4cb1624e8627"
-    // };
   }
 };
 </script>

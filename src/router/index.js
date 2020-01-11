@@ -229,7 +229,7 @@ const routes = [
   },
   // 推荐与分享
   {
-    path: '/cardGuide', // 
+    path: '/cardGuide',
     name: 'cardGuide',
     component: () => import('../views/Share/cardGuide.vue'),
     meta: {
@@ -237,7 +237,7 @@ const routes = [
     }
   },
   {
-    path: '/rulesAndroid', // 
+    path: '/rulesAndroid',
     name: 'rulesAndroid',
     component: () => import('../views/Share/rulesAndroid.vue'),
     meta: {
@@ -245,7 +245,7 @@ const routes = [
     }
   },
   {
-    path: '/rulesIos', // 
+    path: '/rulesIos',
     name: 'rulesIos',
     component: () => import('../views/Share/rulesIos.vue'),
     meta: {

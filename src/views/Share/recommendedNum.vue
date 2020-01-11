@@ -1,5 +1,5 @@
 <template>
-  <div class="container"
+  <div class="container" v-swipedown="swipeDown"
       v-loading="loading"
       :element-loading-text="loadText"
       element-loading-spinner="el-icon-loading"
@@ -27,6 +27,7 @@
 <script>
 import $ from "jquery";
 import Vue from "vue";
+import vueTouch from "@/utils/touch.js";
 Vue.use(vant);
 
 export default {
@@ -48,6 +49,18 @@ export default {
     }
   },
   methods: {
+    swipeDown() {
+      this.loadText = "刷新中";
+      this.loading = true;
+      setTimeout(() => {
+        vant.Toast('刷新成功');
+        this.isLoading = false;
+        this.page = 1;
+        this.recommendList = [];
+        this.getDataList();
+        this.loading = false;
+      }, 500);
+    },
     // 列表
     load() {
       console.log(111)

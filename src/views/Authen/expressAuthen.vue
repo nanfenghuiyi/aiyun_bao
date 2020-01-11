@@ -188,7 +188,7 @@
       </el-drawer>
     </div>
     <!-- 城市组件 -->
-    <div>
+    <div v-swipeleft="swipeLeft">
       <el-drawer
         :visible.sync="cityDrawer"
         :show-close="false"
@@ -197,19 +197,13 @@
       </el-drawer>
     </div>
     <!-- 车型组件 -->
-    <div>
+    <div v-swipeleft="swipeLeft">
       <el-drawer
         :visible.sync="carDrawer"
         :show-close="false"
         size="100%">
         <car @carChildFn="carParentFn" @onSelect="onSelect"></car>
       </el-drawer>
-      <!-- <van-popup
-        v-model="carDrawer"
-        position="right"
-        :style="{ height: '100%' }">
-        <car @carChildFn="carParentFn" @onSelect="onSelect"></car>
-      </van-popup> -->
     </div>
   </div>
 </template>
@@ -218,11 +212,12 @@
 import $ from "jquery";
 import { canvasDataURL } from "../../utils/util";
 import { detectionParam } from "../../utils/util";
+import vueTouch from "@/utils/touch.js";
 import Vue from "vue";
-// import { IndexBar, IndexAnchor, Cell } from 'vant';
 
-// Vue.use(IndexBar).use(IndexAnchor).use(Cell);
-Vue.use(vant);
+import { IndexBar, IndexAnchor, Cell } from 'vant';
+
+Vue.use(IndexBar).use(IndexAnchor).use(Cell);
 
 import city from "../Utils/city";
 import car from "../Utils/car";
@@ -329,6 +324,12 @@ export default {
     },
     handleChange(val) {
       console.log(val);
+    },
+    // 城市右滑关闭
+    swipeLeft() {
+      vant.Toast("未选择")
+      this.cityDrawer = false;
+      this.carDrawer = false;
     },
     // 城市显示
     showCity() {
