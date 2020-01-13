@@ -18,7 +18,12 @@ export default {
       return window.innerHeight + "px";
     }
   },
-  methods: {},
+  methods: {
+    getParams(p) {
+      console.log(p)
+      // Vue.prototype.param = p;
+    }
+  },
   created() {
     var clientHeight =
       document.documentElement.clientHeight || document.body.clientHeight;
@@ -54,6 +59,12 @@ export default {
       order_type: 4,
       log_id: "15764947343577704317"
     };
+    /*将要给原生调用的方法挂载到 window 上面 不能加()*/
+    window.getParams = this.getParams;
+    /* window.οnlοad=function(){//调用交互
+      window.getParams = this.getParams;
+      this.getParams(p);
+    } */
   }
 };
 </script>

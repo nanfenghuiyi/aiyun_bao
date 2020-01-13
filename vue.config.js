@@ -36,6 +36,7 @@ module.exports = {
    *详细信息：https://cli.vuejs.org/config/#publicpath
    */
   publicPath: '/',
+  // publicPath: '../../',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',

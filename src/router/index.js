@@ -309,6 +309,39 @@ const routes = [
       title: '取消理由'
     }
   },
+  // AppShare
+  {
+    path: '/recommend_contractor',
+    name: 'recommend_contractor',
+    component: () => import('../views/AppShare/recommend_contractor.vue'),
+    meta: {
+      title: '爱运宝大巴承包者'
+    }
+  },
+  {
+    path: '/recommend_driver',
+    name: 'recommend_driver',
+    component: () => import('../views/AppShare/recommend_driver.vue'),
+    meta: {
+      title: '爱运宝司机'
+    }
+  },
+  {
+    path: '/recommend_passenger',
+    name: 'recommend_passenger',
+    component: () => import('../views/AppShare/recommend_passenger.vue'),
+    meta: {
+      title: '每单折扣'
+    }
+  },
+  {
+    path: '/recommendLink',
+    name: 'recommendLink',
+    component: () => import('../views/AppShare/recommendLink.vue'),
+    meta: {
+      title: '爱运宝'
+    }
+  },
 ]
 
 const router = new VueRouter({
