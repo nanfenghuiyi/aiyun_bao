@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <van-swipe style="height: 667px;" :show-indicators="false" :loop="false" vertical>
+    <van-swipe @change="swipeChange" :style="{ height: scrollerHeight }" :show-indicators="false" :loop="false" vertical>
       <van-swipe-item>
         <div class="page page1" id="page1">
           <div class="pagebox">
@@ -8,8 +8,13 @@
               <div class="bannerBox">
                 <img src="@/assets/AppShare/banner0.png?time=20171008" alt="banner" />
                 <div class="slideBoxAbsolute">
-                  <div class="slideBox">
-                    <ul>
+                  <div class="slideBox" @click="getShow">
+                    <van-swipe :autoplay="2000" :show-indicators="false" style="width: 100%;">
+                      <van-swipe-item v-for="(image, index) in images" :key="index">
+                        <img class="swipe_img" v-lazy="image" />
+                      </van-swipe-item>
+                    </van-swipe>
+                    <!-- <ul>
                       <li>
                         <div class="imgBox">
                           <img src="@/assets/AppShare/banner1.png?t=20171008" alt="banner1" />
@@ -25,13 +30,13 @@
                           <img src="@/assets/AppShare/banner2.png?t=20171008" alt="banner2" />
                         </div>
                       </li>
-                    </ul>
+                    </ul> -->
                   </div>
                 </div>
               </div>
               <div class="phoneBox">
                 <div class="space">
-                  <div id="download_btn" class="download">
+                  <div id="download_btn" class="download" @click="download">
                     <img
                       src="@/assets/AppShare/logo_no_border.png"
                       alt="download"
@@ -52,9 +57,10 @@
           </div>
         </div>
       </van-swipe-item>
+      <!-- 第1页 -->
       <van-swipe-item>
         <div class="page page2">
-          <div class="pagebox">
+          <div class="pagebox" :class=" {active: activeIndex2,page2: activeIndex2}">
             <div class="pageboxInner">
               <div class="header">
                 <div class="title">
@@ -66,7 +72,7 @@
                   <div class="tableTitle">
                     <span>同样的乘车路线</span>
                   </div>
-                  <table border="1">
+                  <table border="1" cellspacing="0">
                     <tr>
                       <th>某出行平台顺风车</th>
                       <th class="right">爱运宝顺风车</th>
@@ -104,10 +110,10 @@
                     <tr>
                       <td>
                         收费极高&nbsp;客源少
-                        <br />匹配成功率低
+                        <br />匹配成功率低
                       </td>
                       <td class="right">
-                        收费更低&nbsp;车源多
+                        收费更低&nbsp;车源多
                         <br />匹配成功率高
                       </td>
                     </tr>
@@ -121,9 +127,10 @@
           </div>
         </div>
       </van-swipe-item>
+      <!-- 第2页 -->
       <van-swipe-item>
         <div class="page page3">
-          <div class="pagebox">
+          <div class="pagebox" :class=" {active: activeIndex3,page3: activeIndex3}">
             <div class="pageboxInner">
               <div class="header">
                 <div class="title">
@@ -137,7 +144,7 @@
                   <div class="tableTitle">
                     <span>同样的乘车路线</span>
                   </div>
-                  <table border="1">
+                  <table border="1" cellspacing="0">
                     <tr>
                       <th>某出行平台快车</th>
                       <th class="right">爱运宝快车</th>
@@ -184,9 +191,10 @@
           </div>
         </div>
       </van-swipe-item>
+      <!-- 第3页 -->
       <van-swipe-item>
         <div class="page page4">
-          <div class="pagebox">
+          <div class="pagebox" :class=" {active: activeIndex4}">
             <div class="pageboxInner">
               <div class="reward clearfix">
                 <div class="rewardTitle">
@@ -207,7 +215,7 @@
                   </div>
                 </div>
               </div>
-              <div class="ruleBox">
+              <div class="ruleBox" @click="getRule">
                 <div id="rule_btn" class="rule">
                   <a>查看共享收益规则</a>
                   <span class="icon-circle-right"></span>
@@ -220,8 +228,9 @@
           </div>
         </div>
       </van-swipe-item>
+      <!-- 第4页 -->
       <van-swipe-item>
-        <div class="page page5">
+        <div class="page page5" :class=" {active: activeIndex5}">
           <div class="pagebox">
             <div class="pageboxInner">
               <img src="@/assets/AppShare/focus.png" alt="关注公众号" class="focus" />
@@ -250,8 +259,7 @@
       </van-swipe-item>
     </van-swipe>
     <!-- 弹出提示框 -->
-    <div class="puBox">
-      <div class="overLay"></div>
+    <van-popup v-model="show" round :close-on-click-overlay="false" :style="{ width: '80%', height: '75%' }">
       <div class="pu">
         <div class="title">关于奖励活动及爱运</div>
         <div class="content">
@@ -275,79 +283,111 @@
             <p>全国具有强大竞争力的快车平台，更高效的出租车平台，更专业的顺风车平台！出行就用“爱运宝”，乘客花钱更少，司机赚钱更多！</p>
           </section>
         </div>
-        <div id="close-pu" class="close">明白了，去注册</div>
+        <div id="close-pu" @click="closeShow" class="close">明白了，去注册</div>
       </div>
-    </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { Swipe, SwipeItem } from 'vant';
+import { Swipe, SwipeItem, Lazyload, Popup  } from 'vant';
 
-Vue.use(Swipe).use(SwipeItem);
+Vue.use(Swipe).use(SwipeItem).use(Lazyload).use(Popup);
 
 export default {
   data() {
-    return {};
+    return {
+      data: {},
+      images: [
+        require("@/assets/AppShare/banner1.png?t=20171008"),
+        require("@/assets/AppShare/banner3.png?t=20171008"),
+        require("@/assets/AppShare/banner2.png?t=20171008"),
+      ],
+      show: false, // 显示弹出提示框
+      activeIndex2: false, // 第1页动画的状态
+      activeIndex3: false, // 第2页动画的状态
+      activeIndex4: false, // 第3页动画的状态
+      activeIndex5: false, // 第4页动画的状态
+    };
   },
   methods: {
-    // 整屏滑动
-    get() {
-      var container = document.getElementById("container");
-      var pages = document.querySelectorAll(".page");
-      var slip = Slip(container, "y").webapp(pages);
-      var index, $activePage;
-      $("#container .page")
-        .eq(0)
-        .addClass("active")
-        .siblings()
-        .addClass("notactive");
-      // 轮播渐隐渐出
-      var size = $(".slideBox ul li").size();
-      var i = 0;
-      $(".slideBox ul li")
-        .eq(0)
-        .show()
-        .siblings()
-        .hide();
-      function slide() {
-        i++;
-        if (i == size) {
-          i = 0;
-        }
-        $(".slideBox ul li")
-          .eq(i)
-          .fadeIn()
-          .siblings()
-          .fadeOut();
+    // 每页轮播完成后触发
+    swipeChange(index) {
+      console.log(index)
+      if (index == 0) {
+        this.activeIndex2 = false
       }
-      setInterval(slide, 4000);
-
-      // 滑屏时为新页面添加active类，从而触发动画；为上一屏增加notactive类，实现渐隐效果也避免了画面跳动
-      slip.end(function() {
-        index = slip.page;
-        $activePage = $("#container .page").eq(index);
-        $activePage
-          .removeClass("notactive")
-          .addClass("active")
-          .siblings()
-          .removeClass("active")
-          .addClass("notactive");
-      });
-
-      $(".page1 .bannerBox .slideBox").click(function() {
-        $(".puBox").fadeIn();
-      });
-
-      $(".puBox .close").click(function() {
-        $(".puBox").fadeOut();
-        showForm();
-      });
+      if (index == 1) {
+        this.activeIndex2 = true;
+        this.activeIndex3 = false;
+      }
+      if (index == 2) {
+        this.activeIndex2 = false;
+        this.activeIndex3 = true;
+        this.activeIndex4 = false;
+      }
+      if (index == 3) {
+        this.activeIndex3 = false;
+        this.activeIndex4 = true;
+        this.activeIndex5 = false;
+      }
+      if (index == 4) {
+        this.activeIndex4 = false;
+        this.activeIndex5 = true;
+      }
+    },
+    // 显示弹出提示框
+    getShow() {
+      this.show = true;
+    },
+    // 关闭弹出提示框
+    closeShow() {
+      this.show = false;
+    },
+    // 去注册下载
+    download() {
+      this.$router.push({ path: "registerForm", query: this.data });
+    },
+    // 查看共享收益
+    getRule() {
+      var u = navigator.userAgent;
+      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+      var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+      if(isiOS) {
+        this.$router.push({ path: "rulesIos", query: this.data });
+      } else {
+        this.$router.push({ path: "rulesAndroid", query: this.data });
+      }
+    },
+    // 获取参数
+    getData() {
+      this.url = window.location.href;
+      var url = this.url;
+      if (url.indexOf("?") !== -1) {
+        var search = url.substring(url.indexOf("?") + 1);
+        var queryArray = search.split("&");
+        queryArray.forEach(function(item) {
+          var itemArray = item.split("=");
+          var key = itemArray[0];
+          var value = decodeURIComponent(itemArray[1])
+            ? decodeURIComponent(itemArray[1])
+            : "";
+          this.data[key] = value;
+        });
+      }
+      console.log(this.data);
+    },
+  },
+  computed: {
+    // 滚动区高度
+    // (业务需求：手机屏幕高度减去头部标题和底部tabbar的高度，当然这2个高度也是可以动态获取的)
+    scrollerHeight: function() {
+      return (window.innerHeight) + "px";
     }
   },
   mounted() {
-    // this.get();
+    this.getData();
   }
 };
 </script>
@@ -370,7 +410,7 @@ html {
 body {
   width: 100%;
   height: 100%;
-  min-width: 4.266667rem;
+  min-width: 2000px;
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -380,7 +420,7 @@ body {
 
 @media screen and (min-width: 768px) {
   body {
-    width: 10.24rem;
+    width: 468px;
     overflow: auto;
   }
 }
@@ -427,13 +467,6 @@ body {
   }
 }
 
-.space2em {
-  display: inline-block;
-  width: 2em;
-  margin: 0;
-  padding: 0;
-}
-
 .active .pageboxInner {
   opacity: 1;
   transition: opacity 1s;
@@ -466,12 +499,12 @@ body {
   left: 0;
   width: 100%;
   font-size: 16px;
-  line-height: 3em;
+  line-height: 55px;
   color: #fed33c;
   font-weight: 600;
 }
 
-.active .download .text {
+.download .text {
   animation: big 1s infinite;
 }
 
@@ -523,7 +556,7 @@ body {
   }
 
   to {
-    margin-top: -1.333333rem;
+    margin-top: -25px;
   }
 }
 
@@ -535,7 +568,7 @@ body {
 
   to {
     opacity: 1;
-    top: 2rem;
+    top: 75px;
   }
 }
 
@@ -545,7 +578,7 @@ body {
   }
 
   to {
-    margin-top: 0.666667rem;
+    margin-top: 20px;
   }
 }
 
@@ -593,12 +626,12 @@ body {
 @keyframes up {
   0% {
     color: rgba(255, 255, 255, 0.4);
-    font-size: 0.853333rem;
+    font-size: 20px;
   }
 
   100% {
     color: rgba(255, 255, 255, 0);
-    font-size: 0.4rem;
+    font-size: 15px;
   }
 }
 
@@ -611,10 +644,10 @@ body {
 .up .icon-up {
   background: url("../../assets/AppShare/icon_white_up_arrow.png") no-repeat;
   background-position: center;
-  background-size: 0.533333rem 0.333333rem;
+  background-size: 20px 17px;
   display: inline-block;
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 15px;
+  height: 25px;
   font-weight: 200;
   animation: up 1s ease-out infinite;
   -webkit-animation: up 1s ease-out infinite;
@@ -630,7 +663,7 @@ body {
   text-align: center;
   width: 100%;
   height: 100%;
-  padding: 0.266667rem 0;
+  padding: 10px 0;
   box-sizing: border-box;
   position: relative;
   background: url("../../assets/AppShare/background.jpg") no-repeat;
@@ -653,6 +686,10 @@ body {
 
 .page1 .pagebox .bannerBox img {
   width: 100%;
+}
+.swipe_img {
+  width: 90% !important;
+  margin-top: 15px;
 }
 
 .page1 .pagebox .bannerBox .slideBoxAbsolute {
@@ -784,7 +821,7 @@ body {
   margin: 0 auto;
   color: #fff;
   font-size: 0.506667rem;
-  line-height: 1.066667rem;
+  line-height: 40px;
   padding: 0 1em;
   border: 0.053333rem solid #00d3b3;
   border-radius: 0.6rem;
@@ -803,8 +840,8 @@ body {
   left: 0;
   right: 0;
   top: 2rem;
-  width: 89%;
-  height: 80%;
+  width: 84%;
+  height: 77%;
   margin: 0 auto;
   padding: 0.2rem;
   border: 0.04rem solid #00d3b3;
@@ -866,16 +903,15 @@ body {
 .page2 .pagebox .tablebox .tableInnerBox table tr th {
   position: relative;
   width: 50%;
-  border-right: 0.053333rem solid black;
   text-align: center;
-  font-size: 0.32rem;
+  font-size: 12px;
   vertical-align: middle;
   opacity: 0.9;
 }
 
 .page3 .pagebox .tablebox .tableInnerBox table tr th,
 .page2 .pagebox .tablebox .tableInnerBox table tr th {
-  font-size: 0.4rem;
+  font-size: 15px;
 }
 
 .page3 .pagebox .tablebox .tableInnerBox table tr .right,
@@ -891,23 +927,23 @@ body {
 .page4 .pagebox .pageboxInner .reward {
   width: 78%;
   margin: 0 auto;
-  padding: 1.2rem 0 0;
+  padding: 38px 0 0;
   background: url("../../assets/AppShare/recommend.png") no-repeat;
   background-size: 100% 100%;
 }
 
 .page4 .pagebox .pageboxInner .reward .rewardTitle {
   width: 100%;
-  margin-bottom: 0.8rem;
+  margin-bottom: 30px;
 }
 
 .page4 .pagebox .pageboxInner .reward .rewardTitle p {
   display: inline;
   color: #fff;
-  border-bottom: 0.026667rem solid #00cdb3;
+  border-bottom: 1px solid #00cdb3;
   text-align: center;
-  font-size: 0.453333rem;
-  padding: 0.2em 1em;
+  font-size: 17px;
+  padding: 5px 15px;
 }
 
 .page4 .pagebox .pageboxInner .reward .rewardContent {
@@ -917,7 +953,7 @@ body {
 .page4 .pagebox .pageboxInner .reward .rewardContent .rewardList {
   float: left;
   width: 50%;
-  margin-bottom: 0.4rem;
+  margin-bottom: 15px;
   opacity: 1;
 }
 
@@ -938,11 +974,11 @@ body {
 .page4 .pagebox .pageboxInner .ruleBox span {
   display: inline-block;
   vertical-align: top;
-  font-size: 0.4rem;
-  line-height: 3em;
+  font-size: 15px;
+  line-height: 45px;
   color: #fff;
-  margin-right: 0.2rem;
-  letter-spacing: 0.013333rem;
+  margin-right: 10px;
+  letter-spacing: 1px;
 }
 
 .page5 .pageboxInner .focus {
@@ -952,9 +988,9 @@ body {
 .page5 .pageboxInner .codeBox {
   position: relative;
   width: 100%;
-  padding-bottom: 0.8rem;
-  margin-top: -0.666667rem;
-  margin-bottom: 0.4rem;
+  padding-bottom: 40px;
+  margin-top: -1px;
+  margin-bottom: 15px;
 }
 
 .page5 .pageboxInner .codeBox .code {
@@ -962,8 +998,8 @@ body {
 }
 
 .page5 .pageboxInner .codeBox .text {
-  font-size: 0.4rem;
-  line-height: 0.4rem;
+  font-size: 15px;
+  line-height: 15px;
   color: #ffde00;
   text-align: center;
   position: absolute;
@@ -978,14 +1014,14 @@ body {
 
 .page5 .pageboxInner .codeBox .text2 {
   top: 77%;
-  line-height: 1.4em;
+  line-height: 25px;
 }
 
 .page5 .pageboxInner .slogon .text {
-  font-size: 0.506667rem;
+  font-size: 18px;
   color: #00d2b1;
   text-align: center;
-  margin-bottom: 0.2rem;
+  margin-bottom: 10px;
 }
 
 .page5 .pageboxInner .slogon .slogonImg {
@@ -994,86 +1030,61 @@ body {
 
 .page5 .pageboxInner .logoImg {
   position: absolute;
-  bottom: 0.266667rem;
-  width: 2.133333rem;
+  bottom: 10px;
+  width: 80px;
   left: 50%;
-  margin-left: -1.066667rem;
+  transform: translateX(-50%)
 }
-.space2em {
-  display: inline-block;
-  width: 2em;
-}
-.puBox {
-  display: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 99;
-}
-
-.puBox .overLay {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-}
-.puBox .pu {
-  position: absolute;
-  left: 10%;
-  top: 10%;
+.pu {
   background: white;
-  border-radius: 0.2rem;
-  width: 80%;
-  height: 80%;
+  border-radius: 10px;
+  width: 100%;
+  height: 92%;
 }
-.puBox .pu .title {
-  height: 1.066667rem;
-  line-height: 1.066667rem;
+.pu .title {
+  height: 40px;
+  line-height: 40px;
   color: #00c7ac;
-  font-size: 0.56rem;
+  font-size: 20px;
   position: relative;
   text-align: center;
 }
-.puBox .pu .title:after {
+.pu .title:after {
   display: block;
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
-  border-bottom: 0.013333rem solid rgba(7, 17, 27, 0.1);
+  border-bottom: 1px solid rgba(7, 17, 27, 0.1);
   content: "";
 }
-.puBox .pu .content {
-  padding: 0.2rem 0.4rem;
+.pu .content {
+  padding: 10px 15px;
   overflow-y: scroll;
   height: 80%;
 }
-.puBox .pu .content section {
-  margin-bottom: 0.333333rem;
+.pu .content section {
+  margin-bottom: 12px;
   text-align: left;
 }
-.puBox .pu .content section .name {
-  font-size: 0.453333rem;
+.pu .content section .name {
+  font-size: 15px;
   color: #00c7ac;
-  line-height: 1.5em;
+  line-height: 23px;
 }
-.puBox .pu .content section p {
-  font-size: 0.373333rem;
-  line-height: 1.4em;
-  opacity: 0.8;
+.pu .content section p {
+  font-size: 14px;
+  line-height: 17px;
+  opacity: .8;
 }
-.puBox .pu .close {
+.pu .close {
   width: 70%;
   margin: 4% auto;
   text-align: center;
-  padding: 0.2rem 0.5rem;
-  border-radius: 0.533333rem;
-  border: 0.013333rem solid #00c7ac;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid #00c7ac;
   color: #00c7ac;
-  font-size: 0.506667rem;
+  font-size: 20px;
 }
 </style>

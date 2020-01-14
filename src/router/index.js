@@ -342,6 +342,22 @@ const routes = [
       title: '爱运宝'
     }
   },
+  {
+    path: '/registerForm',
+    name: 'registerForm',
+    component: () => import('../views/AppShare/registerForm.vue'),
+    meta: {
+      title: '注册爱运宝'
+    }
+  },
+  {
+    path: '/shareCard',
+    name: 'shareCard',
+    component: () => import('../views/AppShare/shareCard.vue'),
+    meta: {
+      title: '爱运宝VIP专属名片'
+    }
+  },
 ]
 
 const router = new VueRouter({
