@@ -109,6 +109,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "../../styles/AppShare/newRecommend2.css";
+<style lang="scss" scoped>
+@import "../../styles/AppShare/newRecommend2.scss";
 </style>

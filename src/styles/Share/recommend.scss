@@ -45,6 +45,14 @@
   color: #4d4d4d;
 }
 
+.list_li{
+  width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .share-recommend-list {
   display: block;

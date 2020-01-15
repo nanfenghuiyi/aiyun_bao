@@ -392,7 +392,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .clearfix:after {
   content: "";
   display: block;
@@ -485,27 +485,22 @@ body {
   padding-bottom: 38%;
   margin: 0 auto;
   border: 1px solid #ffd200;
-}
-
-.page1 .pagebox .phoneBox .space .download img {
-  width: 50%;
-  margin-top: 10px;
-}
-
-.page1 .pagebox .phoneBox .space .download .text {
-  display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  font-size: 16px;
-  line-height: 55px;
-  color: #fed33c;
-  font-weight: 600;
-}
-
-.download .text {
-  animation: big 1s infinite;
+  img {
+    width: 50%;
+    margin-top: 10px;
+  }
+  .text {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 16px;
+    line-height: 55px;
+    color: #fed33c;
+    font-weight: 600;
+    animation: big 1s infinite;
+  }
 }
 
 .active.page2 .tablebox,
@@ -513,37 +508,35 @@ body {
   animation: slide_from_bottom2 1s;
 }
 
-.active .rewardList:nth-child(1) {
-  animation: fadeIn 1s;
+.active { 
+  .rewardList:nth-child(1) {
+    animation: fadeIn 1s;
+  }
+  .rewardList:nth-child(2) {
+    animation: hide 1s, fadeIn 0.5s 1s;
+  }
+  .rewardList:nth-child(3) {
+    animation: hide 1.6s, fadeIn 0.5s 1.6s;
+  }
+  .rewardList:nth-child(4) {
+    animation: hide 2.2s, fadeIn 0.5s 2.2s;
+  }
+}
+.active.page5 {
+  .code {
+    animation: fadeIn 1s;
+  }
+  .codeBox .text {
+    animation: hide 1s, fadeIn 1s 1s;
+  }
+  .focus {
+    animation: hide 2.2s, slide_from_top2 1s 2.2s;
+  }
+  .slogon {
+    animation: hide 2.2s, slide_from_bottom2 1s 2.2s;
+  }
 }
 
-.active .rewardList:nth-child(2) {
-  animation: hide 1s, fadeIn 0.5s 1s;
-}
-
-.active .rewardList:nth-child(3) {
-  animation: hide 1.6s, fadeIn 0.5s 1.6s;
-}
-
-.active .rewardList:nth-child(4) {
-  animation: hide 2.2s, fadeIn 0.5s 2.2s;
-}
-
-.active.page5 .code {
-  animation: fadeIn 1s;
-}
-
-.active.page5 .codeBox .text {
-  animation: hide 1s, fadeIn 1s 1s;
-}
-
-.active.page5 .focus {
-  animation: hide 2.2s, slide_from_top2 1s 2.2s;
-}
-
-.active.page5 .slogon {
-  animation: hide 2.2s, slide_from_bottom2 1s 2.2s;
-}
 @keyframes big {
   to {
     transform: scale(1.2);
@@ -640,19 +633,19 @@ body {
   width: 100%;
   bottom: 0.066667rem;
   left: 0;
-}
-.up .icon-up {
-  background: url("../../assets/AppShare/icon_white_up_arrow.png") no-repeat;
-  background-position: center;
-  background-size: 20px 17px;
-  display: inline-block;
-  width: 15px;
-  height: 25px;
-  font-weight: 200;
-  animation: up 1s ease-out infinite;
-  -webkit-animation: up 1s ease-out infinite;
-  -moz-animation: up 1s ease-out infinite;
-  -o-animation: up 1s ease-out infinite;
+  .icon-up {
+    background: url("../../assets/AppShare/icon_white_up_arrow.png") no-repeat;
+    background-position: center;
+    background-size: 20px 17px;
+    display: inline-block;
+    width: 15px;
+    height: 25px;
+    font-weight: 200;
+    animation: up 1s ease-out infinite;
+    -webkit-animation: up 1s ease-out infinite;
+    -moz-animation: up 1s ease-out infinite;
+    -o-animation: up 1s ease-out infinite;
+  }
 }
 .page {
   width: 100%;
@@ -669,117 +662,103 @@ body {
   background: url("../../assets/AppShare/background.jpg") no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
+  .pageboxInner {
+    display: table-cell;
+    vertical-align: middle;
+    overflow: hidden;
+  }
 }
-.pagebox .pageboxInner {
-  display: table-cell;
-  vertical-align: middle;
-  overflow: hidden;
-}
+
 .page1 .pagebox {
   position: relative;
-}
-.page1 .pagebox .bannerBox {
-  position: relative;
-  width: 70%;
-  margin: 0 auto;
-}
-
-.page1 .pagebox .bannerBox img {
-  width: 100%;
-}
-.swipe_img {
-  width: 90% !important;
-  margin-top: 15px;
-}
-
-.page1 .pagebox .bannerBox .slideBoxAbsolute {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-
-.page1 .pagebox .bannerBox .slideBoxAbsolute::after {
-  content: "";
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.page1 .pagebox .bannerBox .slideBox {
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  width: 96%;
-  height: 0;
-  padding-bottom: 38%;
-  overflow: hidden;
-}
-
-.page1 .pagebox .bannerBox .slideBox ul {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-.page1 .pagebox .bannerBox .slideBox ul li {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
-
-.page1 .pagebox .bannerBox .slideBox ul li::after {
-  content: "";
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.page1 .pagebox .bannerBox .slideBox ul li .imgBox {
-  display: inline-block;
-  vertical-align: middle;
-  width: 90%;
-}
-
-.page1 .pagebox .bannerBox .slideBox ul li .imgBox img {
-  width: 100%;
-}
-
-.page1 .pagebox .bannerBox .slideBox ul li:last-child {
-  display: none;
-}
-
-.page1 .pagebox .phoneBox {
-  width: 100%;
-  margin-top: 0.8rem;
-  overflow: hidden;
-}
-
-.page1 .pagebox .phoneBox .phone {
-  text-align: center;
-  margin-top: -1.333333rem;
-}
-
-.page1 .pagebox .phoneBox .phone img {
-  width: 75%;
-}
-
-.page1 .pagebox .phoneBox .space {
-  z-index: 99;
-}
-
-.page1 .pagebox .phoneBox .space .download .downloadLink {
-  position: absolute;
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  .bannerBox {
+    position: relative;
+    width: 70%;
+    margin: 0 auto;
+    img {
+      width: 100%;
+    }
+    .slideBoxAbsolute {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    .slideBoxAbsolute::after {
+      content: "";
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .slideBox {
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+      width: 96%;
+      height: 0;
+      padding-bottom: 38%;
+      overflow: hidden;
+      ul {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        li {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+        }
+        li::after {
+          content: "";
+          height: 100%;
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .imgBox {
+          display: inline-block;
+          vertical-align: middle;
+          width: 90%;
+          img {
+            width: 100%;
+          }
+        }
+        li:last-child {
+          display: none;
+        }
+      }
+    }
+  }
+  .swipe_img {
+    width: 90% !important;
+    margin-top: 15px;
+  }
+  .phoneBox {
+    width: 100%;
+    margin-top: 0.8rem;
+    overflow: hidden;
+  }
+  .phone {
+    text-align: center;
+    margin-top: -1.333333rem;
+    img {
+      width: 75%;
+    }
+  }
+  .space {
+    z-index: 99;
+    .download .downloadLink {
+      position: absolute;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+  }
 }
 
 .page3 .pagebox,
@@ -787,304 +766,259 @@ body {
   width: 100%;
   padding: 0;
   display: block;
-}
-
-.page3 .pagebox .pageboxInner,
-.page2 .pagebox .pageboxInner {
-  display: block;
-  height: 100%;
-}
-
-.page3 .pagebox .header,
-.page2 .pagebox .header {
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 100%;
-  margin-top: 0.666667rem;
-  text-align: center;
-}
-
-.page3 .pagebox .header::after,
-.page2 .pagebox .header::after {
-  content: "";
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.page3 .pagebox .header .title,
-.page2 .pagebox .header .title {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0 auto;
-  color: #fff;
-  font-size: 0.506667rem;
-  line-height: 40px;
-  padding: 0 1em;
-  border: 0.053333rem solid #00d3b3;
-  border-radius: 0.6rem;
-  letter-spacing: 0.1em;
-  font-weight: 500;
-}
-
-.page3 .pagebox .header .title span,
-.page2 .pagebox .header .title span {
-  color: #ffd700;
-}
-
-.page3 .pagebox .tablebox,
-.page2 .pagebox .tablebox {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 2rem;
-  width: 84%;
-  height: 77%;
-  margin: 0 auto;
-  padding: 0.2rem;
-  border: 0.04rem solid #00d3b3;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox,
-.page2 .pagebox .tablebox .tableInnerBox {
-  background: #00d3b3;
-  width: 100%;
-  height: 100%;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox .tableTitle,
-.page2 .pagebox .tablebox .tableInnerBox .tableTitle {
-  height: 10%;
-  position: relative;
-  text-align: center;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox .tableTitle::after,
-.page2 .pagebox .tablebox .tableInnerBox .tableTitle::after {
-  content: "";
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox .tableTitle span,
-.page2 .pagebox .tablebox .tableInnerBox .tableTitle span {
-  display: inline-block;
-  vertical-align: middle;
-  letter-spacing: 0.1em;
-  font-size: 0.506667rem;
-  font-weight: 600;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox table,
-.page2 .pagebox .tablebox .tableInnerBox table {
-  width: 100%;
-  height: 90%;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox table tr,
-.page2 .pagebox .tablebox .tableInnerBox table tr {
-  width: 100%;
-  padding: 0.133333rem;
-  border-top: 0.053333rem solid black;
-  border-bottom: 0.053333rem solid black;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox table tr img,
-.page2 .pagebox .tablebox .tableInnerBox table tr img {
-  width: 85%;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox table tr td,
-.page3 .pagebox .tablebox .tableInnerBox table tr th,
-.page2 .pagebox .tablebox .tableInnerBox table tr td,
-.page2 .pagebox .tablebox .tableInnerBox table tr th {
-  position: relative;
-  width: 50%;
-  text-align: center;
-  font-size: 12px;
-  vertical-align: middle;
-  opacity: 0.9;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox table tr th,
-.page2 .pagebox .tablebox .tableInnerBox table tr th {
-  font-size: 15px;
-}
-
-.page3 .pagebox .tablebox .tableInnerBox table tr .right,
-.page2 .pagebox .tablebox .tableInnerBox table tr .right {
-  color: #fff;
-  border-right: none;
+  .pageboxInner {
+    display: block;
+    height: 100%;
+  }
+  .header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: 0.666667rem;
+    text-align: center;
+    .title {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 auto;
+      color: #fff;
+      font-size: 0.506667rem;
+      line-height: 40px;
+      padding: 0 1em;
+      border: 0.053333rem solid #00d3b3;
+      border-radius: 0.6rem;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      span {
+        color: #ffd700;
+      }
+    }
+  }
+  .header::after {
+    content: "";
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .tablebox {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 2rem;
+    width: 84%;
+    height: 77%;
+    margin: 0 auto;
+    padding: 0.2rem;
+    border: 0.04rem solid #00d3b3;
+    .tableInnerBox {
+      background: #00d3b3;
+      width: 100%;
+      height: 100%;
+      .tableTitle {
+        height: 10%;
+        position: relative;
+        text-align: center;
+        span {
+          display: inline-block;
+          vertical-align: middle;
+          letter-spacing: 0.1em;
+          font-size: 0.506667rem;
+          font-weight: 600;
+        }
+      }
+      .tableTitle::after {
+        content: "";
+        height: 100%;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      table {
+        width: 100%;
+        height: 90%;
+        tr {
+          width: 100%;
+          padding: 0.133333rem;
+          border-top: 0.053333rem solid black;
+          border-bottom: 0.053333rem solid black;
+          img {
+            width: 85%;
+          }
+          td,th {
+            position: relative;
+            width: 50%;
+            text-align: center;
+            font-size: 12px;
+            vertical-align: middle;
+            opacity: 0.9;
+          }
+          th {
+            font-size: 15px;
+          }
+          .right {
+            color: #fff;
+            border-right: none;
+          }
+        }
+      }
+    }
+  }
 }
 
 .page4 {
   position: relative;
+  .pagebox .pageboxInner {
+    .reward {
+      width: 78%;
+      margin: 0 auto;
+      padding: 38px 0 0;
+      background: url("../../assets/AppShare/recommend.png") no-repeat;
+      background-size: 100% 100%;
+      .rewardTitle {
+        width: 100%;
+        margin-bottom: 30px;
+        p {
+          display: inline;
+          color: #fff;
+          border-bottom: 1px solid #00cdb3;
+          text-align: center;
+          font-size: 17px;
+          padding: 5px 15px;
+        }
+      }
+      .rewardContent {
+        width: 100%;
+        .rewardList {
+          float: left;
+          width: 50%;
+          margin-bottom: 15px;
+          opacity: 1;
+          img {
+            width: 75%;
+          }
+        }
+      }
+    }
+    .ruleBox {
+      width: 100%;
+      .rule {
+        width: 100%;
+        text-align: center;
+      }
+      a,span {
+        display: inline-block;
+        vertical-align: top;
+        font-size: 15px;
+        line-height: 45px;
+        color: #fff;
+        margin-right: 10px;
+        letter-spacing: 1px;
+      }
+    }
+    .focus {
+      width: 72%;
+    }
+    .codeBox {
+      position: relative;
+      width: 100%;
+      padding-bottom: 40px;
+      margin-top: -1px;
+      margin-bottom: 15px;
+      code {
+        width: 95%;
+      }
+      .text {
+        font-size: 15px;
+        line-height: 15px;
+        color: #ffde00;
+        text-align: center;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+      .text1 {
+        top: 20%;
+      }
+      .text2 {
+        top: 77%;
+        line-height: 25px;
+      }
+    }
+  }
 }
 
-.page4 .pagebox .pageboxInner .reward {
-  width: 78%;
-  margin: 0 auto;
-  padding: 38px 0 0;
-  background: url("../../assets/AppShare/recommend.png") no-repeat;
-  background-size: 100% 100%;
+.page5 .pageboxInner {
+  .slogon {
+    .text {
+      font-size: 18px;
+      color: #00d2b1;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .slogonImg {
+      width: 80%;
+    }
+  }
+  .logoImg {
+    position: absolute;
+    bottom: 10px;
+    width: 80px;
+    left: 50%;
+    transform: translateX(-50%)
+  }
 }
 
-.page4 .pagebox .pageboxInner .reward .rewardTitle {
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.page4 .pagebox .pageboxInner .reward .rewardTitle p {
-  display: inline;
-  color: #fff;
-  border-bottom: 1px solid #00cdb3;
-  text-align: center;
-  font-size: 17px;
-  padding: 5px 15px;
-}
-
-.page4 .pagebox .pageboxInner .reward .rewardContent {
-  width: 100%;
-}
-
-.page4 .pagebox .pageboxInner .reward .rewardContent .rewardList {
-  float: left;
-  width: 50%;
-  margin-bottom: 15px;
-  opacity: 1;
-}
-
-.page4 .pagebox .pageboxInner .reward .rewardContent .rewardList img {
-  width: 75%;
-}
-
-.page4 .pagebox .pageboxInner .ruleBox {
-  width: 100%;
-}
-
-.page4 .pagebox .pageboxInner .ruleBox .rule {
-  width: 100%;
-  text-align: center;
-}
-
-.page4 .pagebox .pageboxInner .ruleBox a,
-.page4 .pagebox .pageboxInner .ruleBox span {
-  display: inline-block;
-  vertical-align: top;
-  font-size: 15px;
-  line-height: 45px;
-  color: #fff;
-  margin-right: 10px;
-  letter-spacing: 1px;
-}
-
-.page5 .pageboxInner .focus {
-  width: 72%;
-}
-
-.page5 .pageboxInner .codeBox {
-  position: relative;
-  width: 100%;
-  padding-bottom: 40px;
-  margin-top: -1px;
-  margin-bottom: 15px;
-}
-
-.page5 .pageboxInner .codeBox .code {
-  width: 95%;
-}
-
-.page5 .pageboxInner .codeBox .text {
-  font-size: 15px;
-  line-height: 15px;
-  color: #ffde00;
-  text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-}
-
-.page5 .pageboxInner .codeBox .text1 {
-  top: 20%;
-}
-
-.page5 .pageboxInner .codeBox .text2 {
-  top: 77%;
-  line-height: 25px;
-}
-
-.page5 .pageboxInner .slogon .text {
-  font-size: 18px;
-  color: #00d2b1;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.page5 .pageboxInner .slogon .slogonImg {
-  width: 80%;
-}
-
-.page5 .pageboxInner .logoImg {
-  position: absolute;
-  bottom: 10px;
-  width: 80px;
-  left: 50%;
-  transform: translateX(-50%)
-}
 .pu {
   background: white;
   border-radius: 10px;
   width: 100%;
   height: 92%;
-}
-.pu .title {
-  height: 40px;
-  line-height: 40px;
-  color: #00c7ac;
-  font-size: 20px;
-  position: relative;
-  text-align: center;
-}
-.pu .title:after {
-  display: block;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  border-bottom: 1px solid rgba(7, 17, 27, 0.1);
-  content: "";
-}
-.pu .content {
-  padding: 10px 15px;
-  overflow-y: scroll;
-  height: 80%;
-}
-.pu .content section {
-  margin-bottom: 12px;
-  text-align: left;
-}
-.pu .content section .name {
-  font-size: 15px;
-  color: #00c7ac;
-  line-height: 23px;
-}
-.pu .content section p {
-  font-size: 14px;
-  line-height: 17px;
-  opacity: .8;
-}
-.pu .close {
-  width: 70%;
-  margin: 4% auto;
-  text-align: center;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: 1px solid #00c7ac;
-  color: #00c7ac;
-  font-size: 20px;
+  .title {
+    height: 40px;
+    line-height: 40px;
+    color: #00c7ac;
+    font-size: 20px;
+    position: relative;
+    text-align: center;
+  }
+  .title:after {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+    content: "";
+  }
+  .content {
+    padding: 10px 15px;
+    overflow-y: scroll;
+    height: 80%;
+    section {
+      margin-bottom: 12px;
+      text-align: left;
+      .name {
+        font-size: 15px;
+        color: #00c7ac;
+        line-height: 23px;
+      }
+      p {
+        font-size: 14px;
+        line-height: 17px;
+        opacity: .8;
+      }
+    }
+  }
+  .close {
+    width: 70%;
+    margin: 4% auto;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid #00c7ac;
+    color: #00c7ac;
+    font-size: 20px;
+  }
 }
 </style>

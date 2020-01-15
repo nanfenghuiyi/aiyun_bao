@@ -4,7 +4,7 @@
     <div class="flex_column-center flex3">
       <!--<input id="city" name="city" value="{$city}" style="display: none">-->
       <img src="@/assets/AppShare/p_header_title@2x.png" class="img header_text flex1">
-      <div class="header_title tl" style="padding-left: 7.5%;">每单都享 <span class="discount"></span> 折</div>
+      <div class="header_title tl" style="padding-left: 7.5%;">每单都享 <span class="discount">8</span> 折</div>
     </div>
     <div class="right flex2">
       <img src="@/assets/AppShare/p_header_img2@2x.png" class="img">
@@ -108,6 +108,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "../../styles/AppShare/newRecommend2.css";
+<style lang="scss" scoped>
+@import "../../styles/AppShare/newRecommend2.scss";
 </style>

@@ -22,16 +22,16 @@
       <!-- 专属名片弹窗 -->
       <van-popup v-model="show" :close-on-click-overlay="false" round :style="{ width: '80%' }">
         <div class="modal-header">
-            <span class="title">爱运宝VIP专属名片</span>
-            <span class="close" @click="closeShow">&times;</span>
-          </div>
-          <ul>
-            <li id="user-phone" v-text="user_phone"></li>
-            <li id="vip-code" v-text="vip_code"></li>
-            <li>名片二维码已绑定爱运宝账号</li>
-            <li>永享扫码注册用户行程收益</li>
-          </ul>
-          <div class="modal-footer" @click="closeShow">好的</div>
+          <span class="title">爱运宝VIP专属名片</span>
+          <span class="close" @click="closeShow">&times;</span>
+        </div>
+        <ul>
+          <li id="user-phone" v-text="user_phone"></li>
+          <li id="vip-code" v-text="vip_code"></li>
+          <li>名片二维码已绑定爱运宝账号</li>
+          <li>永享扫码注册用户行程收益</li>
+        </ul>
+        <div class="modal-footer" @click="closeShow">好的</div>
       </van-popup>
       <!-- <div class="pu" id="myModal">
         <div class="model"></div>
@@ -306,99 +306,102 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+#qrcodeCanvas {
+  display: none;
+}
 .card-main {
-    width: 100%;
-    height: 100%;
-    background-color: #f1f2f3;
-    font-size: 14px;
-    overflow: scroll;
-}
-.text-center {
-    font-size: 14px;
-    color: #333333;
-    text-align: center;
-    padding: 13px 0;
-}
-.type-wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #f1f2f3;
+  font-size: 14px;
+  overflow: scroll;
+  .text-center {
+  font-size: 14px;
+  color: #333333;
+  text-align: center;
+  padding: 13px 0;
+  }
+  .type-wrapper {
     display: flex;
     flex-direction: row;
     padding: 10px;
-}
-.type-wrapper span {
-    flex: 1;
-    background: #3eaa32;
-    color: #fff;
-    font-size: 12px;
-    text-align: center;
-    padding: 10px 0;
-    margin: 0 5px;
-}
-.type-wrapper span:hover,
-.type-wrapper .active {
-    flex: 1;
-    background: #26821c;
-    color: #fff;
-}
-.zoom4 {
-    zoom: 0.2;
-}
-#qrcodeCanvas {
-    display: none;
-}
-/* #face {
+    span {
+      flex: 1;
+      background: #3eaa32;
+      color: #fff;
+      font-size: 12px;
+      text-align: center;
+      padding: 10px 0;
+      margin: 0 5px;
+    }
+    span:hover,
+    .active {
+      flex: 1;
+      background: #26821c;
+      color: #fff;
+    }
+  }
+  /* #face {
     height: 913px;
-} */
-.text {
+  */
+  .zoom4 {
+    zoom: 0.2;
+  }
+  .text {
     color: #666666;
     padding: 15px;
     font-size: 13px;
     text-align: center;
-}
-p {
+  }
+  p {
     color: #999999;
     font-size: 13px;
     padding: 10px;
     text-align: center;
+  }
 }
+
+
 .modal-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border-bottom: 1px solid #cccccc;
-    padding: 15px 10px;
-}
-.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #cccccc;
+  padding: 15px 10px;
+  .title {
     font-size: 18px;
     font-weight: 500;
     color: #000000;
     flex: 1;
-}
-.close {
+  }
+  .close {
     width: 20px;
     height: 20px;
     font-size: 20px;
     color: #666666;
     text-align: center;
+  }
 }
+
 ul {
-    list-style: circle;
-    border-bottom: 1px solid #cccccc;
-    padding: 15px 0;
-}
-ul li {
+  list-style: circle;
+  border-bottom: 1px solid #cccccc;
+  padding: 15px 0;
+  li {
     list-style: disc !important;
     margin: 10px 40px;
+  }
 }
 .modal-footer {
-    font-size: 12px;
-    color: #ffffff;
-    background-color: #fd9c46;
-    padding: 8px 0; 
-    text-align: center;
-    margin: 10px 15px;
-    width: 40px;
-    border-radius: 5px;
-    float: right;
+  font-size: 12px;
+  color: #ffffff;
+  background-color: #fd9c46;
+  padding: 8px 0; 
+  text-align: center;
+  margin: 10px 15px;
+  width: 40px;
+  border-radius: 5px;
+  float: right;
 }
 </style>

@@ -1,33 +1,25 @@
 <template>
-  <div class="container" v-swipedown="swipeDown"
-      v-loading="loading"
-      :element-loading-text="loadText"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.6)">
-    <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    </van-pull-refresh> -->
-    <div class="share-recommend-list">
-      <div id="listloading" class="listloading-list">
-        <div>
-          <ul class="infinite-list" id="share-recommend-list" v-infinite-scroll="load" infinite-scroll-disabled="disabled" infinite-scroll-immediate="false" infinite-scroll-delay="10">
-            <li v-for="(item, index) of recommendList" :key="index">
-              <span>{{item.phone}}</span>
-              <span>{{item.time}}</span>
-            </li>
-          </ul>
-          <!-- <p v-if="resLoading">加载中...</p>
-          <p v-if="noMore">没有更多了</p> -->
-        </div>
-      </div>
+  <div class="container" v-loading="loading" :element-loading-text="loadText" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.6)">
+    <div class="share-recommend-list" id="share-recommend-list">
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-list v-model="listLoading" :finished="finished" finished-text="没有更多了" @load="onLoad" :offset="10" >
+          <div class="list-item">
+            <van-cell v-for="(item, index) in recommendList" :key="index">
+              <div class="list_li">
+                <span>{{item.phone}}</span>
+                <span>{{item.time}}</span>
+              </div>
+            </van-cell>
+          </div>
+        </van-list>
+      </van-pull-refresh>
     </div>
-  
   </div>
 </template>
 
 <script>
 import $ from "jquery";
 import Vue from "vue";
-import vueTouch from "@/utils/touch.js";
 Vue.use(vant);
 
 export default {
@@ -36,41 +28,37 @@ export default {
       loading: false,
       loadText: "加载中",
       disabled: false, // 滚动禁用
-      loading: false, // 加载状态
       resLoading: true, // 加载中
-      noMore: false, // 没有更多了
 
       recommendList: [],
       status: -1,
 
       page: 1,
       // 下拉刷新
-      // isLoading: false,
+      listLoading: false,   //是否处于加载状态
+      finished: false,  //是否已加载完所有数据
+      isLoading: false,   //是否处于下拉刷新状态
     }
   },
   methods: {
-    swipeDown() {
-      this.loadText = "刷新中";
-      this.loading = true;
+    // 上拉加载
+    onLoad() {    
+      if (this.recommendList.length<20) {
+        this.finished = true;
+        return
+      }  
       setTimeout(() => {
-        vant.Toast('刷新成功');
-        this.isLoading = false;
-        this.page = 1;
-        this.recommendList = [];
+        this.page++;
         this.getDataList();
-        this.loading = false;
+        this.listLoading = false;
+
+        if (this.loadStatus != 1) {
+          this.finished = true;
+        }
       }, 500);
     },
-    // 列表
-    load() {
-      console.log(111)
-      this.page++;
-      this.getDataList();
-      // 加载状态结束
-      this.loading = false;
-    },
     // 下拉刷新
-    /* onRefresh() {
+    onRefresh() {
       setTimeout(() => {
         vant.Toast('刷新成功');
         this.isLoading = false;
@@ -78,7 +66,7 @@ export default {
         this.recommendList = [];
         this.getDataList()
       }, 500);
-    }, */
+    },
     /**
      * 获取推荐用户列表信息
      */

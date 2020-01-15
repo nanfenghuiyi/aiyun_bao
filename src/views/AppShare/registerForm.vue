@@ -495,31 +495,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.point_header {
-  text-align: center;
-  font-size: 18px;
-  color: rgb(31, 177, 255);
-  padding: 10px 20px;
-  background-color: rgb(255, 255, 255);
-  border-bottom: 1px solid rgb(204, 204, 204);
-}
-.point_title {
-  padding: 10px 15px;
-  font-size: 12px;
-  color: rgb(102, 103, 111);
-  line-height: 0.35rem;
-}
-.point_footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 15px 0px;
-  color: white;
-  font-size: 18px;
-  background-color: rgb(31, 177, 255);
-}
+<style lang="scss" scoped>
+
 .clearfix:after {
   content: "";
   display: block;
@@ -562,6 +539,30 @@ body {
   right: 0;
   background: #fff;
   text-align: center;
+  .close {
+    display: inline-block;
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background: url("../../assets/AppShare/close.png") no-repeat;
+    background-size: 80%;
+    background-position: center;
+  }
+  .registerFormBoxInner {
+    display: inline-block;
+    vertical-align: middle;
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .registerForm {
+    width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 auto;
+  }
 }
 
 .registerFormBox::after {
@@ -571,270 +572,222 @@ body {
   vertical-align: middle;
 }
 
-.registerFormBox .close {
-  display: inline-block;
-  position: absolute;
-  top: 30px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
-  background: url("../../assets/AppShare/close.png") no-repeat;
-  background-size: 80%;
-  background-position: center;
-}
-
-.registerFormBox .registerFormBoxInner {
-  display: inline-block;
-  vertical-align: middle;
-  width: 80%;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-.registerFormBox .registerForm {
-  width: 100%;
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0 auto;
-}
 /*.content{*/
 /*display: none;*/
 /*}*/
 .registered {
   display: none;
   margin-bottom: 120px;
-}
-.registered_phone {
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.8);
-  line-height: 60px;
-}
-.registered_text {
-  display: block;
-  margin: 10px 0 5px;
-  color: rgba(0, 0, 0, 0.6);
-  line-height: 20px;
-  font-size: 13px;
-}
-.download_link {
-  display: inline-block;
-  font-size: 16px;
-  color: red;
-  text-decoration: underline !important;
-}
-.registerFormBox .registerForm .formHeader {
-  text-align: center;
-  margin-bottom: 40px;
+  .registered_phone {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 60px;
+  }
+  .registered_text {
+    display: block;
+    margin: 10px 0 5px;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 20px;
+    font-size: 13px;
+  }
+  .download_link {
+    display: inline-block;
+    font-size: 16px;
+    color: red;
+    text-decoration: underline !important;
+  }
 }
 
-.registerFormBox .registerForm .formHeader img {
-  display: inline-block;
-  width: 55px;
-  height: 55px;
+.registerFormBox .registerForm {
+  .formHeader {
+    text-align: center;
+    margin-bottom: 40px;
+    img {
+      display: inline-block;
+      width: 55px;
+      height: 55px;
+    }
+    span {
+      display: block;
+      margin-top: 15px;
+      font-size: 20px;
+      opacity: 0.8;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+  }
+  form {
+    .inputBox {
+      width: 100%;
+      height: 30px;
+      margin: 20px auto;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding-bottom: 4px;
+      position: relative;
+      text-align: center;
+      input {
+        border: none;
+        font-size: 18px;
+        color: rgba(0, 0, 0, 0.7);
+        font-weight: 300;
+        text-align: center;
+        background: none;
+      }
+      input::-webkit-input-placeholder {
+        font-size: 18px;
+        font-weight: 300;
+        color: rgba(0, 0, 0, 0.3);
+      }
+      .tip {
+        display: none;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        top: -20px;
+        color: red;
+        font-size: 14px;
+      }
+      .status {
+        display: block;
+        float: right;
+        width: 20px;
+        height: 20px;
+      }
+      .icon-eye img {
+        /* float: right; */
+        opacity: 0.6;
+        display: inline-block;
+        width: 30px;
+        height: 15px;
+      }
+      .tick {
+        background: url("../../assets/AppShare/right.png") no-repeat;
+        background-position: center;
+        background-size: 20px 20px;
+      }
+      .wrong {
+        background: url("../../assets/AppShare/wrong.png") no-repeat;
+        background-position: center;
+        background-size: 20px 20px;
+      }
+    }
+    .inputImgBox {
+      padding-bottom: 8px;
+      margin: 8px 0;
+      width: 100%;
+      height: auto;
+      .imgCodeBox {
+        float: left;
+        width: 60%;
+        #imgCode {
+          width: 100%;
+          height: 1.333333rem;
+        }
+        .imgBox {
+          position: relative;
+          float: right;
+          width: 40%;
+          height: 1.333333rem;
+          overflow: hidden;
+          .refresh {
+            position: absolute;
+            right: 10px;
+            bottom: 4px;
+          }
+          img {
+            width: 110px;
+            height: 100%;
+          }
+        }
+      }
+    }
+    .inputCodeBox {
+      width: 100%;
+      height: auto;
+      padding-bottom: 8px;
+      margin: 0 0 0.133333rem 0;
+      .messageCodeBox {
+        width: 60%;
+        float: left;
+        #messageCode {
+          width: 100%;
+          height: 45px;
+        }
+      }
+      .codeBtnBox {
+        width: 40%;
+        float: right;
+        .codeBtn {
+          width: 110px;
+          height: 45px;
+          border: 2px solid #00d3b4;
+          font-size: 16px;
+          font-weight: 300;
+          white-space: nowrap;
+          background: none;
+          -webkit-tap-highlight-color: transparent;
+          text-decoration: none;
+        }
+        .able {
+          color: #00d3b4;
+        }
+        .disable {
+          color: #ccc;
+        }
+      }
+    }
+    .submitBtn {
+      display: block;
+      width: 100%;
+      background: #8c8c8c;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 300;
+      margin: 0 auto;
+      padding: 15px 0;
+      text-decoration: none;
+      letter-spacing: 5px;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .submitBtnActive {
+      background: #00d3b4;
+    }
+  }
+  .protocol {
+    display: table;
+    text-align: center;
+    padding: 3px 0;
+    margin: 5px auto 0;
+    .check {
+      display: table-cell;
+      vertical-align: middle;
+      width: 18px;
+      height: 18px;
+      background: #00d3b4;
+      text-align: center;
+    }
+    .check img {
+      display: inline-block;
+      vertical-align: middle;
+      width: 100%;
+      height: 100%;
+    }
+    .checkNo img {
+      display: none;
+    }
+    .text {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 16px;
+      font-weight: 300;
+      opacity: 0.7;
+      letter-spacing: 1px;
+    }
+  }
 }
 
-.registerFormBox .registerForm .formHeader span {
-  display: block;
-  margin-top: 15px;
-  font-size: 20px;
-  opacity: 0.8;
-  font-weight: 300;
-  letter-spacing: 1px;
-}
-
-.registerFormBox .registerForm form .inputBox {
-  width: 100%;
-  height: 30px;
-  margin: 20px auto;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding-bottom: 4px;
-  position: relative;
-  text-align: center;
-}
-
-.registerFormBox .registerForm form .inputBox input {
-  border: none;
-  font-size: 18px;
-  color: rgba(0, 0, 0, 0.7);
-  font-weight: 300;
-  text-align: center;
-  background: none;
-}
-
-.registerFormBox .registerForm form .inputBox input::-webkit-input-placeholder {
-  font-size: 18px;
-  font-weight: 300;
-  color: rgba(0, 0, 0, 0.3);
-}
-
-.registerFormBox .registerForm form .inputBox .tip {
-  display: none;
-  width: 100%;
-  text-align: center;
-  position: absolute;
-  top: -20px;
-  color: red;
-  font-size: 14px;
-}
-
-.registerFormBox .registerForm form .inputBox .status {
-  display: block;
-  float: right;
-  width: 20px;
-  height: 20px;
-}
-
-.registerFormBox .registerForm form .inputBox .icon-eye img {
-  /* float: right; */
-  opacity: 0.6;
-  display: inline-block;
-  width: 30px;
-  height: 15px;
-}
-.registerFormBox .registerForm form .inputBox .tick {
-  background: url("../../assets/AppShare/right.png") no-repeat;
-  background-position: center;
-  background-size: 20px 20px;
-}
-
-.registerFormBox .registerForm form .inputBox .wrong {
-  background: url("../../assets/AppShare/wrong.png") no-repeat;
-  background-position: center;
-  background-size: 20px 20px;
-}
-
-.registerFormBox .registerForm form .inputImgBox {
-  padding-bottom: 8px;
-  margin: 8px 0;
-  width: 100%;
-  height: auto;
-}
-
-.registerFormBox .registerForm form .inputImgBox .imgCodeBox {
-  float: left;
-  width: 60%;
-}
-
-.registerFormBox .registerForm form .inputImgBox .imgCodeBox #imgCode {
-  width: 100%;
-  height: 1.333333rem;
-}
-
-.registerFormBox .registerForm form .inputImgBox .imgBox {
-  position: relative;
-  float: right;
-  width: 40%;
-  height: 1.333333rem;
-  overflow: hidden;
-}
-.refresh {
-  position: absolute;
-  right: 10px;
-  bottom: 4px;
-}
-
-.registerFormBox .registerForm form .inputImgBox .imgBox img {
-  width: 110px;
-  height: 100%;
-}
-
-.registerFormBox .registerForm form .inputCodeBox {
-  width: 100%;
-  height: auto;
-  padding-bottom: 8px;
-  margin: 0 0 0.133333rem 0;
-}
-
-.registerFormBox .registerForm form .inputCodeBox .messageCodeBox {
-  width: 60%;
-  float: left;
-}
-
-.registerFormBox .registerForm form .inputCodeBox .messageCodeBox #messageCode {
-  width: 100%;
-  height: 45px;
-}
-
-.registerFormBox .registerForm form .inputCodeBox .codeBtnBox {
-  width: 40%;
-  float: right;
-}
-
-.registerFormBox .registerForm form .inputCodeBox .codeBtnBox .codeBtn {
-  width: 110px;
-  height: 45px;
-  border: 2px solid #00d3b4;
-  font-size: 16px;
-  font-weight: 300;
-  white-space: nowrap;
-  background: none;
-  -webkit-tap-highlight-color: transparent;
-  text-decoration: none;
-}
-
-.registerFormBox .registerForm form .inputCodeBox .codeBtnBox .able {
-  color: #00d3b4;
-}
-
-.registerFormBox .registerForm form .inputCodeBox .codeBtnBox .disable {
-  color: #ccc;
-}
-
-.registerFormBox .registerForm form .submitBtn {
-  display: block;
-  width: 100%;
-  background: #8c8c8c;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 300;
-  margin: 0 auto;
-  padding: 15px 0;
-  text-decoration: none;
-  letter-spacing: 5px;
-  text-align: center;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.registerFormBox .registerForm form .submitBtnActive {
-  background: #00d3b4;
-}
-.registerFormBox .registerForm .protocol {
-  display: table;
-  text-align: center;
-  padding: 3px 0;
-  margin: 5px auto 0;
-}
-
-.registerFormBox .registerForm .protocol .check {
-  display: table-cell;
-  vertical-align: middle;
-  width: 18px;
-  height: 18px;
-  background: #00d3b4;
-  text-align: center;
-}
-
-.registerFormBox .registerForm .protocol .check img {
-  display: inline-block;
-  vertical-align: middle;
-  width: 100%;
-  height: 100%;
-}
-
-.registerFormBox .registerForm .protocol .checkNo img {
-  display: none;
-}
-
-.registerFormBox .registerForm .protocol .text {
-  display: table-cell;
-  vertical-align: middle;
-  font-size: 16px;
-  font-weight: 300;
-  opacity: 0.7;
-  letter-spacing: 1px;
-}
-
-.protocolBox {
+/* .protocolBox {
   position: absolute;
   display: none;
   left: 0;
@@ -842,7 +795,7 @@ body {
   right: 0;
   bottom: 0;
   overflow: hidden;
-}
+} */
 
 /* .protocolDetailWrapper {
   font-family: "PingFang SC";
@@ -895,7 +848,7 @@ body {
   margin-left: 2em;
 } */
 
-.back {
+/* .back {
   position: relative;
   text-align: center;
   width: 0.853333rem;
@@ -924,5 +877,30 @@ body {
   border-radius: 50%;
   background: url("../../assets/AppShare/top.png") no-repeat;
   background-size: 1.333333rem 1.333333rem;
+} */
+// 温馨提示
+.point_header {
+  text-align: center;
+  font-size: 18px;
+  color: rgb(31, 177, 255);
+  padding: 10px 20px;
+  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(204, 204, 204);
+}
+.point_title {
+  padding: 10px 15px;
+  font-size: 12px;
+  color: rgb(102, 103, 111);
+  line-height: 0.35rem;
+}
+.point_footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px 0px;
+  color: white;
+  font-size: 18px;
+  background-color: rgb(31, 177, 255);
 }
 </style>
