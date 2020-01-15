@@ -226,6 +226,7 @@ export default {
         .post(url, params)
         .then(res => {
           console.log(res);
+          this.loading = false;
           var res = res.data;
           if (res.status == 1) {
             let data = res.data;

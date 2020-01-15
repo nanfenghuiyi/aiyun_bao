@@ -26,9 +26,9 @@ const routes = [
     }
   },
   {
-    path: '/privacy_ayb',
-    name: 'privacy_ayb',
-    component: () => import('../views/Protocol/privacy_ayb.vue'),
+    path: '/privacyAyb',
+    name: 'privacyAyb',
+    component: () => import('../views/Protocol/privacyAyb.vue'),
     meta: {
       title: '隐私政策'
     }

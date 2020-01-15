@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div id="qrcodeCanvas" class="hide"></div>
+    <div id="qrcodeCanvas" ref="qrcodeCanvas" class="hide"></div>
     <div class="card-main">
       <div class="text-center">专属名片</div>
       <div class="type-wrapper">
@@ -8,7 +8,7 @@
         <span class="type" @click="setTaxi" id="taxi">出租车司机</span>
         <span class="type" @click="setBus" id="bus">大巴车司机</span>
       </div>
-      <div id="face" class="zoom4" align="center"></div>
+      <div id="face" class="zoom4" align="center" v-html="face"></div>
       <p>正面</p>
 
       <div id="back" class="zoom4" align="center">
@@ -54,6 +54,12 @@
 </template>
 
 <script>
+import common from "../../assets/AppShare/common.jpg";
+import taxi from "../../assets/AppShare/taxi.jpg";
+import bus from "../../assets/AppShare/bus.jpg";
+import logo from "../../assets/AppShare/logo_no_border.png";
+
+import QRCode from "qrcodejs2";
 import $ from "jquery";
 import { number } from "../../utils/util";
 import Vue from "vue";
@@ -63,18 +69,19 @@ export default {
   data() {
     return {
       show: true,
+      face: "",
 
       type: "common", // 默认乘客和司机快车
       linkData: {}, // 链接参数
       qrsrc: "", // 二维码地址
       user_phone: "", // 名片电话
       vip_code: "", // 名片编码
+      base64: [],
     };
   },
   methods: {
     // 关闭提示框
     closeShow() {
-      console.log(111)
       this.show = false;
     },
     // 获取参数
@@ -114,21 +121,22 @@ export default {
     // 生成二维码
     getQrUrl() {
       var qrUrl  = "";
+      var url = window.location.host;
       switch (this.type) {
         case "common":
-          qrUrl= "http://a56999.com/static/Event/appShare/html/recommend_passenger.html?rnd=" + new Date().getTime() + "&type=1";
+          qrUrl= url+ "/#/recommend_passenger?rnd=" + new Date().getTime() + "&type=1";
           break;
         case "taxi":
-          qrUrl= "http://a56999.com/static/Event/appShare/html/recommend_driver.html?rnd=" + new Date().getTime() + "&type=2";
+          qrUrl= url+ "/#/recommend_driver?rnd=" + new Date().getTime() + "&type=2";
           break;
         case "bus":
-          qrUrl= "http://a56999.com/static/Event/appShare/html/recommend_contractor.html?rnd=" + new Date().getTime() + "&type=4";
+          qrUrl= url+ "/#/recommend_contractor?rnd=" + new Date().getTime() + "&type=4";
           break;
         default:
-          qrUrl= "http://a56999.com/static/Event/appShare/html/recommendLink.html?rnd=" + new Date().getTime() + "&type=1";
+          qrUrl= url+ "/#/recommendLink?rnd=" + new Date().getTime() + "&type=1";
           break;
       }
-      this.qrcode(setUrl(linkData, qrUrl));
+      this.qrcode(this.setUrl(this.linkData, qrUrl));
     },
     /**
      * 显示名片信息
@@ -136,11 +144,164 @@ export default {
     showCardInfo() {
       this.show = true;
       this.user_phone = "已生成用户" + number(this.linkData.phone) + "专属名片"
-      this.vip_code = "VIP编码 : " + linkData.tjtel
+      this.vip_code = "VIP编码 : " + this.linkData.tjtel
+    },
+    /**
+     * 判断是否是pc端
+     * @returns {boolean}
+     * @constructor
+     */
+    IsPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone",
+            "SymbianOS", "Windows Phone",
+            "iPad", "iPod"];
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    },
+    /**
+     * 生成二维码
+     * @param url
+     * @returns {string}
+     */
+    qrcode(url) {
+        //生成二维码工具
+        this.qrcodeCanvas = new QRCode("qrcodeCanvas", {
+          width: 128,
+          height: 128,
+          colorDark: "#000000", // 前景色
+          colorLight: "#ffffff", // 背景色
+          correctLevel: QRCode.CorrectLevel.H // 容错级别
+        });
+        //设置要生成二维码的链接
+        this.qrcodeCanvas.clear(); // 清除代码
+        this.qrcodeCanvas.makeCode(url);
+        var demo = document.getElementById('qrcodeCanvas');
+        this.qrsrc = demo.childNodes[0].toDataURL("image/jpg", 1);
+        this.hecheng();
+    },
+    /**
+     * 合成名片
+     */
+    hecheng() {
+        console.log("qrsrc=", this.qrsrc);
+        var that = this;
+        var data = [
+          that.type=="common"?common:this.type=="bus"?bus:taxi,
+          that.qrsrc,
+          logo
+        ];
+        var base64 = [];
+        that.draw(data, function () {
+            that.face = '<img src="' + base64[0] + '">';
+            that.showCardInfo();
+        }, base64)
+    },
+    /**
+     * 画名片
+     * @param data
+     * @param fn
+     * @param base64
+     */
+    draw(data, fn, base64) {
+      var that = this;
+      var c = document.createElement('canvas'),
+      ctx = c.getContext('2d'),
+      len = data.length;
+      c.width = 1480;
+      c.height = 913;
+      ctx.rect(0, 0, c.width, c.height);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      function drawing(n) {
+          if (n < len) {
+              var img = new Image;
+              img.setAttribute("crossOrigin",'Anonymous'); //解决跨域
+              img.src = data[n];
+              
+              img.onload = function() {
+                switch (n) {
+                  case 0:
+                      ctx.drawImage(img, 0, 0, 1480, 913);
+                      break;
+                  case 1:
+                      ctx.drawImage(img, 890, 500, 300, 300);
+                      break;
+                  case 2:
+                      ctx.drawImage(img, 990, 595, 100, 100);
+                      break;
+                }
+                drawing(n + 1);//递归
+              }
+          } else { 
+              //添加文字
+              ctx.font = "300 42px 苹方";
+              ctx.fillStyle = '#445963';
+              ctx.fillText("VIP编码：" + that.linkData.tjtel, 100, 35);
+              //保存生成作品图片
+              base64.push(c.toDataURL("image/jpg", 1));
+              fn();
+          }
+      }
+      drawing(0);
+    },
+    /**
+     * 设置跳转链接参数
+     * @param url
+     */
+    setUrl(data, url) {
+        if (data != null) {
+            if (data.tjtel) {
+                url += ("&tjtel=" + data.tjtel);
+                if (data.city) {
+                    url += ("&city=" + data.city);
+                    if (data.identity) {
+                        url += ("&identity=" + data.identity);
+                        if (data.award_code) {
+                            url += ("&award_code=" + data.award_code);
+                        }
+                    } else if (data.award_code) {
+                        url += ("&award_code=" + data.award_code);
+                    }
+                } else if (data.identity) {
+                    url += ("&identity=" + data.identity);
+                    if (data.award_code) {
+                        url += ("&award_code=" + data.award_code);
+                    }
+                } else if (data.award_code) {
+                    url += ("&award_code=" + data.award_code);s
+                }
+            } else if (data.city) {
+                url += ("&city=" + data.city);
+                if (data.identity) {
+                    url += ("&identity=" + data.identity);
+                    if (data.award_code) {
+                        url += ("&award_code=" + data.award_code);
+                    }
+                } else if (data.award_code) {
+                    url += ("&award_code=" + data.award_code);
+                }
+            } else if (data.identity) {
+                url += ("&identity=" + data.identity);
+                if (data.award_code) {
+                    url += ("&award_code=" + data.award_code);
+                }
+            } else if (data.award_code) {
+                url += ("&award_code=" + data.award_code);
+            }
+        }
+        return url;
     }
   },
   mounted() {
-    this.getData()
+    this.getData();
+    this.getQrUrl();
   }
 };
 </script>

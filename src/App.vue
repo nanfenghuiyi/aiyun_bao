@@ -51,7 +51,7 @@ export default {
     Vue.prototype.param = {
       city_code: "028",
       identity: 1,
-      user_id: "a8b697c9-e803-4a88-91bf-dab09dcde250",
+      user_id: "4e6a5815-d119-44f9-a050-381f6debf0d0",
       bus_no: 308,
       employee_id: 569,
       employee_type: "1",
