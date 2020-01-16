@@ -7,10 +7,10 @@
     element-loading-background="rgba(0, 0, 0, 0.6)"
   >
     <div class="mp-main">
-      <div class="flex-row mp-box-title bottom-border">
-        <!-- <img @click="closePay" class="mp-img-close" src="@/assets/Pay/icon_gray_close.png" /> -->
+      <!-- <div class="flex-row mp-box-title bottom-border">
+        <img @click="closePay" class="mp-img-close" src="@/assets/Pay/icon_gray_close.png" />
         <span class="title">支付</span>
-      </div>
+      </div> -->
       <div class="mp-alert-pay-type">
         <ul id="price-info-list">
           <li v-for="(item, index) of priceInfoList" :key="index">
