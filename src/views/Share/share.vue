@@ -6,7 +6,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.6)"
   >
-    <div class="share-main flex-column">
+    <div id="share-main" class="share-main flex-column">
       <img id="share-img" class="share-img" :src="shareImg[imgIndex]" alt />
       <div id="android-rules" class="share-rules" v-if="isIOS">
         <router-link class="router_link" to="/rulesAndroid" target="_self">共享收益规则</router-link>
@@ -307,6 +307,8 @@ export default {
     }
   },
   mounted() {
+    let winHeight = document.documentElement.clientHeight   
+    document.getElementById('share-main').style.height = winHeight +'px'  //调整上拉加载框高度
     this.getNavigator();
     this.getShareContent();
   }

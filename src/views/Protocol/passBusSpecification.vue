@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-backtop :bottom="10" :right="10"></el-backtop>
-    <div class="protocol-main">
+    <div id="protocol-main" class="protocol-main">
       <h1>专车用户乘车规范</h1>
       <p>您同意，文明合理使用爱运宝平台及其平台内驾驶员为您提供的服务，尊重社会公德，不损害社会公共利益，扰乱社会经济秩序。在使用爱运宝平台内的相关过程中，如果您违反以下任—约定，平台内的驾驶员有权选择立即终止向您提供服务，以及拒绝您使用爱运宝平台相关网站、服务、应用程序的权利：</p>
       <div class="line-item">
@@ -16,6 +16,15 @@
   </div>
 </template>
 
+<script>
+
+export default {
+  mounted() {
+    let winHeight = document.documentElement.clientHeight   
+    document.getElementById('protocol-main').style.height = (winHeight - 20) +'px'  //调整上拉加载框高度
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 @import "../../styles/Protocol/protocol.scss";

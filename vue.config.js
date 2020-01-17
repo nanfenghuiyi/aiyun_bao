@@ -1,4 +1,4 @@
-'use strict'
+// 'use strict'
 const path = require('path')
 // const defaultSettings = require('./src/settings.js')
 
@@ -13,20 +13,34 @@ function resolve(dir) {
 // 例如，Mac:sudo npm run
 // 您可以通过以下方法更改端口：
 // 端口=9528 npm运行开发或npm运行开发--端口=9528
-const port = process.env.port || process.env.npm_config_port || 9528 // 开发端口
+// const port = process.env.port || process.env.npm_config_port || 9528 // 开发端口
 
 // 所有配置项解释都可以在https://cli.vuejs.org/config中找到/
-const webpack = require('webpack')
+const webpack = require('webpack');
+const productionGzipExtensions = ['js', 'css']
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   configureWebpack: {
     plugins: [
-      new webpack.ProvidePlugin({
+      new webpack.ProvidePlugin({ // jQ使用
         $: "jquery",
         jQuery: "jquery",
         "windows.jQuery": "jquery"
       }),
-    ]
+      new CompressionWebpackPlugin({ // js,css压缩
+        algorithm: 'gzip',
+        test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'), // 匹配文件名
+        threshold: 10240, // 对超过10k的数据压缩
+        minRatio: 0.8,
+        deleteOriginalAssets: false // 不删除源文件
+      }),
+    ],
+
+    externals: {
+      element: 'ElementUI',
+    },
+
   },
   /**
    *如果计划在子路径下部署站点，则需要设置publicPath，
@@ -35,7 +49,7 @@ module.exports = {
    *在大多数情况下，请使用“/”！!!
    *详细信息：https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: '/',
+  publicPath: './',
   // publicPath: '../../',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -76,6 +90,25 @@ module.exports = {
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO:需要测试
     config.plugins.delete('prefetch') // TODO:需要测试
+
+    // 图片路径问题
+    /* config
+      .module
+      .rule("images")
+      .test(/\.(jpg|png|gif)$/)
+      .use("url-loader")
+      .loader("url-loader")
+      .options({
+        limit: 10,
+        // 以下配置项用于配置file-loader
+        // 根据环境使用cdn或相对路径
+        publicPath: process.env.NODE_ENV === 'production' ? 'http://127.0.0.1:5500/dist/img' : '',
+        // 将图片打包到dist/img文件夹下, 不配置则打包到dist文件夹下
+        outputPath: 'img',
+        // 配置打包后图片文件名
+        name: '[name].[ext]',
+      })
+      .end(); */
 
     // 设置保留空白
     config.module

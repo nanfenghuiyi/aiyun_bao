@@ -118,6 +118,7 @@
     <!-- 上传照片 -->
     <div>
       <el-drawer
+        :modal="true"
         :visible.sync="drawer"
         :show-close="false"
         size="56%"

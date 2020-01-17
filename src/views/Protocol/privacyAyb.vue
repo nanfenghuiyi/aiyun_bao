@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <el-backtop :bottom="10" :right="10"></el-backtop>
     <div class="protocol-main">
       <div class="title">《爱运宝》应用隐私保护政策</div>
       <p>

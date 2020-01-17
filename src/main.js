@@ -3,14 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from "./axios"
-import ElementUI from 'element-ui'
+// import ElementUI from 'element-ui'
+import element from './element'
 import 'lib-flexible'
 import 'element-ui/lib/theme-chalk/index.css'
 import global_msg from "./utils/main"
 
 import 'normalize.css/normalize.css' // 重置的现代替代方法
 
-Vue.use(ElementUI)
+// Vue.use(ElementUI)
+Vue.use(element)
+
 
 Vue.config.productionTip = false
 Vue.prototype.$global_msg = global_msg

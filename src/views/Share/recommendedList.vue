@@ -6,7 +6,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.6)"
   >
-    <div class="share-recommend">
+    <div id="share-recommend" class="share-recommend">
       <h2>
         累计推荐用户
         <b id="invite_total" v-text="invite_total"></b>
@@ -115,6 +115,8 @@ export default {
     }
   },
   mounted() {
+    let winHeight = document.documentElement.clientHeight   
+    document.getElementById('share-recommend').style.height = winHeight +'px'  //调整上拉加载框高度
     this.getRecommendDetail()
   }
 };

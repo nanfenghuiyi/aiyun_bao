@@ -1,54 +1,56 @@
 <template>
-  <div class="container">
-    <div id="qrcodeCanvas" ref="qrcodeCanvas" class="hide"></div>
-    <div class="card-main">
-      <div class="text-center">专属名片</div>
-      <div class="type-wrapper">
-        <span class="type active" @click="setCommon" id="common">乘客/快车司机</span>
-        <span class="type" @click="setTaxi" id="taxi">出租车司机</span>
-        <span class="type" @click="setBus" id="bus">大巴车司机</span>
-      </div>
-      <div id="face" class="zoom4" align="center" v-html="face"></div>
-      <p>正面</p>
-
-      <div id="back" class="zoom4" align="center">
-        <img src="@/assets/AppShare/back.jpg" />
-      </div>
-      <p>背面</p>
-      <div class="text">
-        <!--<button type="button" onclick="download()" class="btn btn-warning">点击下载</button>-->
-        <span id="sub">长按</span>图片下载，随后打印，轻松推广
-      </div>
-      <!-- 专属名片弹窗 -->
-      <van-popup v-model="show" :close-on-click-overlay="false" round :style="{ width: '80%' }">
-        <div class="modal-header">
-          <span class="title">爱运宝VIP专属名片</span>
-          <span class="close" @click="closeShow">&times;</span>
+  <div id="container" class="container">
+    <div id="container-card">
+      <div id="qrcodeCanvas" ref="qrcodeCanvas" class="hide"></div>
+      <div class="card-main">
+        <div class="text-center">专属名片</div>
+        <div class="type-wrapper">
+          <span class="type active" @click="setCommon" id="common">乘客/快车司机</span>
+          <span class="type" @click="setTaxi" id="taxi">出租车司机</span>
+          <span class="type" @click="setBus" id="bus">大巴车司机</span>
         </div>
-        <ul>
-          <li id="user-phone" v-text="user_phone"></li>
-          <li id="vip-code" v-text="vip_code"></li>
-          <li>名片二维码已绑定爱运宝账号</li>
-          <li>永享扫码注册用户行程收益</li>
-        </ul>
-        <div class="modal-footer" @click="closeShow">好的</div>
-      </van-popup>
-      <!-- <div class="pu" id="myModal">
-        <div class="model"></div>
-        <div class="content">
+        <div id="face" class="zoom4" align="center" v-html="face"></div>
+        <p>正面</p>
+
+        <div id="back" class="zoom4" align="center">
+          <img src="@/assets/AppShare/back.jpg" />
+        </div>
+        <p>背面</p>
+        <div class="text">
+          <!--<button type="button" onclick="download()" class="btn btn-warning">点击下载</button>-->
+          <span id="sub">长按</span>图片下载，随后打印，轻松推广
+        </div>
+        <!-- 专属名片弹窗 -->
+        <van-popup v-model="show" :close-on-click-overlay="false" round :style="{ width: '80%' }">
           <div class="modal-header">
             <span class="title">爱运宝VIP专属名片</span>
-            <span class="close">&times;</span>
+            <span class="close" @click="closeShow">&times;</span>
           </div>
           <ul>
-            <li id="user-phone"></li>
-            <li id="vip-code"></li>
+            <li id="user-phone" v-text="user_phone"></li>
+            <li id="vip-code" v-text="vip_code"></li>
             <li>名片二维码已绑定爱运宝账号</li>
             <li>永享扫码注册用户行程收益</li>
           </ul>
-          <div class="modal-footer">好的</div>
-        </div>
-      </div> -->
+          <div class="modal-footer" @click="closeShow">好的</div>
+        </van-popup>
+        <!-- <div class="pu" id="myModal">
+          <div class="model"></div>
+          <div class="content">
+            <div class="modal-header">
+              <span class="title">爱运宝VIP专属名片</span>
+              <span class="close">&times;</span>
+            </div>
+            <ul>
+              <li id="user-phone"></li>
+              <li id="vip-code"></li>
+              <li>名片二维码已绑定爱运宝账号</li>
+              <li>永享扫码注册用户行程收益</li>
+            </ul>
+            <div class="modal-footer">好的</div>
+          </div>
+        </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -300,6 +302,8 @@ export default {
     }
   },
   mounted() {
+    let winHeight = document.documentElement.clientHeight   
+    document.getElementById('container-card').style.height = winHeight +'px'  //调整上拉加载框高度
     this.getData();
     this.getQrUrl();
   }

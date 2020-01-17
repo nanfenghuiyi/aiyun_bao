@@ -948,11 +948,41 @@ body {
   }
 }
 
-.page5 .pageboxInner {
+.page5 .pageboxInner{
+  .focus {
+    width: 72%;
+  }
+  .codeBox {
+    position: relative;
+    width: 100%;
+    padding-bottom: 40px;
+    margin-top: -30px;
+    margin-bottom: 20px;
+    .code {
+      width: 95%;
+    }
+    .text {
+      font-size: 15px;
+      line-height: 15px;
+      color: #FFDE00;
+      text-align: center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+    }
+    .text1 {
+      top: 20%;
+    }
+    .text2 {
+      top: 77%;
+      line-height: 21px;
+    }
+  }
   .slogon {
     .text {
-      font-size: 18px;
-      color: #00d2b1;
+      font-size: 0.506667rem;
+      color: #00D2B1;
       text-align: center;
       margin-bottom: 10px;
     }
@@ -965,9 +995,10 @@ body {
     bottom: 10px;
     width: 80px;
     left: 50%;
-    transform: translateX(-50%)
+    transform: translateX(-50%);
   }
-}
+} 
+
 
 .pu {
   background: white;
