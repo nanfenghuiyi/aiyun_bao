@@ -6,7 +6,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.6)"
   >
-    <div class="layer-left">
+    <div id="layer-left" class="layer-left">
       <div class="header">
         <img alt="head" src="@/assets/Utils/face_icon.png" />
         <div class="header-text">
@@ -25,15 +25,17 @@
           </li>
         </ul>
       </div>
-      <van-index-bar :index-list="letter" @select="onSelect" highlight-color="#07c160">
-        <div v-for="(item, index) of allModels" :key="index">
-          <van-index-anchor :index="item.letter" />
-            <van-cell v-for="(item, index) of item.module" :key="index" @click="getCarModel(item)">
-              <img class="mr" :src="item.src" alt="">
-              <span>{{item.name}}</span>
-            </van-cell>
-        </div>
-      </van-index-bar>
+      <div>
+        <van-index-bar :index-list="letter" @select="onSelect" highlight-color="#07c160">
+          <div v-for="(item, index) of allModels" :key="index">
+            <van-index-anchor :index="item.letter" />
+              <van-cell v-for="(item, index) of item.module" :key="index" @click="getCarModel(item)">
+                <img class="mr" :src="item.src" alt="">
+                <span>{{item.name}}</span>
+              </van-cell>
+          </div>
+        </van-index-bar>
+      </div>
     </div>
     <!-- 获取指定车型数据 -->
     <div v-swipeleft="swipeLeft">
@@ -67,8 +69,11 @@ import Vue from "vue";
 import vueTouch from "@/utils/touch.js";
 import { IndexBar, IndexAnchor, Cell } from 'vant';
 
-Vue.use(IndexBar).use(IndexAnchor).use(Cell);
+Vue.use(IndexBar);
+Vue.use(IndexAnchor);
+Vue.use(Cell);
 
+// Vue.use(vant)
 export default {
   data() {
     return {
@@ -99,7 +104,7 @@ export default {
     },
     onSelect(event) {
       console.log(event)
-      this.$emit("elect", event)
+      // this.$emit("elect", event)
     },
     // 选取热门车型
     isHotModel(data) {
@@ -234,6 +239,9 @@ export default {
   created() {},
   mounted() {
     this.getCar();
+    // let winHeight = document.documentElement.clientHeight   
+    // document.getElementById('layer-left').style.height = (winHeight - 20) +'px'  //调整上拉加载框高度
+    
   }
 };
 </script>

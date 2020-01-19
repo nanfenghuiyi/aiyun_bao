@@ -203,7 +203,7 @@
         :visible.sync="carDrawer"
         :show-close="false"
         size="100%">
-        <car @carChildFn="carParentFn" @onSelect="onSelect"></car>
+        <car @carChildFn="carParentFn"></car>
       </el-drawer>
     </div>
   </div>
@@ -216,12 +216,15 @@ import { detectionParam } from "../../utils/util";
 import vueTouch from "@/utils/touch.js";
 import Vue from "vue";
 
-import { IndexBar, IndexAnchor, Cell } from 'vant';
-
-Vue.use(IndexBar).use(IndexAnchor).use(Cell);
 
 import city from "../Utils/city";
 import car from "../Utils/car";
+
+import 'vant/lib/index.css';
+import { IndexBar, IndexAnchor, Cell } from 'vant';
+
+Vue.use(IndexBar).use(IndexAnchor).use(Cell);
+// Vue.use(vant);
 
 export default {
   data() {
@@ -320,9 +323,6 @@ export default {
   },
   components: {city, car},
   methods: {
-    onSelect() {
-      console.log(1111)
-    },
     handleChange(val) {
       console.log(val);
     },

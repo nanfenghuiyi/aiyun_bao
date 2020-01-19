@@ -1,20 +1,13 @@
 module.exports = {
   presets: [
-    '@vue/cli-plugin-babel/preset'
+    "@vue/app"
   ],
   plugins: [
     ['import', {
       libraryName: 'vant',
       libraryDirectory: 'es',
       style: true
-    }, 'vant']
-  ]
-}
-
-module.exports = {
-  presets: ["@vue/app"],
-  plugins: [
-    // element官方教程
+    }, 'vant'],
     [
       "component",
       {
@@ -23,4 +16,4 @@ module.exports = {
       }
     ]
   ]
-};
+}

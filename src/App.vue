@@ -1,6 +1,6 @@
 <template>
-  <!-- <div id="app" :style="{ height: scrollerHeight }"> -->
-  <div id="app">
+  <div id="app" :style="{ height: scrollerHeight }">
+  <!-- <div id="app"> -->
     <router-view id="apply" />
   </div>
 </template>
@@ -26,8 +26,8 @@ export default {
     }
   },
   created() {
-    // var clientHeight =
-      // document.documentElement.clientHeight || document.body.clientHeight;
+    var clientHeight =
+      document.documentElement.clientHeight || document.body.clientHeight;
     window.onresize = function() {
       var nowClientHeight =
         document.documentElement.clientHeight || document.body.clientHeight;
@@ -73,7 +73,7 @@ export default {
 <style lang="scss">
 .container {
   width: 100%;
-  // height: 100%;
+  height: 100%;
 }
 .focusState {
   position: absolute;
