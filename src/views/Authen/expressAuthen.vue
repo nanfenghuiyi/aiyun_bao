@@ -221,11 +221,12 @@ import city from "../Utils/city";
 import car from "../Utils/car";
 
 import 'vant/lib/index.css';
-import { IndexBar, IndexAnchor, Cell } from 'vant';
+import { IndexBar, IndexAnchor, Cell, DatetimePicker } from 'vant';
 
-Vue.use(IndexBar)
-Vue.use(IndexAnchor)
+Vue.use(IndexBar);
+Vue.use(IndexAnchor);
 Vue.use(Cell);
+Vue.use(DatetimePicker);
 // Vue.use(vant);
 
 export default {
