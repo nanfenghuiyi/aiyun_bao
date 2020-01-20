@@ -223,7 +223,9 @@ import car from "../Utils/car";
 import 'vant/lib/index.css';
 import { IndexBar, IndexAnchor, Cell } from 'vant';
 
-Vue.use(IndexBar).use(IndexAnchor).use(Cell);
+Vue.use(IndexBar)
+Vue.use(IndexAnchor)
+Vue.use(Cell);
 // Vue.use(vant);
 
 export default {
